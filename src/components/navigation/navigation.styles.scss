@@ -1,0 +1,131 @@
+@import "../../styles/base.scss";
+
+header {
+  padding:10px 0;
+  
+  .container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .brand{
+    color: $lightestslate;
+    font-family: "Polysans Bulky";
+    font-size: 2rem;
+    color: $green;
+  }
+
+  .navigation-menu{
+    margin-left: auto;
+
+    @include mobile{
+      display: none;
+    }
+
+    ul{
+      font-size: .8rem;
+      list-style: none;
+      padding:0;
+      display: flex;
+      align-items: center;
+      gap: 25px;
+
+      li{
+
+        a{
+          display: flex;
+          align-items: center;
+          gap:10px;
+          color: $lightestslate;
+          font-family: "Space Mono";
+          text-decoration: none;
+  
+          .number{
+            color: $green;
+          }
+        }
+
+      }
+
+
+    }
+
+  }
+
+  .navigation-menu-mobile{
+    display: none;
+    position: fixed;
+    bottom:0;
+    left: 0;
+    width: 100%;
+    background-color: $green;
+    padding: 0 10px;
+    box-sizing: border-box;
+    z-index: 9;
+
+    button{
+      position: absolute;
+      left: 3%;
+      top: -50px;
+      width: 94%;
+    }
+
+    ul{
+      font-size: .8rem;
+      list-style: none;
+      padding:0;
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+
+      li{
+        
+        width: 25%;
+
+        a{
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-decoration: none;
+          gap:5px;
+          color: $navy;
+
+          span.icon{
+            transform: translateY(15px);
+            transition:.3s;
+
+            img{
+              width: 30px;
+            }
+          }
+
+          span.label{
+            transform: translateY(40px);
+            transition:.3s;
+            font-family: "Space Mono";
+            font-size: 10px;
+          }
+
+          &:hover span.icon,
+          &:focus span.icon{
+              transform: translateY(0)
+          }
+
+          &:hover span.label,
+          &:focus span.label{
+            transform: translateY(0)
+          }
+
+        }
+      }
+    }
+
+    @include mobile{
+      display: block;
+    }
+  }
+
+}
+

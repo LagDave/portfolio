@@ -1,0 +1,40 @@
+@import "../../styles/base.scss";
+
+button{
+  cursor: pointer;
+
+  &.primary{
+    color: $green;
+    background: transparent;
+    border: 1px solid $green;
+    font-family: "Space Mono";
+    padding:12px 25px;
+    border-radius: 3px;
+    transition: .2s;
+    font-size: .9rem;
+
+    &-small{
+      font-size: 0.8rem;
+      padding:8px 15px;
+    }
+
+    &.filled{
+      background: $navy;
+    }
+
+    &:hover{
+      background: $greentintOpaque;
+    }
+
+    &:focus{
+      outline: none;
+    }
+
+    @include mobile{
+      font-size: 0.8rem;
+      padding:8px 15px;
+    }
+
+  }
+
+}

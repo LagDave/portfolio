@@ -1,0 +1,78 @@
+@import "../../styles/base.scss";
+
+#hero{
+
+  min-height: 80vh;
+  display: grid;
+  place-items: center;
+
+  @include mobile{
+      min-height: auto;
+  }
+
+  .container{
+
+    width: 100%;
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+
+    @include mobile{
+      grid-template-columns: 1fr;
+    }
+
+    .left{
+      
+      h1, h2{
+        margin: 0;
+      }
+
+      h2{
+        margin-top:.3em;
+
+        .glow{
+          color: #fff;
+          animation-name: glow;
+          animation-duration: .5s;
+          animation-delay: 2s;
+          animation-fill-mode: forwards;
+          text-shadow: 0 0 0px #000, 0 0 0px #fff, 0 0 0px #fff, 0 0 0px #0fa, 0 0 0px #0fb, 0 0 0px #0fa, 0 0 0px #0fa, 0 0 0px #0fa
+        }
+      }
+
+      p.description{
+        line-height: 2em;
+        max-width: 50%;
+
+        @include mobile{
+          max-width: 100%;
+        }
+      }
+
+    }
+
+    .right{
+      position: relative;
+
+      .robo-lottie{
+        position: absolute;
+        top:-50px;
+        right: -100px;
+        width: 500px;
+        
+        @include mobile{
+          display: none;
+        }
+      }
+    }
+
+  }
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 0px #000, 0 0 0px #fff, 0 0 0px #fff, 0 0 0px #0fa, 0 0 0px #0fb, 0 0 0px #0fa, 0 0 0px #0fa, 0 0 0px #0fa
+  }
+  to {
+    text-shadow: 0 0 6px #000, 0 0 10px #fff, 0 0 1px #fff, 0 0 4px #0fa, 0 0 4px #0fb, 0 0 20px #0fa, 0 0 0px #0fa, 0 0 0px #0fa
+  }
+}
