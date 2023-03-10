@@ -24,13 +24,25 @@ const Navigation = () => {
     AOS.init();
   }, [])
 
+  function liftNavigationLabel(e){
+    const icon = e.target.closest('a').childNodes[0];
+    const label = e.target.closest('a').childNodes[2];
+    label.classList.add('lift');
+    icon.classList.add('lift');
+
+    setTimeout(() => {
+      label.classList.remove('lift');
+      icon.classList.remove('lift');
+    }, 500)
+  }
+
   return (
     <>
     <header>
       <div className="container">
 
         <div data-aos="fade-right" className="brand">
-          <Lottie style={{ width: '100px' }} animationData={logoLottie}/>
+          <Lottie style={{ width: '80px' }} animationData={logoLottie}/>
           </div>
 
         <div className="navigation-menu">
@@ -48,10 +60,10 @@ const Navigation = () => {
           <a><Button text="Download Resume" className="primary filled primary-small" /></a>
 
           <ul>
-            <li><a href="#"><span className="icon"><img src={aboutBlue} alt="" /></span> <span className="label">About</span></a></li>
-            <li><a href="#"><span className="icon"><img src={expBlue} alt="" /></span> <span className="label">ExP</span></a></li>
-            <li><a href="#"><span className="icon"><img src={techBlue} alt="" /></span> <span className="label">Tech</span></a></li>
-            <li><a href="#"><span className="icon"><img src={contactBlue} alt="" /></span> <span className="label">Contact</span></a></li>
+            <li><a onClick={liftNavigationLabel} href="#"><span className="icon"><img src={aboutGreen} alt="" /></span> <span className="label">About</span></a></li>
+            <li><a onClick={liftNavigationLabel} href="#"><span className="icon"><img src={expGreen} alt="" /></span> <span className="label">ExP</span></a></li>
+            <li><a onClick={liftNavigationLabel} href="#"><span className="icon"><img src={techGreen} alt="" /></span> <span className="label">Tech</span></a></li>
+            <li><a onClick={liftNavigationLabel} href="#"><span className="icon"><img src={contactGreen} alt="" /></span> <span className="label">Contact</span></a></li>
           </ul>
         </div>
 
