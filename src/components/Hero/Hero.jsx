@@ -21,7 +21,6 @@ const Hero = () => {
             I am a <span className="text-lightest-slate">passionate software engineer</span> who loves to build applications for the web.
             With <span className="text-lightest-slate">over 3 years of specialized experience</span> in modern web technologies I am keen to delivering efficient web solutions to rev up your business.
           </p>
-
           <Button data-aos-delay="1100" data-aos="fade-right" className="primary filled mt-3" text="Checkout my Resume!"/>
         </div>
 
