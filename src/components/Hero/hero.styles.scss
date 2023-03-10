@@ -30,12 +30,11 @@
         margin-top:.3em;
 
         .glow{
-          color: #fff;
+          color: $darkerSlate;
           animation-name: glow;
           animation-duration: .5s;
           animation-delay: 2s;
           animation-fill-mode: forwards;
-          text-shadow: 0 0 0px #000, 0 0 0px #fff, 0 0 0px #fff, 0 0 0px #0fa, 0 0 0px #0fb, 0 0 0px #0fa, 0 0 0px #0fa, 0 0 0px #0fa
         }
       }
 
@@ -70,9 +69,11 @@
 
 @keyframes glow {
   from {
+    color: $darkerSlate;
     text-shadow: 0 0 0px #000, 0 0 0px #fff, 0 0 0px #fff, 0 0 0px #0fa, 0 0 0px #0fb, 0 0 0px #0fa, 0 0 0px #0fa, 0 0 0px #0fa
   }
   to {
+    color: #fff;
     text-shadow: 0 0 6px #000, 0 0 10px #fff, 0 0 1px #fff, 0 0 4px #0fa, 0 0 4px #0fb, 0 0 20px #0fa, 0 0 0px #0fa, 0 0 0px #0fa
   }
 }
