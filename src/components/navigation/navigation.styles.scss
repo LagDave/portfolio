@@ -1,7 +1,7 @@
 @import "../../styles/base.scss";
 
 header {
-  padding:10px 0;
+  padding:20px 0;
   
   .container{
     display: flex;
@@ -14,6 +14,7 @@ header {
     font-family: "Polysans Bulky";
     font-size: 2rem;
     color: $green;
+    margin-left: -13px;
   }
 
   .navigation-menu{
@@ -30,6 +31,7 @@ header {
       display: flex;
       align-items: center;
       gap: 25px;
+      margin:0;
 
       li{
 
@@ -59,7 +61,7 @@ header {
     bottom:0;
     left: 0;
     width: 100%;
-    background-color: $green;
+    background-color: $darkerNavy;
     padding: 0 10px;
     box-sizing: border-box;
     z-index: 9;
@@ -90,7 +92,7 @@ header {
           justify-content: center;
           text-decoration: none;
           gap:5px;
-          color: $navy;
+          color: #fff;
 
           span.icon{
             transform: translateY(15px);
@@ -99,6 +101,11 @@ header {
             img{
               width: 30px;
             }
+
+            &.lift{
+              transform: translateY(0);
+            }
+            
           }
 
           span.label{
@@ -106,18 +113,11 @@ header {
             transition:.3s;
             font-family: "Space Mono";
             font-size: 10px;
-          }
 
-          &:hover span.icon,
-          &:focus span.icon{
-              transform: translateY(0)
+            &.lift{
+              transform: translateY(0);
+            }
           }
-
-          &:hover span.label,
-          &:focus span.label{
-            transform: translateY(0)
-          }
-
         }
       }
     }
