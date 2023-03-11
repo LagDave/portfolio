@@ -1,6 +1,6 @@
 import "./styles/base.scss";
 
-import Navigation from "./components/navigation/Navigation"
+import Navigation from "./components/Navigation/Navigation"
 import Hero from "./components/Hero/Hero"
 
 const App = () => {

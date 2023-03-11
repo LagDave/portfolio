@@ -7,7 +7,8 @@
   place-items: center;
 
   @include mobile{
-      min-height: 60vh;
+      min-height: auto;
+      padding-top: 20px;
   }
 
   .container{
@@ -47,6 +48,12 @@
         }
       }
 
+      button{
+        @include mobile{
+          display: none;
+        }
+      }
+
     }
 
     .right{
@@ -72,6 +79,6 @@
     text-shadow: 0 0 0px #000, 0 0 0px #fff, 0 0 0px #fff, 0 0 0px #0fa, 0 0 0px #0fb, 0 0 0px #0fa, 0 0 0px #0fa, 0 0 0px #0fa
   }
   to {
-    text-shadow: 0 0 6px #000, 0 0 10px #fff, 0 0 1px #fff, 0 0 4px #0fa, 0 0 4px #0fb, 0 0 20px #0fa, 0 0 0px #0fa, 0 0 0px #0fa
+    text-shadow: 0 0 6px #000, 0 0 10px #fff, 0 0 1px #fff, 0 0 4px #0fa, 0 0 1px #0fb, 0 0 1px #0fa, 0 0 0px #0fa, 0 0 0px #0fa;
   }
 }

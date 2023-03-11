@@ -7,15 +7,8 @@ import AOS from 'aos';
 import Lottie from "lottie-react";
 import logoLottie from "../../images/logo-lottie.json";
 
-import aboutGreen from "../../images/about-green.png";
-import expGreen from "../../images/exp-green.png";
-import techGreen from "../../images/tech-green.png";
-import contactGreen from "../../images/contact-green.png";
-
-import aboutBlue from "../../images/about-blue.png";
-import expBlue from "../../images/exp-blue.png";
-import techBlue from "../../images/tech-blue.png";
-import contactBlue from "../../images/contact-blue.png";
+import Icon from "../Icon/Icon";
+import { faAddressCard, faRankingStar, faMicrochip, faPhone, faFile} from '@fortawesome/free-solid-svg-icons'
 
 
 const Navigation = () => {
@@ -43,27 +36,27 @@ const Navigation = () => {
 
         <div data-aos="fade-right" className="brand">
           <Lottie style={{ width: '80px' }} animationData={logoLottie}/>
-          </div>
+        </div>
 
         <div className="navigation-menu">
           <ul>
-            <li data-aos-delay="400" data-aos="fade-down"><a href="#"><span className="icon"><img src={aboutGreen} alt="" /></span> About</a></li>
-            <li data-aos-delay="500" data-aos="fade-down"><a href="#"><span className="icon"><img src={expGreen} alt="" /></span> Experience</a></li>
-            <li data-aos-delay="600" data-aos="fade-down"><a href="#"><span className="icon"><img src={techGreen} alt="" /></span> Technologies</a></li>
-            <li data-aos-delay="700" data-aos="fade-down"><a href="#"><span className="icon"><img src={contactGreen} alt="" /></span> Contact</a></li>
-            <li data-aos-delay="1100" data-aos="fade-left"><a><Button className="primary primary-small" text="Resume"/></a></li>
+            <li data-aos-delay="400" data-aos="fade-down"><a href="#"><span className="icon"><Icon icon={faAddressCard}/></span> About</a></li>
+            <li data-aos-delay="500" data-aos="fade-down"><a href="#"><span className="icon"><Icon icon={faRankingStar}/></span> Experience</a></li>
+            <li data-aos-delay="600" data-aos="fade-down"><a href="#"><span className="icon"><Icon icon={faMicrochip}/></span> Technologies</a></li>
+            <li data-aos-delay="700" data-aos="fade-down"><a href="#"><span className="icon"><Icon icon={faPhone}/></span> Contact</a></li>
+            <li data-aos-delay="1100" data-aos="fade-left"><a href="#"><Button className="primary primary-small"><Icon icon={faFile}/> Resume</Button></a></li>
           </ul>
         </div>
 
         <div className="navigation-menu-mobile">
 
-          <a><Button text="Download Resume" className="primary filled primary-small" /></a>
+          <a><Button className="primary filled primary-small">Checkout my Resume</Button></a>
 
           <ul>
-            <li><a onClick={liftNavigationLabel} href="#"><span className="icon"><img src={aboutGreen} alt="" /></span> <span className="label">About</span></a></li>
-            <li><a onClick={liftNavigationLabel} href="#"><span className="icon"><img src={expGreen} alt="" /></span> <span className="label">ExP</span></a></li>
-            <li><a onClick={liftNavigationLabel} href="#"><span className="icon"><img src={techGreen} alt="" /></span> <span className="label">Tech</span></a></li>
-            <li><a onClick={liftNavigationLabel} href="#"><span className="icon"><img src={contactGreen} alt="" /></span> <span className="label">Contact</span></a></li>
+            <li><a onClick={liftNavigationLabel} href="#"><span className="icon"><Icon icon={faAddressCard}/></span> <span className="label">About</span></a></li>
+            <li><a onClick={liftNavigationLabel} href="#"><span className="icon"><Icon icon={faRankingStar}/></span> <span className="label">ExP</span></a></li>
+            <li><a onClick={liftNavigationLabel} href="#"><span className="icon"><Icon icon={faMicrochip}/></span> <span className="label">Tech</span></a></li>
+            <li><a onClick={liftNavigationLabel} href="#"><span className="icon"><Icon icon={faPhone}/></span> <span className="label">Contact</span></a></li>
           </ul>
         </div>
 
