@@ -3,7 +3,6 @@ import "./navigation.styles.scss"
 import Button from "../Button/Button"
 
 import { useEffect } from "react";
-import AOS from 'aos';
 import Lottie from "lottie-react";
 import logoLottie from "../../images/logo-lottie.json";
 
@@ -12,10 +11,6 @@ import { faAddressCard, faRankingStar, faMicrochip, faPhone, faFile} from '@fort
 
 
 const Navigation = () => {
-
-  useEffect(() => {
-    AOS.init();
-  }, [])
 
   function liftNavigationLabel(e){
     const icon = e.target.closest('a').childNodes[0];

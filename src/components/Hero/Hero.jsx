@@ -17,8 +17,9 @@ const Hero = () => {
       <div className="container">
     
         <div className="left">
+          <Lottie data-aos-delay="1200" data-aos="zoom-in" className="robo-lottie" animationData={roboLottie}/>
           <p data-aos-delay="400" data-aos="fade-right" className="space-mono text-lightest-slate">Hi, my name is</p>
-          <GradientHeading data-aos-delay="600" data-aos="fade-right">Rustine Dave</GradientHeading>
+          <GradientHeading type='h1' data-aos-delay="600" data-aos="fade-right">Rustine Dave</GradientHeading>
           <h2 data-aos-delay="800" data-aos="fade-right" className="polysans-bulky text-darker-slate">Putting imaginations into <span className="glow">perspective</span></h2>
 
           <p data-aos-delay="1000" data-aos="fade-right" className="description text-slate mt-4">
