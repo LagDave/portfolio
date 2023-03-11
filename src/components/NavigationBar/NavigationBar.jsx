@@ -10,7 +10,7 @@ import Icon from "../Icon/Icon";
 import { faAddressCard, faRankingStar, faMicrochip, faPhone, faFile} from '@fortawesome/free-solid-svg-icons'
 
 
-const Navigation = () => {
+const NavigationBar = () => {
 
   function liftNavigationLabel(e){
     const icon = e.target.closest('a').childNodes[0];
@@ -62,4 +62,4 @@ const Navigation = () => {
   )
 }
 
-export default Navigation
+export default NavigationBar

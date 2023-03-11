@@ -2,7 +2,7 @@ import "./styles/base.scss";
 
 import { useEffect } from "react";
 
-import Navigation from "./components/Navigation/Navigation"
+import Navigation from "./components/NavigationBar/NavigationBar"
 import Hero from "./components/Hero/Hero"
 import About from "./components/About/About"
 import AOS from 'aos';
