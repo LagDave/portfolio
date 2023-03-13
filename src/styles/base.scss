@@ -2,7 +2,13 @@
 
 @mixin mobile {
   @media screen and (max-width: 768px) {
-    @content
+    @content;
+  }
+}
+
+@mixin laptop {
+  @media screen and (max-height: 930px) and (max-width: 1440px) {
+    @content;
   }
 }
 
@@ -19,6 +25,10 @@ body{
   
   &.inner{
     max-width: 1040px;
+  }
+
+  @include laptop{
+    padding: 0 100px;
   }
 
 }
@@ -68,6 +78,10 @@ body{
 h1{
   font-size: 7em;
 
+  @include laptop{
+    font-size: 5em;
+  }
+
   @include mobile{
     font-size: 3em;
   }
@@ -80,7 +94,7 @@ h2{
     font-size: .5em;
   }
 
-  @include mobile{
+  @include laptop{
     font-size: 2em;
   }
 }
