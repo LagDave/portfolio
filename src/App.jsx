@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import Navigation from "./components/NavigationBar/NavigationBar"
 import Hero from "./components/Hero/Hero"
 import About from "./components/About/About"
+import Experience from "./components/Experience/Experience";
 import AOS from 'aos';
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
       <Navigation/>
       <Hero/>
       <About/>
+      <Experience/>
     </div>
   )
 }

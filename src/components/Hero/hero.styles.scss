@@ -11,6 +11,10 @@
       padding-top: 20px;
   }
 
+  @include laptop{
+    min-height: 80vh;
+  }
+
   .container{
 
     width: 100%;
@@ -22,6 +26,12 @@
     }
 
     .left{
+
+      @include mobile{
+        text-align: center;
+        display: grid;
+        place-items: center;
+      }      
 
       .robo-lottie{
         display: none;
@@ -62,12 +72,6 @@
         }
       }
 
-      @include mobile{
-        text-align: center;
-        display: grid;
-        place-items: center;
-      }      
-
     }
 
     .right{
@@ -79,6 +83,11 @@
         right: -100px;
         width: 500px;
         
+        @include laptop{
+          top: -7px;
+          right: -136px;
+        }
+
         @include mobile{
           display: none;
         }
