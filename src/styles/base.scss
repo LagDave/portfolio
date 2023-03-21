@@ -31,6 +31,10 @@ body{
     padding: 0 100px;
   }
 
+  @include mobile{
+    padding: 0 20px;
+  }
+
 }
 
 .space-mono{
@@ -92,6 +96,11 @@ h2{
 
   .sub{
     font-size: .5em;
+
+    @include mobile{
+      display: block;
+    }
+
   }
 
   @include laptop{

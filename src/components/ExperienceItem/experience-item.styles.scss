@@ -1,0 +1,45 @@
+@import "../../styles/base.scss";
+
+.vertical-timeline-wrapper{
+
+  margin-top:7em;
+
+  .vertical-timeline{
+
+    &:before{
+      top: 50px;
+      width: 1px;
+      background: #ffffff3d;
+    }
+
+    @include mobile{
+      padding:0;
+      margin-top: -50px;
+    }
+
+    .vertical-timeline-element-icon{
+      background: white;
+      color: $navy;
+    }
+
+    .vertical-timeline-element-content{
+      background-image: linear-gradient(25deg, #0e3b74, #236887, #27979a, #17c9ac);
+      color: white;
+      backdrop-filter: blur( 4px );
+      -webkit-backdrop-filter: blur( 4px );
+      border-radius: 5px;
+      box-shadow: none;
+
+      ul{
+        padding: 1em;
+        padding-bottom: 0;
+        margin: 0;
+
+        li p{
+          margin:0;
+          color: rgba(255, 255, 255, 0.585);
+        }
+      }
+    }
+  }
+}
