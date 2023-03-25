@@ -2,9 +2,22 @@
 
 header {
   padding:20px 0;
+  position: sticky;
+  top:0;
+  width: 100%;
+  z-index: 9;
+  transition: .2s;
   
   @include mobile{
     padding: 0;
+  }
+
+  &.isScrolled{
+    background: #050c169a;
+    -webkit-backdrop-filter: blur( 30px );
+    backdrop-filter: blur( 30px );
+    padding: 10px 0;
+    border-bottom: 1px solid  rgba( 255, 255, 255, 0.18 );
   }
   
   .container{
@@ -64,16 +77,23 @@ header {
 
   }
 
+}
+
+.mobile-header{
+
   .navigation-menu-mobile{
     display: none;
     position: fixed;
     bottom:0;
     left: 0;
     width: 100%;
-    background-color: $darkerNavy;
-    padding: 0 10px;
     box-sizing: border-box;
     z-index: 9;
+    background: #050c169a;
+    backdrop-filter: blur( 30px );
+    -webkit-backdrop-filter: blur( 30px );
+    padding: 10px 0;
+    border-top: 1px solid  rgba( 255, 255, 255, 0.18 );
 
     button{
       position: absolute;
@@ -106,6 +126,8 @@ header {
           span.icon{
             transform: translateY(15px);
             transition:.3s;
+            font-size: 20px;
+            opacity: .5;
 
             img{
               width: 30px;
