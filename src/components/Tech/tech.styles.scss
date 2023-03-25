@@ -12,6 +12,13 @@
     padding-top: 6vh;
   }
 
+  h2{
+    @include mobile{
+      line-height: 1.3em;
+      text-align: center;
+    }
+  }
+
 
   .tech-wrapper{
     min-height: 50vh;
