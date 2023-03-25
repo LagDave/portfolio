@@ -37,7 +37,7 @@ const NavigationBar = () => {
 
   return (
     <>
-      <header className={`${offset > 0 && 'isScrolled'}`}>
+      <header id="desktop-header" className={`${offset > 0 && 'isScrolled'}`}>
         <div className="container">
 
           <div data-aos="fade-right" className="brand">
@@ -58,7 +58,7 @@ const NavigationBar = () => {
 
       </header>
 
-      <header className="mobile-header">
+      <header id="mobile-header">
         <div className="navigation-menu-mobile">
 
         <a><Button className="primary filled primary-small">Checkout my Resume</Button></a>
