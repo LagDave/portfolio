@@ -71,16 +71,11 @@ const Tech = () => {
       detectRetina: true,
   }
 
-  const particlesInit = useCallback(async engine => {
-    console.log(engine);
-      // you can initiate the tsParticles instance (engine) here, adding custom shapes or presets
-      // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-      // starting from v2 you can add only the features you need reducing the bundle size
+    const particlesInit = useCallback(async engine => {
       await loadFull(engine);
     }, []);
 
     const particlesLoaded = useCallback(async container => {
-        await console.log(container);
     }, []);
 
   return (
@@ -114,7 +109,7 @@ const Tech = () => {
                     <TechCard isImage={true} imageURL='https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg' title='Bootstrap'/>
                     <TechCard isImage={true} imageURL='https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg' title='HTML5'/>
                     <TechCard isImage={true} imageURL='https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg' title='CSS3'/>
-                    <TechCard isImage={true} imageURL='https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jquery/jquery-original.svg' title='JavaScript'/>
+                    <TechCard isImage={true} imageURL='https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' title='JavaScript'/>
                 </div>
 
                 <div className="tech-card-row">

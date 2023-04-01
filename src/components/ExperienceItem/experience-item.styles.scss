@@ -4,6 +4,10 @@
 
   margin-top:7em;
 
+  @include mobile{
+    margin-top: 6em;
+  }
+
   .vertical-timeline{
 
     &:before{
@@ -23,12 +27,22 @@
     }
 
     .vertical-timeline-element-content{
-      background-image: linear-gradient(25deg, #0e3b74, #236887, #27979a, #17c9ac);
-      color: white;
+      background: rgba( 255, 255, 255, 0.25 );
+      box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
       backdrop-filter: blur( 4px );
       -webkit-backdrop-filter: blur( 4px );
+      border-radius: 10px;
+      border: 1px solid rgba( 255, 255, 255, 0.5 );
+      color: white;
       border-radius: 5px;
       box-shadow: none;
+
+      h3{
+
+        @include mobile{
+          font-size: 1.3em;
+        }
+      }
 
       ul{
         padding: 1em;

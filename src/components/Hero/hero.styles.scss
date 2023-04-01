@@ -5,10 +5,11 @@
   min-height: 80vh;
   display: grid;
   place-items: center;
+  padding-bottom: 50px;
 
   @include mobile{
       min-height: auto;
-      padding-top: 20px;
+      padding-top: 20px 0 50px;
   }
 
   @include laptop{

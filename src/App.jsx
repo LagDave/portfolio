@@ -7,6 +7,7 @@ import Hero from "./components/Hero/Hero"
 import About from "./components/About/About"
 import Experience from "./components/Experience/Experience";
 import Tech from "./components/Tech/Tech";
+import Contact from "./components/Contact/Contact";
 
 import AOS from 'aos';
 
@@ -22,13 +23,16 @@ const App = () => {
   }, [])
 
   return(
-    <div className="wrapper">
+    <>
+    <div className="global-wrapper">
       <Navigation/>
       <Hero/>
       <About/>
       <Experience/>
       <Tech/>
     </div>
+    <Contact/>
+    </>
   )
 }
 

@@ -1,0 +1,110 @@
+@import "../../styles/base.scss";
+
+#contact{
+  padding: 8vh 0;
+  position: sticky;
+  bottom:0;
+  width: 100%;
+  z-index: 0;
+
+  @include mobile{
+    padding-top: 50px;
+    padding-bottom: 200px;
+  }
+
+  h2 span{
+    letter-spacing: 0.1em;
+  }
+
+  .contact-glass{
+    width: 100%;
+    max-width: 600px;
+    margin: 50px auto 0;
+    background:rgba( 255, 255, 255, 0.25 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+    padding:30px 50px 40px;
+    box-sizing: content-box;
+
+    @include mobile{
+      width: auto !important;
+      padding: 0 20px 20px;
+    }
+
+    form{
+      display: flex;
+      flex-direction: column;
+
+      .row{
+
+        &:last-of-type{
+          margin-top: 30px;
+
+          @include mobile{
+            margin-top: 0;
+           }         
+        }
+        
+
+        .col-lg-6, .col-lg-12{
+
+          label{
+            color: white;
+            font-family: "Space Mono";
+            margin-top: 20px;
+
+            @include mobile{
+              margin-top: 20px;
+            }
+          }
+
+          input, textarea{
+            padding:20px;
+            font-size: 1em;
+            background: #ffffff4a;
+            border-color: #aeaeae;
+            color: $navy;
+            outline: none;
+            box-shadow: none !important;
+            max-height: 300px;
+  
+            @include mobile{
+             padding: 5px;
+             max-height: 100px;
+            }        
+  
+          }
+
+        }
+
+      }
+
+      .contact-footer{
+        margin-top: 30px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        
+
+        .contact-thumbs{
+          font-size: 2em;
+          display: flex;
+          gap: 30px;
+          opacity: .7;
+
+          @include mobile{
+            font-size: 1.2em;
+            gap: 20px;
+          }
+        }
+
+        button{
+          width: max-content;
+        }
+      }
+
+    }
+  }
+}

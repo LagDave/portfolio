@@ -5,9 +5,10 @@
   padding-top:15vh;
   display: grid;
   place-items: center;
+  position: relative;
 
   @include mobile{
-    padding: 50px 0;
+    padding: 40px 0 0;
   }
 
   @include laptop{
@@ -23,7 +24,7 @@
     }
 
     @include mobile{
-      margin-top:1em;
+      margin: 20px 0 0;
       display: grid;
       line-height: 1.3em;
     }

@@ -18,6 +18,12 @@ body{
   font-family: "Source Sans Pro";
 }
 
+.global-wrapper{
+  background: $navy;
+  position: relative;
+  z-index: 1;
+}
+
 .container{
   max-width: 1440px;
   padding:0 20px;
@@ -77,7 +83,15 @@ body{
 .text-slate{
   color: $slate;
 }
-
+.text-navy{
+  color: $navy;
+}
+.text-shadow-1{
+  text-shadow: 0 2px 4px rgba(71,97,206,.36);
+}
+.text-shadow-none{
+  text-shadow: none;
+}
 // typography base helper classes
 h1{
   font-size: 7em;
