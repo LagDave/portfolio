@@ -12,6 +12,10 @@
   }
 }
 
+html{
+  scroll-behavior: smooth;
+}
+
 body{
   background: $navy !important;
   color: $slate;
@@ -129,6 +133,7 @@ p{
 a{
   color: $green;
   text-decoration: none !important;
+  cursor: pointer;
 
   &:hover{
     color: $green;

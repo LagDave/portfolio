@@ -2,7 +2,7 @@ import "./contact.styles.scss";
 
 import Icon from "../Icon/Icon";
 import { faPaperPlane, faEnvelope} from '@fortawesome/free-solid-svg-icons'
-import { faLinkedin, faGithubSquare, faFacebookSquare} from '@fortawesome/free-brands-svg-icons'
+import { faLinkedin, faGithubSquare, faFacebookSquare, faWhatsappSquare} from '@fortawesome/free-brands-svg-icons'
 import Button from "../Button/Button";
 
 const Contact = () => {
@@ -37,13 +37,15 @@ const Contact = () => {
             <div className="contact-footer">
               
               <div className="contact-thumbs">
-                <a href="#"><Icon icon={faEnvelope}/></a>
-                <a href="#"><Icon icon={faLinkedin}/></a>
-                <a href="#"><Icon icon={faGithubSquare}/></a>
-                <a href="#"><Icon icon={faFacebookSquare}/></a>
+                
+                <a href="https://www.linkedin.com/in/rustine-dave-235a51237/" target="_blank"><Icon icon={faLinkedin}/></a>
+                <a href="https://github.com/lagdave/" target="_blank"><Icon icon={faGithubSquare}/></a>
+                <a href="https://www.facebook.com/rustinedave" target="_blank"><Icon icon={faFacebookSquare}/></a>
+                <a href="mailto:hi@rustinedave.com"><Icon icon={faEnvelope}/></a>
+                <a href="https://wa.me/+639505425118" target="_blank"><Icon icon={faWhatsappSquare}/></a>
               </div>
 
-              <Button className="primary white"><Icon icon={faPaperPlane}/> Submit</Button>
+              <Button id="contact-anchor" className="primary white"><Icon icon={faPaperPlane}/> Submit</Button>
             
             </div>
             
