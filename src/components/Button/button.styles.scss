@@ -12,6 +12,7 @@ button{
     border-radius: 3px;
     transition: .2s;
     font-size: .9rem;
+    border-radius: 5px;
 
     &-small{
       font-size: 0.8rem;
@@ -20,6 +21,21 @@ button{
 
     &.filled{
       background: $navy;
+    }
+
+    &.dark{
+      border-color: $navy;
+      color: $navy;
+    }
+
+    &.white{
+      border-color: white;
+      color: white;
+
+      &:hover{
+        background-color: white;
+        color: $navy;
+      }
     }
 
     &:hover{
