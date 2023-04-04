@@ -28,31 +28,39 @@ const Contact = () => {
       prod: 'https://us-central1-rustine-dave.cloudfunctions.net/api/sendmail'
     }
 
-    axios.post(apiUrl.prod, {
-      name, email, message
-    })
-    .then(response => {
-      setName('');
-      setEmail('');
-      setMessage(''); 
-      setIsSubmitting(false);
-      if(response.data.status == 'success'){
-        Swal.fire(
-          'Just Awesome!',
-          'Your email has been sent. Please expect a reply within 24 hours. Thank you!',
-          'success'
-        )
-      }else if (response.data.status == 'error' && response.data.body == 'max-send-limit'){
-        Swal.fire(
-          'Ooopsiee...',
-          'You can only send 3 consecutive emails at max. Try again tomorrow — or poke me through any of my social media links.',
-          'error'
-        )
-      }
+    axios.get('https://api.ipify.org/?format=json')
+    .then(({data}) => {
+      
+      axios.post(apiUrl.local, {
+        name, email, message, ip: data.ip
+      })
+      .then(response => {
 
+        setName('');
+        setEmail('');
+        setMessage(''); 
+        setIsSubmitting(false);
 
-    })
-    .catch(err => console.log(err));
+        if(response.data.status == 'success'){
+          Swal.fire(
+            'Just Awesome!',
+            'Your email has been sent. Please expect a reply within 24 hours. Thank you!',
+            'success'
+          )
+        }else if (response.data.status == 'error' && response.data.body == 'max-send-limit'){
+          Swal.fire(
+            'Ooopsiee...',
+            'You can only send 3 consecutive emails at max. Try again tomorrow — or poke me through any of my social media links.',
+            'error'
+          )
+        }
+  
+  
+      })
+      .catch(err => console.log(err));
+    }).catch(err => console.log(err))
+    
+
   }
 
   return ( 
