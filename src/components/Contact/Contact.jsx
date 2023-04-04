@@ -15,10 +15,13 @@ const Contact = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
 
   function sendEmail(e) {
     e.preventDefault();
+
+    setIsSubmitting(true);
 
     const apiUrl = {
       local: 'http://localhost:5555/rustine-dave/us-central1/api/sendmail',
@@ -32,6 +35,7 @@ const Contact = () => {
       setName('');
       setEmail('');
       setMessage(''); 
+      setIsSubmitting(false);
       if(response.data.status == 'success'){
         Swal.fire(
           'Just Awesome!',
@@ -90,7 +94,17 @@ const Contact = () => {
                 <a href="https://wa.me/+639505425118" target="_blank"><Icon icon={faWhatsappSquare}/></a>
               </div>
 
-              <Button id="contact-anchor" className="primary white"><Icon icon={faPaperPlane}/> Submit</Button>
+              <Button disabled={isSubmitting} id="contact-anchor" className="primary white">
+              {
+                isSubmitting ? 
+                (
+                  <div className="spinner-border spinner-border-sm" role="status"></div>
+                ) :
+                (
+                  <Icon icon={faPaperPlane}/>
+                )
+              }
+              Submit</Button>
             
             </div>
             
