@@ -35,6 +35,17 @@ const NavigationBar = () => {
     }, 500)
   }
 
+  function scrollBottom(){
+    // pseudo scroll workaround for content reveal style contact section
+    window.scrollTo(0, document.body.scrollHeight);
+    window.history.pushState('#contact', 'Contact', '/#contact');
+  }
+
+  function liftNavigationLabelScrollBottom(event){
+    liftNavigationLabel(event);
+    scrollBottom();
+  }
+
   return (
     <>
       <header id="desktop-header" className={`${offset > 0 && 'isScrolled'}`}>
@@ -46,11 +57,11 @@ const NavigationBar = () => {
 
           <div className="navigation-menu">
             <ul>
-              <li data-aos-delay="400" data-aos="fade-down"><a href="#"><span className="icon"><Icon icon={faAddressCard}/></span> About</a></li>
-              <li data-aos-delay="500" data-aos="fade-down"><a href="#"><span className="icon"><Icon icon={faRankingStar}/></span> Experience</a></li>
-              <li data-aos-delay="600" data-aos="fade-down"><a href="#"><span className="icon"><Icon icon={faMicrochip}/></span> Technologies</a></li>
-              <li data-aos-delay="700" data-aos="fade-down"><a href="#"><span className="icon"><Icon icon={faPhone}/></span> Contact</a></li>
-              <li data-aos-delay="1100" data-aos="fade-left"><a href="#"><Button className="primary primary-small"><Icon icon={faFile}/> Resume</Button></a></li>
+              <li data-aos-delay="400" data-aos="fade-down"><a href="#about"><span className="icon"><Icon icon={faAddressCard}/></span> About</a></li>
+              <li data-aos-delay="500" data-aos="fade-down"><a href="#experience"><span className="icon"><Icon icon={faRankingStar}/></span> Experience</a></li>
+              <li data-aos-delay="600" data-aos="fade-down"><a href="#tech"><span className="icon"><Icon icon={faMicrochip}/></span> Technologies</a></li>
+              <li data-aos-delay="700" data-aos="fade-down"><a onClick={scrollBottom}><span className="icon"><Icon icon={faPhone}/></span> Contact</a></li>
+              <li data-aos-delay="1100" data-aos="fade-left"><a target="_blank" href="/files/Resume.pdf"><Button className="primary primary-small"><Icon icon={faFile}/> Resume</Button></a></li>
             </ul>
           </div>
 
@@ -61,13 +72,13 @@ const NavigationBar = () => {
       <header id="mobile-header">
         <div className="navigation-menu-mobile">
 
-        <a><Button className="primary filled primary-small">Checkout my Resume</Button></a>
+        <a target="_blank" href="/files/Resume.pdf"><Button className="primary filled primary-small">Checkout my Resume</Button></a>
 
         <ul>
-          <li><a onClick={liftNavigationLabel} href="#"><span className="icon"><Icon icon={faAddressCard}/></span> <span className="label">About</span></a></li>
-          <li><a onClick={liftNavigationLabel} href="#"><span className="icon"><Icon icon={faRankingStar}/></span> <span className="label">ExP</span></a></li>
-          <li><a onClick={liftNavigationLabel} href="#"><span className="icon"><Icon icon={faMicrochip}/></span> <span className="label">Tech</span></a></li>
-          <li><a onClick={liftNavigationLabel} href="#"><span className="icon"><Icon icon={faPhone}/></span> <span className="label">Contact</span></a></li>
+          <li><a onClick={liftNavigationLabel} href="#about"><span className="icon"><Icon icon={faAddressCard}/></span> <span className="label">About</span></a></li>
+          <li><a onClick={liftNavigationLabel} href="#experience"><span className="icon"><Icon icon={faRankingStar}/></span> <span className="label">ExP</span></a></li>
+          <li><a onClick={liftNavigationLabel} href="#tech"><span className="icon"><Icon icon={faMicrochip}/></span> <span className="label">Tech</span></a></li>
+          <li><a onClick={liftNavigationLabelScrollBottom}><span className="icon"><Icon icon={faPhone}/></span> <span className="label">Contact</span></a></li>
         </ul>
         </div>
       </header>

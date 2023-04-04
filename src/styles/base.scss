@@ -12,6 +12,10 @@
   }
 }
 
+html{
+  scroll-behavior: smooth;
+}
+
 body{
   background: $navy !important;
   color: $slate;
@@ -92,6 +96,29 @@ body{
 .text-shadow-none{
   text-shadow: none;
 }
+
+
+// sweetalert
+.swal2-popup{
+  background: $navy !important;
+  
+  .swal2-title{
+    color: white !important;
+    font-family: "Polysans Bulky Wide";
+  }
+  .swal2-html-container{
+    color: $lightestslate;
+    line-height: 1.5em;
+  }
+  .swal2-confirm {
+    background: $green !important;
+    color: $navy !important;
+    padding: 10px 30px;
+    box-shadow: none !important;
+  }
+}
+
+
 // typography base helper classes
 h1{
   font-size: 7em;
@@ -129,6 +156,7 @@ p{
 a{
   color: $green;
   text-decoration: none !important;
+  cursor: pointer;
 
   &:hover{
     color: $green;
