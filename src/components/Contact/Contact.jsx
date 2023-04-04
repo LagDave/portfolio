@@ -15,40 +15,52 @@ const Contact = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
 
   function sendEmail(e) {
     e.preventDefault();
+
+    setIsSubmitting(true);
 
     const apiUrl = {
       local: 'http://localhost:5555/rustine-dave/us-central1/api/sendmail',
       prod: 'https://us-central1-rustine-dave.cloudfunctions.net/api/sendmail'
     }
 
-    axios.post(apiUrl.prod, {
-      name, email, message
-    })
-    .then(response => {
-      setName('');
-      setEmail('');
-      setMessage(''); 
-      if(response.data.status == 'success'){
-        Swal.fire(
-          'Just Awesome!',
-          'Your email has been sent. Please expect a reply within 24 hours. Thank you!',
-          'success'
-        )
-      }else if (response.data.status == 'error' && response.data.body == 'max-send-limit'){
-        Swal.fire(
-          'Ooopsiee...',
-          'You can only send 3 consecutive emails at max. Try again tomorrow — or poke me through any of my social media links.',
-          'error'
-        )
-      }
+    axios.get('https://api.ipify.org/?format=json')
+    .then(({data}) => {
+      
+      axios.post(apiUrl.local, {
+        name, email, message, ip: data.ip
+      })
+      .then(response => {
 
+        setName('');
+        setEmail('');
+        setMessage(''); 
+        setIsSubmitting(false);
 
-    })
-    .catch(err => console.log(err));
+        if(response.data.status == 'success'){
+          Swal.fire(
+            'Just Awesome!',
+            'Your email has been sent. Please expect a reply within 24 hours. Thank you!',
+            'success'
+          )
+        }else if (response.data.status == 'error' && response.data.body == 'max-send-limit'){
+          Swal.fire(
+            'Ooopsiee...',
+            'You can only send 3 consecutive emails at max. Try again tomorrow — or poke me through any of my social media links.',
+            'error'
+          )
+        }
+  
+  
+      })
+      .catch(err => console.log(err));
+    }).catch(err => console.log(err))
+    
+
   }
 
   return ( 
@@ -90,7 +102,17 @@ const Contact = () => {
                 <a href="https://wa.me/+639505425118" target="_blank"><Icon icon={faWhatsappSquare}/></a>
               </div>
 
-              <Button id="contact-anchor" className="primary white"><Icon icon={faPaperPlane}/> Submit</Button>
+              <Button disabled={isSubmitting} id="contact-anchor" className="primary white">
+              {
+                isSubmitting ? 
+                (
+                  <div className="spinner-border spinner-border-sm" role="status"></div>
+                ) :
+                (
+                  <Icon icon={faPaperPlane}/>
+                )
+              }
+              Submit</Button>
             
             </div>
             
