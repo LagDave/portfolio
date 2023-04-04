@@ -25,7 +25,7 @@ const Contact = () => {
       prod: 'https://us-central1-rustine-dave.cloudfunctions.net/api/sendmail'
     }
 
-    axios.post(apiUrl.local, {
+    axios.post(apiUrl.prod, {
       name, email, message
     })
     .then(response => {
