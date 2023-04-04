@@ -5,7 +5,52 @@ import { faPaperPlane, faEnvelope} from '@fortawesome/free-solid-svg-icons'
 import { faLinkedin, faGithubSquare, faFacebookSquare, faWhatsappSquare} from '@fortawesome/free-brands-svg-icons'
 import Button from "../Button/Button";
 
+import Swal from "sweetalert2";
+import 'sweetalert2/src/sweetalert2.scss'
+
+import axios from "axios";
+import { useState } from "react";
 const Contact = () => {
+
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+
+  function sendEmail(e) {
+    e.preventDefault();
+
+    const apiUrl = {
+      local: 'http://localhost:5555/rustine-dave/us-central1/api/sendmail',
+      prod: 'https://us-central1-rustine-dave.cloudfunctions.net/api/sendmail'
+    }
+
+    axios.post(apiUrl.local, {
+      name, email, message
+    })
+    .then(response => {
+      setName('');
+      setEmail('');
+      setMessage(''); 
+      if(response.data.status == 'success'){
+        Swal.fire(
+          'Just Awesome!',
+          'Your email has been sent. Please expect a reply within 24 hours. Thank you!',
+          'success'
+        )
+      }else if (response.data.status == 'error' && response.data.body == 'max-send-limit'){
+        Swal.fire(
+          'Ooopsiee...',
+          'You can only send 3 consecutive emails at max. Try again tomorrow — or poke me through any of my social media links.',
+          'error'
+        )
+      }
+
+
+    })
+    .catch(err => console.log(err));
+  }
+
   return ( 
     <section id="contact">
       <div className="container">
@@ -14,23 +59,23 @@ const Contact = () => {
 
         <div className="contact-glass">
 
-          <form action="">
+          <form onSubmit={sendEmail}>
 
             <div className="row">
               <div className="col-lg-6">
                 <label htmlFor="name">Name</label>
-                <input id="name" name="name" type="text" className="form-control" />
+                <input onChange={e => setName(e.target.value)} value={name}required id="name" name="name" type="text" className="form-control" />
               </div>
               <div className="col-lg-6">
                 <label htmlFor="email">Email</label>
-                <input id="email" name="email" type="email" className="form-control" />
+                <input onChange={e => setEmail(e.target.value)} value={email}required id="email" name="email" type="email" className="form-control" />
               </div>
             </div>
 
             <div className="row">
               <div className="col-lg-12">
                 <label htmlFor="message">Message</label>
-                <textarea id="message" name="message" rows="10" className="form-control"></textarea>
+                <textarea onChange={e => setMessage(e.target.value)} value={message}required id="message" name="message" rows="10" className="form-control"></textarea>
               </div>
             </div>
 
@@ -56,7 +101,8 @@ const Contact = () => {
 
 
 
-      </div>
+      </div> 
+      <p className="text-center footer-text mt-5">Made with <i className="devicon-react-original colored mx-2"></i> and <i className="devicon-firebase-plain colored mx-2"></i> by Rustine Dave © 2023</p>
     </section>
    );
 }

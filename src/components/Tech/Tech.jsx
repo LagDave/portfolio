@@ -84,12 +84,12 @@ const Tech = () => {
 
       <div className="tech-wrapper">
 
-        <Particles
+        {/* <Particles
           id="tsparticles"
           init={particlesInit}
           loaded={particlesLoaded}
           options={particlesOptions}
-        />
+        /> */}
         
         <div className="container">
             <h2 data-aos="fade-down" className="polysans-bulky-wide text-white">Technologies <span className="sub text-green barlow-condensed-light"> — A CONSTELLATION OF EXPERTISE!</span></h2>
