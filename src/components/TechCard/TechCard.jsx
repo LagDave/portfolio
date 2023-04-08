@@ -7,6 +7,7 @@ const TechCard = ({isImage = false, imageURL, deviconClasses, title, whiteCardBG
 
     <div
         className="tech-card"
+        data-aos="zoom-in"
     >
         <div className="inner-element">
             {

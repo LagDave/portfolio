@@ -67,9 +67,9 @@ const Contact = () => {
     <section id="contact">
       <div className="container">
  
-        <h2 className="polysans-bulky-wide text-white text-center">Contact <span className="sub text-green barlow-condensed-light"> — SEND YOUR THOUGHTS!</span></h2>
+        <h2 data-aos="fade-down" className="polysans-bulky-wide text-white text-center">Contact <span className="sub text-green barlow-condensed-light"> — SEND YOUR THOUGHTS!</span></h2>
 
-        <div className="contact-glass">
+        <div data-aos="fade-up" className="contact-glass">
 
           <form onSubmit={sendEmail}>
 
