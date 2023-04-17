@@ -1,7 +1,5 @@
 import "./tech-card.styles.scss"
 
-import Tilt from 'react-parallax-tilt';
-
 const TechCard = ({isImage = false, imageURL, deviconClasses, title, whiteCardBG = false}) => {
   return ( 
 
