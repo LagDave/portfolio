@@ -2,10 +2,7 @@
 
 #contact{
   padding: 8vh 0;
-  position: sticky;
-  bottom:0;
-  width: 100%;
-  z-index: 0;
+
 
   @include mobile{
     padding-top: 50px;

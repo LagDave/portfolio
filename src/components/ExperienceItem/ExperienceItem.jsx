@@ -7,14 +7,15 @@ import Icon from "../Icon/Icon";
 import {faBriefcase} from '@fortawesome/free-solid-svg-icons'
 
 
-const ExperienceItem = ({title, subtitle, description, details}) => {
+const ExperienceItem = ({title, subtitle, description, details, image}) => {
   return ( 
     <VerticalTimelineElement
       className="vertical-timeline-element--work"
       contentArrowStyle={{ borderRight: '7px solid  #fff' }}
-      icon={<Icon icon={faBriefcase}/>}
+      icon={<img src={image}/>}
     >
-
+    
+    <img className="watermark-company-logo" src={image} />
     <h3 className="vertical-timeline-element-title polysans-neutral">{title}</h3>
     <h6 className="vertical-timeline-element-subtitle polysans-neutral mt-2">{subtitle}</h6>
     <ul>

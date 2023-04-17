@@ -1,95 +1,16 @@
 import "./tech.styles.scss";
 
-import { useCallback } from "react";
-import Particles from "react-tsparticles";
-import { loadFull } from "tsparticles";
-
 import TechCard from "../TechCard/TechCard";
 
 import GradientHeading from "../GradientHeading/GradientHeading";
 
 const Tech = () => {
 
-  const particlesOptions = {
-    fullScreen: { enable: false },
-      fpsLimit: 120,
-      interactivity: {
-          events: {
-              resize: true,
-          },
-          modes: {
-              push: {
-                  quantity: 1,
-              },
-              repulse: {
-                  distance: 200,
-                  duration: 0.4,
-              },
-          },
-      },
-      particles: {
-          color: {
-              value: "#fff",
-          },
-          links: {
-              color: "#ffffff",
-              distance: 150,
-              enable: true,
-              opacity: 0.5,
-              width: 1,
-          },
-          collisions: {
-              enable: false,
-          },
-          move: {
-              directions: "none",
-              enable: true,
-              outModes: {
-                  default: "bounce",
-              },
-              random: true,
-              speed: 0.5,
-              straight: true,
-          },
-          number: {
-              density: {
-                  enable: true,
-                  area: 1000,
-              },
-              value: 20,
-          },
-          opacity: {
-              value: 1,
-          },
-          shape: {
-              type: "circle",
-          },
-          size: {
-              value: { min: 1, max: 5 },
-          },
-      },
-      detectRetina: true,
-  }
-
-    const particlesInit = useCallback(async engine => {
-      await loadFull(engine);
-    }, []);
-
-    const particlesLoaded = useCallback(async container => {
-    }, []);
-
   return (
 
     <section id="tech">
 
       <div className="tech-wrapper">
-
-        {/* <Particles
-          id="tsparticles"
-          init={particlesInit}
-          loaded={particlesLoaded}
-          options={particlesOptions}
-        /> */}
         
         <div className="container">
             <h2 data-aos="fade-down" className="polysans-bulky-wide text-white">Technologies <span className="sub text-green barlow-condensed-light"> — A CONSTELLATION OF EXPERTISE!</span></h2>
