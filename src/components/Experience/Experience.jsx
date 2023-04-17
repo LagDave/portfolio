@@ -5,6 +5,12 @@ import ExperienceItem from "../ExperienceItem/ExperienceItem";
 import { VerticalTimeline }  from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 
+import fgsLogo from '../../images/fgs-logo.png'
+import roidnaLogo from '../../images/roidna-logo.png'
+import wesmcdowellLogo from '../../images/wes-logo.png'
+import twofLogo from '../../images/2f-logo.png'
+import webpropellersLogo from '../../images/webpropellers-logo.png'
+
 const Experience = () => {
 
   const isMobile = function() {
@@ -31,6 +37,19 @@ const Experience = () => {
                   'Designed and Developed internal web applications and software products for the company.'
                 ]
               }
+              image={fgsLogo}
+            />
+
+            <ExperienceItem
+              title="Engineering Dep. Consultant"
+              subtitle='ROI·DNA — San Francisco, California, USA '
+              details={
+                [
+                  'Added features to existing medium to large-scaled projects',
+                  'Troubleshot, optimized, and formulated solutions for faulty, existing websites'
+                ]
+              }
+              image={roidnaLogo}
             />
 
             <ExperienceItem
@@ -42,6 +61,7 @@ const Experience = () => {
                   'Developed WordPress websites for different requirements'
                 ]
               }
+              image={wesmcdowellLogo}
             />
 
             <ExperienceItem
@@ -50,9 +70,10 @@ const Experience = () => {
               details={
                 [
                   'Designed and developed websites for agency clients with Wix, Shopify, WordPresss and custom scripts.',
-                  'Troubleshot, optimized, and formulated solutions for faulty, existing websites.'
+                  'Troubleshot, optimized, and formulated solutions for faulty, existing websites'
                 ]
               }
+              image={twofLogo}
             />
 
             <ExperienceItem
@@ -64,6 +85,7 @@ const Experience = () => {
                   'Engineered web solutions to accommodate brilliant business ideas Provided outstanding technical support for english, and non-english clients'
                 ]
               }
+              image={webpropellersLogo}
             />
           </VerticalTimeline>
 

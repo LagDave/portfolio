@@ -24,6 +24,13 @@
     .vertical-timeline-element-icon{
       background: white;
       color: $navy;
+
+      img{
+        position: absolute;
+        width: 100%;
+        box-shadow: none;
+      }
+      
     }
 
     .vertical-timeline-element-content{
@@ -36,6 +43,22 @@
       color: white;
       border-radius: 5px;
       box-shadow: none;
+      overflow: hidden;
+
+      .watermark-company-logo{
+        width: 100%;
+        max-width: 300px;
+        position: absolute;
+        z-index: -1;
+        opacity: .2; 
+        filter: invert(50%);
+        top: -30%;
+
+        @include mobile{
+          left:0;
+          top:0;
+        }
+      }
 
       h3{
 
