@@ -21,8 +21,8 @@ const Tech = () => {
                 <div className="tech-card-row">
                     <GradientHeading type='h1'>FRONT-END</GradientHeading>    
                     
-                    <TechCard isImage={true} imageURL='https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' title='ReactJS'/>
-                    <TechCard isImage={true} imageURL='https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg' whiteCardBG={true} title='Redux'/>
+                    <TechCard isImage={true} imageURL='https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' title='React'/>
+                    <TechCard isImage={true} imageURL='https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg' whiteCardBG={false} title='Redux Toolkit'/>
                     <TechCard isImage={true} imageURL='https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg' title='VueJS'/>
                     <TechCard isImage={true} imageURL='https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nuxtjs/nuxtjs-original.svg' title='NuxtJS'/>
                     <TechCard isImage={true} imageURL='https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sass/sass-original.svg' title='SASS'/>
