@@ -2,6 +2,9 @@
 
 #contact{
   padding: 8vh 0;
+  background: url('../../images/grainy-1.jpeg');
+  background-attachment: fixed;
+  background-size: cover;
 
 
   @include mobile{
@@ -20,7 +23,7 @@
     background:rgba( 255, 255, 255, 0.25 );
     backdrop-filter: blur( 4px );
     -webkit-backdrop-filter: blur( 4px );
-    border-radius: 10px;
+    border-radius: 5px;
     border: 1px solid rgba( 255, 255, 255, 0.18 );
     padding:30px 50px 40px;
     box-sizing: content-box;
