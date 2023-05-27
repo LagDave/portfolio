@@ -5,14 +5,19 @@
   min-height: 60vh;
   display: grid;
   place-items: center;
-  background: url('../../images/grainy-1.jpeg');
-  background-attachment: fixed;
+  background: url('../../images/grainy-1.png');
   background-size: cover;
+  background-position: center;
   padding: 50px 0;
   position: relative;
 
   @include laptop{
     min-height: 80vh;
+  }
+  
+  @include mobile{
+    background-attachment: scroll;
+    background-position-x: 70%;
   }
 
   .container{
@@ -68,7 +73,7 @@
       flex-direction: column;
       padding: 50px 80px;
       justify-content: center;
-      background: rgba( 255, 255, 255, 0.25 );
+      background: rgba(5, 12, 22, 0.6039215686);
       backdrop-filter: blur( 1px );
       -webkit-backdrop-filter: blur( 1px );
       color: white;
@@ -81,7 +86,7 @@
         padding: 10px 20px 30px;
         margin-top: 50px;
       }
-    
+
       h2{
         span{
           letter-spacing: .1em;

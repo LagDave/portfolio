@@ -44,6 +44,12 @@
       border-radius: 5px;
       box-shadow: none;
       overflow: hidden;
+      transition: .3s;
+      cursor: pointer;
+
+      &:hover{
+        background: rgba(5, 12, 22, 0.6039215686);
+      }
 
       .watermark-company-logo{
         width: 100%;

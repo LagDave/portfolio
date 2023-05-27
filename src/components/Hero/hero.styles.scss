@@ -13,8 +13,9 @@
   background-position:top right;
 
   @include mobile{
-      min-height: auto;
-      padding-top: 20px 0 50px;
+    background-size: 148%;
+    min-height: auto;
+    padding-top: 20px 0 50px;
   }
 
   @include laptop{
