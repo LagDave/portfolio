@@ -83,6 +83,44 @@
 
     .right{
       position: relative;
+      display: grid;
+      place-items: center;
+
+      @include mobile{
+        display: none;
+      }
+
+      @include laptop{
+        grid-template-columns: 1fr;
+      }
+
+
+      .resume-preview{
+
+        margin-right: 20px;
+
+        img{
+          min-width: 80%;
+          max-width: 300px;
+          transition: .3s;
+        }
+
+        .resume-front{
+          transform: rotate(5deg);
+        }
+
+        .resume-drop{
+          position: absolute;
+        }
+
+        &:hover{
+          .resume-front,
+          .resume-drop{
+            transform: rotate(0deg);
+          }
+        }
+      }
+
 
       .robo-lottie{
         position: absolute;

@@ -2,6 +2,7 @@ import "./hero.styles.scss";
 
 import Lottie from "lottie-react";
 import roboLottie from "../../images/robo-lottie.json";
+import resumePreview from "../../images/resume-preview.jpg"
 import Icon from "../Icon/Icon";
 import {faArrowUpRightFromSquare} from '@fortawesome/free-solid-svg-icons'
 
@@ -32,7 +33,14 @@ const Hero = () => {
         </div>
 
         <div className="right">
-          <Lottie data-aos-delay="1200" data-aos="zoom-in" className="robo-lottie" animationData={roboLottie}/>
+          
+          <a className="mt-4 d-block" target="_blank" href="/files/Resume.pdf">
+            <div className="resume-preview">
+              <img className='resume-drop' src={resumePreview} alt="" />
+              <img className='resume-front' src={resumePreview} alt="" />
+            </div>
+          </a>
+          {/* <Lottie data-aos-delay="1200" data-aos="zoom-in" className="robo-lottie" animationData={roboLottie}/> */}
         </div>
 
       </div>
