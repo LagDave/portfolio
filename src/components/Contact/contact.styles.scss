@@ -2,14 +2,15 @@
 
 #contact{
   padding: 8vh 0;
-  background: url('../../images/grainy-1.jpeg');
-  background-attachment: fixed;
+  background: url('../../images/grainy-1.png');
   background-size: cover;
 
 
   @include mobile{
     padding-top: 50px;
     padding-bottom: 150px;
+    background-attachment: scroll;
+    background-position-x: 50%;
   }
 
   h2 span{
@@ -20,7 +21,7 @@
     width: 100%;
     max-width: 600px;
     margin: 50px auto 0;
-    background:rgba( 255, 255, 255, 0.25 );
+    background:rgba(5, 12, 22, 0.6039215686);
     backdrop-filter: blur( 4px );
     -webkit-backdrop-filter: blur( 4px );
     border-radius: 5px;
