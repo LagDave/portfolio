@@ -5,9 +5,8 @@
   min-height: 60vh;
   display: grid;
   place-items: center;
-  background: url('../../images/grainy-1.png');
+  background: url('../../images/noise.svg'), linear-gradient(45deg, $navy 10%, $green 200%);
   background-size: cover;
-  background-position: center;
   padding: 50px 0;
   position: relative;
 
@@ -16,8 +15,7 @@
   }
   
   @include mobile{
-    background-attachment: scroll;
-    background-position-x: 70%;
+    background: url('../../images/noise.svg'), linear-gradient(100deg, $navy 10%, $green 200%);
   }
 
   .container{
@@ -78,7 +76,7 @@
       -webkit-backdrop-filter: blur( 1px );
       color: white;
       border-radius: 5px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, .3);
 
       @include mobile{
         width: 100%;

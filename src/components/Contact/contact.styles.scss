@@ -2,15 +2,13 @@
 
 #contact{
   padding: 8vh 0;
-  background: url('../../images/grainy-1.png');
-  background-size: cover;
+  background: url('../../images/noise.svg'), linear-gradient(45deg, $navy 10%, $green 200%);
 
 
   @include mobile{
     padding-top: 50px;
     padding-bottom: 150px;
-    background-attachment: scroll;
-    background-position-x: 50%;
+    background: url('../../images/noise.svg'), linear-gradient(100deg, $navy 10%, $green 200%);
   }
 
   h2 span{

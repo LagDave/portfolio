@@ -34,7 +34,9 @@ const Experience = () => {
               subtitle='FGS Advisory — Sydney, Australia'
               details={
                 [
-                  'Designed and Developed internal web applications and software products for the company.'
+                  '<span>Helped develop a web-based PDF editor</span> targeted for accounting firms with <span>Laravel</span> and <span>Javascript</span>',
+                  '<span>Implemented complex, calculation-dense features</span> like page rotation logic (algebra and geometry), and undo-redo (sorting algorithms) among others',
+                  '<span>Designed and presented quick mockups</span> for features and additional pages',
                 ]
               }
               image={fgsLogo}
@@ -45,8 +47,9 @@ const Experience = () => {
               subtitle='ROI·DNA — San Francisco, California, USA '
               details={
                 [
-                  'Added features to existing medium to large-scaled projects',
-                  'Troubleshot, optimized, and formulated solutions for faulty, existing websites'
+                  'Added features to existing medium to large-scaled <span>WordPress</span> and <span>Laravel + React</span> projects',
+                  '<span>Handled multiple client projects</span> simultaneously on different tech-stacks',
+                  'Reported, and <span>formulated solutions for bugs</span> on numerous projects',
                 ]
               }
               image={roidnaLogo}
@@ -57,8 +60,10 @@ const Experience = () => {
               subtitle='wesmcdowell.com — Chicago, USA'
               details={
                 [
-                  'Created custom web solutions for technical business problems',
-                  'Developed WordPress websites for different requirements'
+                  '<span>Employer is a youtuber/digital strategy expert with a quarter of a million subscribers and thousands of students</span>',
+                  'Maintained website and fixed urgent bugs',
+                  'Helped on the technical side - ie, opening, and closing campaign pages - during course campaigns in a time-sensitive environment',
+                  'Create new pages, and update existing ones with Elementor + WordPress'
                 ]
               }
               image={wesmcdowellLogo}
@@ -69,8 +74,8 @@ const Experience = () => {
               subtitle='2fsolutions.com — Italy'
               details={
                 [
-                  'Designed and developed websites for agency clients with Wix, Shopify, WordPresss and custom scripts.',
-                  'Troubleshot, optimized, and formulated solutions for faulty, existing websites'
+                  'Developed websites with <span>Vue + Laravel</span> or <span>WordPress</span>, depending on client requirements',
+                  '<span>Troubleshot, optimized, and formulated solutions</span> for faulty, existing websites'
                 ]
               }
               image={twofLogo}
@@ -81,8 +86,12 @@ const Experience = () => {
               subtitle='Web Propellers — Davao, Philippines'
               details={
                 [
-                  'Developed WordPress websites for an array of industries',
-                  'Engineered web solutions to accommodate brilliant business ideas Provided outstanding technical support for english, and non-english clients'
+                  'Developed and handled different types websites for an array of industries',
+                  'Engineered web solutions to accommodate brilliant business ideas and provided outstanding technical support for english, and non-english clients',
+                  '<span>Spun up and maintained virtual compute machines</span> from scratch for different types of project',
+                  '<span>Exposed to bash terminal</span> and operated virtual machines remotely',
+                  'Utilized AWS services like <span>S3</span>, <span>Route 53</span>, <span>Lambda</span>, <span>RDS</span>, etc. for different business requirements',
+                  '<span>Migrated websites</span> to different hosting services'
                 ]
               }
               image={webpropellersLogo}

@@ -34,7 +34,7 @@
     }
 
     .vertical-timeline-element-content{
-      background: rgba( 255, 255, 255, 0.25 );
+      background: rgba(5, 12, 22, 0.6039215686);
       box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
       backdrop-filter: blur( 4px );
       -webkit-backdrop-filter: blur( 4px );
@@ -47,16 +47,12 @@
       transition: .3s;
       cursor: pointer;
 
-      &:hover{
-        background: rgba(5, 12, 22, 0.6039215686);
-      }
-
       .watermark-company-logo{
-        width: 100%;
-        max-width: 300px;
+        width: 140%;
+        max-width: 500px;
         position: absolute;
         z-index: -1;
-        opacity: .2; 
+        opacity: .1; 
         filter: invert(50%);
         top: -30%;
 
@@ -81,6 +77,11 @@
         li p{
           margin:0;
           color: rgba(255, 255, 255, 0.585);
+          line-height: 2em;
+
+          span{
+            color: $green;
+          }
         }
       }
     }

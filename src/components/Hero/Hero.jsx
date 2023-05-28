@@ -2,6 +2,7 @@ import "./hero.styles.scss";
 
 import Lottie from "lottie-react";
 import roboLottie from "../../images/robo-lottie.json";
+import clickLottie from "../../images/click-lottie-black.json";
 import resumePreview from "../../images/resume-preview.jpg"
 import Icon from "../Icon/Icon";
 import {faArrowUpRightFromSquare} from '@fortawesome/free-solid-svg-icons'
@@ -38,9 +39,9 @@ const Hero = () => {
             <div className="resume-preview">
               <img className='resume-drop' src={resumePreview} alt="" />
               <img className='resume-front' src={resumePreview} alt="" />
+              <Lottie speed={3.0} data-aos-delay="1200" data-aos="zoom-in" className="click-lottie" animationData={clickLottie}/>
             </div>
           </a>
-          {/* <Lottie data-aos-delay="1200" data-aos="zoom-in" className="robo-lottie" animationData={roboLottie}/> */}
         </div>
 
       </div>
