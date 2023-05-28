@@ -39,7 +39,7 @@ const Hero = () => {
             <div className="resume-preview">
               <img className='resume-drop' src={resumePreview} alt="" />
               <img className='resume-front' src={resumePreview} alt="" />
-              <Lottie data-aos-delay="1200" data-aos="zoom-in" className="click-lottie" animationData={clickLottie}/>
+              <Lottie speed={3.0} data-aos-delay="1200" data-aos="zoom-in" className="click-lottie" animationData={clickLottie}/>
             </div>
           </a>
         </div>

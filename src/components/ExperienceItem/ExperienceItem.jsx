@@ -24,7 +24,7 @@ const ExperienceItem = ({title, subtitle, description, details, image}) => {
       details.map((detail) => {
         return (
           <li key={detail}>
-            <p>{ detail }</p>
+            <p className='detail' dangerouslySetInnerHTML={{ __html: detail }}></p>
           </li>
         )
       })
