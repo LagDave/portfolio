@@ -1,85 +1,81 @@
 @import "../../styles/base.scss";
 
-.vertical-timeline-wrapper{
+.vertical-timeline-wrapper {
+  margin-top: 7em;
 
-  margin-top:7em;
-
-  @include mobile{
+  @include mobile {
     margin-top: 6em;
   }
 
-  .vertical-timeline{
-
-    &:before{
+  .vertical-timeline {
+    &:before {
       top: 50px;
       width: 1px;
       background: #ffffff3d;
     }
 
-    @include mobile{
-      padding:0;
+    @include mobile {
+      padding: 0;
       margin-top: -50px;
     }
 
-    .vertical-timeline-element-icon{
+    .vertical-timeline-element-icon {
       background: white;
       color: $navy;
 
-      img{
+      img {
         position: absolute;
         width: 100%;
         box-shadow: none;
       }
-      
     }
 
-    .vertical-timeline-element-content{
+    .vertical-timeline-element-content {
       background: rgba(5, 12, 22, 0.6039215686);
-      box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-      backdrop-filter: blur( 4px );
-      -webkit-backdrop-filter: blur( 4px );
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       border-radius: 10px;
-      border: 1px solid rgba( 255, 255, 255, 0.5 );
+      border: 1px solid rgba(255, 255, 255, 0.5);
       color: white;
       border-radius: 5px;
       box-shadow: none;
       overflow: hidden;
-      transition: .3s;
+      transition: 0.3s;
       cursor: pointer;
 
-      .watermark-company-logo{
+      .watermark-company-logo {
         width: 140%;
         max-width: 500px;
         position: absolute;
         z-index: -1;
-        opacity: .1; 
+        opacity: 0.1;
         filter: invert(50%);
         top: -30%;
 
-        @include mobile{
-          left:0;
-          top:0;
+        @include mobile {
+          left: 0;
+          top: 0;
         }
       }
 
-      h3{
-
-        @include mobile{
+      h3 {
+        @include mobile {
           font-size: 1.3em;
         }
       }
 
-      ul{
+      ul {
         padding: 1em;
         padding-bottom: 0;
         margin: 0;
 
-        li p{
-          margin:0;
+        li p {
+          margin: 0;
           color: rgba(255, 255, 255, 0.585);
           line-height: 2em;
 
-          span{
+          span {
             color: $green;
           }
         }
