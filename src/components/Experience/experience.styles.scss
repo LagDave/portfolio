@@ -5,7 +5,10 @@
   padding-top:15vh;
   display: grid;
   place-items: center;
-  position: relative;
+
+  .container{
+    position: relative;
+  }
 
   @include mobile{
     padding: 40px 0 0;
@@ -31,4 +34,33 @@
     
   }
 
+  .smudge{
+    position: absolute;
+    z-index: -1;
+  }
+
+  .smudge-1{
+    top:0;
+    left:10%;
+  }
+
+  .smudge-2{
+    top:25%;
+    right: 25%;
+  }
+
+  .smudge-3{
+    top:50%;
+    left: 5%;
+  }
+
+  .smudge-4{
+    top:75%;
+    right: 5%;
+  }
+
+  .smudge-5{
+    top:90%;
+    left: 5%;
+  }
 }
