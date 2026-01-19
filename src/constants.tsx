@@ -1,11 +1,5 @@
 import { Job, TechCategory, SocialLink } from "./types";
-import {
-  Linkedin,
-  Github,
-  Facebook,
-  Mail,
-  Phone,
-} from "lucide-react";
+import { Linkedin, Github, Facebook, Mail, Phone } from "lucide-react";
 
 // Import images from src/images
 import profilePic1 from "./images/profile-picture.png";
@@ -36,7 +30,7 @@ export const HERO_CONTENT = {
   tagline: "Functional. Fun. Never boring.",
   taglineGradientPart: "That's how I build software.",
   description:
-    "Building apps with AI. Functional, impactful, and never boring. With 5+ years of modern solutions engineering experience, I turn complex problems into products people genuinely enjoy with AI.",
+    "Building apps with AI. Functional, impactful, and never boring. With 5+ years of modern software engineering experience, I turn complex problems into products people genuinely enjoy.",
   cta: "Check out my Resume",
   resumePdf: "/files/Resume.pdf",
 };
@@ -184,7 +178,10 @@ export const TECH_CATEGORIES: TechCategory[] = [
         name: "React",
         icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
       },
-      { name: "Redux Toolkit", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg" },
+      {
+        name: "Redux Toolkit",
+        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg",
+      },
       {
         name: "VueJS",
         icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg",
@@ -218,12 +215,18 @@ export const TECH_CATEGORIES: TechCategory[] = [
         name: "PHP",
         icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg",
       },
-      { name: "Laravel", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg" },
+      {
+        name: "Laravel",
+        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg",
+      },
       {
         name: "NodeJS",
         icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
       },
-      { name: "MySQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
+      {
+        name: "MySQL",
+        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg",
+      },
       {
         name: "PostgreSQL",
         icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
@@ -249,7 +252,10 @@ export const TECH_CATEGORIES: TechCategory[] = [
   {
     title: "Beyond",
     items: [
-      { name: "WordPress", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-original.svg" },
+      {
+        name: "WordPress",
+        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-original.svg",
+      },
       {
         name: "WooCommerce",
         icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/woocommerce/woocommerce-original.svg",

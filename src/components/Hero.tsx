@@ -5,21 +5,24 @@ import { ArrowRight } from "lucide-react";
 
 const Hero: React.FC = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-white dark:bg-black">
-      {/* Background Image - Hidden on mobile */}
-      <div
-        className="absolute inset-0 hidden md:block"
-        style={{
-          backgroundImage: "url(/right-banner.png)",
-          backgroundPosition: "calc(113% + 4vw) calc(101% + 32.5vh)",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "56%",
-        }}
-      />
+    <section className="relative min-h-screen flex items-center justify-center pt-20 bg-white dark:bg-black">
+      {/* Background Container - prevents overflow without blocking scroll */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Background Image - Hidden on mobile */}
+        <div
+          className="absolute inset-0 hidden md:block"
+          style={{
+            backgroundImage: "url(/right-banner.png)",
+            backgroundPosition: "calc(113% + 4vw) calc(101% + 32.5vh)",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "56%",
+          }}
+        />
 
-      {/* Subtle Background Gradients */}
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-b from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-full blur-[120px] opacity-60 -z-10 translate-x-1/3 -translate-y-1/3" />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-t from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 rounded-full blur-[100px] opacity-40 -z-10 -translate-x-1/3 translate-y-1/3" />
+        {/* Subtle Background Gradients */}
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-b from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-full blur-[120px] opacity-60 -z-10 translate-x-1/3 -translate-y-1/3" />
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-t from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 rounded-full blur-[100px] opacity-40 -z-10 -translate-x-1/3 translate-y-1/3" />
+      </div>
 
       <div className="max-w-7xl mx-auto px-6 w-full">
         <div className="max-w-2xl space-y-6 md:space-y-8 relative z-10">

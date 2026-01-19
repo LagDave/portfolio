@@ -237,7 +237,7 @@ const Technologies: React.FC = () => {
   };
 
   return (
-    <div id="technologies" className="scroll-mt-24 w-full bg-white dark:bg-black py-12 md:py-24 relative overflow-hidden">
+    <div id="technologies" className="scroll-mt-24 w-full bg-white dark:bg-black py-12 md:py-24 relative">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-[0.015] dark:opacity-[0.03]"
         style={{

@@ -7,7 +7,7 @@ import axios from "axios";
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({ name: "", email: "", body: "" });
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error" | "captcha_error">("idle");
   const { executeRecaptcha } = useGoogleReCaptcha();
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
@@ -15,6 +15,8 @@ const Contact: React.FC = () => {
 
     if (!executeRecaptcha) {
       console.error("reCAPTCHA not available");
+      setStatus("captcha_error");
+      setTimeout(() => setStatus("idle"), 3000);
       return;
     }
 
@@ -22,6 +24,12 @@ const Contact: React.FC = () => {
 
     try {
       const token = await executeRecaptcha("contact_form");
+
+      if (!token) {
+        setStatus("captcha_error");
+        setTimeout(() => setStatus("idle"), 3000);
+        return;
+      }
 
       await axios.post(
         "https://hook.eu1.make.com/1vxq2sl9wckyzdehj94mrciu5w4daddn",
@@ -160,6 +168,8 @@ const Contact: React.FC = () => {
                   </>
                 ) : status === "error" ? (
                   <span className="relative z-10">Error - Try Again</span>
+                ) : status === "captcha_error" ? (
+                  <span className="relative z-10">Verification Failed - Try Again</span>
                 ) : (
                   <>
                     <span className="relative z-10">Send Message</span>

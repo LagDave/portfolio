@@ -33,7 +33,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen selection:bg-blue-500 selection:text-white overflow-x-hidden">
+    <div className="min-h-screen selection:bg-blue-500 selection:text-white">
       <Navbar theme={theme} toggleTheme={toggleTheme} />
       <main>
         <Hero />
