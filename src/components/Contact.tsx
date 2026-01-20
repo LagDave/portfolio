@@ -218,7 +218,7 @@ const Contact: React.FC = () => {
               {/* Invisible reCAPTCHA - hidden badge */}
               <ReCAPTCHA
                 ref={recaptchaRef}
-                sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || ""}
+                sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
                 onChange={handleCaptchaChange}
                 size="invisible"
                 badge="bottomright"
