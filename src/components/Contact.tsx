@@ -1,48 +1,65 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useRef } from "react";
 import AnimatedSection from "./ui/AnimatedSection";
 import { SOCIAL_LINKS } from "../constants";
 import { Send, ArrowUpRight, Loader2, Check } from "lucide-react";
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import ReCAPTCHA from "react-google-recaptcha";
 import axios from "axios";
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({ name: "", email: "", body: "" });
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error" | "captcha_error">("idle");
-  const { executeRecaptcha } = useGoogleReCaptcha();
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error" | "captcha_error"
+  >("idle");
+  const [captchaVerified, setCaptchaVerified] = useState(false);
+  const [captchaLoading, setCaptchaLoading] = useState(false);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const captchaTokenRef = useRef<string | null>(null);
 
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
+  const handleCaptchaChange = (token: string | null) => {
+    setCaptchaLoading(false);
+    if (token) {
+      captchaTokenRef.current = token;
+      setCaptchaVerified(true);
+    } else {
+      captchaTokenRef.current = null;
+      setCaptchaVerified(false);
+    }
+  };
+
+  const handleCaptchaClick = () => {
+    if (captchaVerified) return;
+    setCaptchaLoading(true);
+    recaptchaRef.current?.execute();
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!executeRecaptcha) {
-      console.error("reCAPTCHA not available");
+    if (!captchaVerified || !captchaTokenRef.current) {
       setStatus("captcha_error");
       setTimeout(() => setStatus("idle"), 3000);
       return;
     }
 
     setStatus("loading");
-
     try {
-      const token = await executeRecaptcha("contact_form");
-
-      if (!token) {
-        setStatus("captcha_error");
-        setTimeout(() => setStatus("idle"), 3000);
-        return;
-      }
-
       await axios.post(
         "https://hook.eu1.make.com/1vxq2sl9wckyzdehj94mrciu5w4daddn",
-        { ...formData, recaptchaToken: token }
+        { ...formData, recaptchaToken: captchaTokenRef.current },
       );
       setStatus("success");
       setFormData({ name: "", email: "", body: "" });
+      recaptchaRef.current?.reset();
+      captchaTokenRef.current = null;
+      setCaptchaVerified(false);
       setTimeout(() => setStatus("idle"), 3000);
     } catch {
       setStatus("error");
+      recaptchaRef.current?.reset();
+      captchaTokenRef.current = null;
+      setCaptchaVerified(false);
       setTimeout(() => setStatus("idle"), 3000);
     }
-  }, [executeRecaptcha, formData]);
+  };
 
   return (
     <div
@@ -61,7 +78,8 @@ const Contact: React.FC = () => {
                   fontWeight: 400,
                 }}
               >
-                Let's build something fun<span className="text-blue-600">.</span>
+                Let's build something fun
+                <span className="text-blue-600">.</span>
               </h2>
               <p className="text-base md:text-xl text-slate-500 dark:text-slate-400 mb-6 md:mb-12 max-w-md leading-relaxed">
                 Always open to product ideas, AI-driven builds, and meaningful
@@ -110,7 +128,9 @@ const Contact: React.FC = () => {
                   type="text"
                   id="name"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   className="w-full bg-slate-50 dark:bg-black/50 border border-slate-900 dark:border-white/20 rounded-xl px-4 py-4 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white/40 focus:bg-white dark:focus:bg-black transition-all"
                   placeholder="John Doe"
                   required
@@ -127,7 +147,9 @@ const Contact: React.FC = () => {
                   type="email"
                   id="email"
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   className="w-full bg-slate-50 dark:bg-black/50 border border-slate-900 dark:border-white/20 rounded-xl px-4 py-4 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white/40 focus:bg-white dark:focus:bg-black transition-all"
                   placeholder="john@example.com"
                   required
@@ -144,15 +166,67 @@ const Contact: React.FC = () => {
                   id="message"
                   rows={4}
                   value={formData.body}
-                  onChange={(e) => setFormData({ ...formData, body: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, body: e.target.value })
+                  }
                   className="w-full bg-slate-50 dark:bg-black/50 border border-slate-900 dark:border-white/20 rounded-xl px-4 py-4 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white/40 focus:bg-white dark:focus:bg-black transition-all resize-none"
                   placeholder="Tell me about your project..."
                   required
                 />
               </div>
+
+              {/* Custom reCAPTCHA Checkbox */}
+              <div
+                onClick={handleCaptchaClick}
+                className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-all ${
+                  captchaVerified
+                    ? "bg-slate-100 dark:bg-white/10 border-slate-900 dark:border-white"
+                    : "bg-slate-50 dark:bg-black/50 border-slate-200 dark:border-white/20 hover:border-slate-400 dark:hover:border-white/40"
+                }`}
+              >
+                <div
+                  className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all ${
+                    captchaVerified
+                      ? "bg-slate-900 border-slate-900 dark:bg-white dark:border-white"
+                      : "border-slate-400 dark:border-white/40"
+                  }`}
+                >
+                  {captchaLoading ? (
+                    <Loader2
+                      size={14}
+                      className="text-slate-600 dark:text-white animate-spin"
+                    />
+                  ) : captchaVerified ? (
+                    <Check size={14} className="text-white dark:text-black" />
+                  ) : null}
+                </div>
+                <span
+                  className={`text-sm font-medium ${
+                    captchaVerified
+                      ? "text-slate-900 dark:text-white"
+                      : "text-slate-600 dark:text-slate-400"
+                  }`}
+                >
+                  {captchaLoading
+                    ? "Verifying..."
+                    : captchaVerified
+                      ? "A human presence has been confirmed."
+                      : "Touch so I can sense your human spark"}
+                </span>
+              </div>
+
+              {/* Invisible reCAPTCHA - hidden badge */}
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || ""}
+                onChange={handleCaptchaChange}
+                size="invisible"
+                badge="bottomright"
+              />
+
               <button
                 type="submit"
-                disabled={status === "loading"}
+                disabled={status === "loading" || !captchaVerified}
                 className="group relative w-full bg-slate-900 dark:bg-white text-white dark:text-black font-bold py-4 rounded-xl transition-all flex items-center justify-center space-x-2 shadow-xl shadow-slate-900/10 active:scale-[0.98] transform duration-100 overflow-hidden disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -169,7 +243,9 @@ const Contact: React.FC = () => {
                 ) : status === "error" ? (
                   <span className="relative z-10">Error - Try Again</span>
                 ) : status === "captcha_error" ? (
-                  <span className="relative z-10">Verification Failed - Try Again</span>
+                  <span className="relative z-10">
+                    Please verify you're not a robot
+                  </span>
                 ) : (
                   <>
                     <span className="relative z-10">Send Message</span>

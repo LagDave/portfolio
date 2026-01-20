@@ -7,3 +7,12 @@ h1, h2, h3, h4, h5, h6 {
   font-family: "Polysans Bulky", sans-serif;
 }
 
+/* Hide reCAPTCHA badge */
+.grecaptcha-badge {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
