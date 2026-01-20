@@ -15,7 +15,7 @@ const About: React.FC = () => {
       <AnimatedSection className="py-0">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-start">
           {/* Image Grid Collage - First on mobile */}
-          <div className="relative order-1 md:order-1">
+          <div className="relative order-1 md:order-1 overflow-hidden">
             <div className="relative z-10 grid grid-cols-2 gap-3 md:gap-6">
               <motion.div
                 whileHover={{ y: -10 }}
@@ -59,7 +59,7 @@ const About: React.FC = () => {
               </motion.div>
             </div>
             {/* Decorative shapes */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-slate-50 dark:bg-slate-900 rounded-full blur-3xl -z-10" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-slate-50 dark:bg-slate-900 rounded-full blur-3xl -z-10" />
           </div>
 
           {/* Text Content */}
