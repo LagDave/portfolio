@@ -58,13 +58,15 @@ export default function Hero({ isDark }: HeroProps) {
     const speed = isDeleting ? 30 : 22;
     return setTimeout(
       () => setCharCount((c) => c + (isDeleting ? -1 : 1)),
-      speed
+      speed,
     );
   }, [charCount, isDeleting, phraseIdx]);
 
   useEffect(() => {
     const id = tick();
-    return () => { if (id) clearTimeout(id); };
+    return () => {
+      if (id) clearTimeout(id);
+    };
   }, [tick]);
 
   return (
@@ -126,10 +128,7 @@ export default function Hero({ isDark }: HeroProps) {
         />
 
         {/* Gradient orbs */}
-        <motion.div
-          style={{ y: bgY }}
-          className="absolute inset-0"
-        >
+        <motion.div style={{ y: bgY }} className="absolute inset-0">
           <motion.div
             animate={{
               x: [0, 30, -20, 0],
@@ -191,19 +190,29 @@ export default function Hero({ isDark }: HeroProps) {
                 isDark ? "text-white" : "text-gray-900"
               }`}
             >
-              <span className={`relative inline-block text-xs sm:text-sm lg:text-base font-medium ${isDark ? "text-white/30" : "text-gray-900/30"}`}>
+              <span
+                className={`relative inline-block text-xs sm:text-sm lg:text-base font-medium ${isDark ? "text-white/30" : "text-gray-900/30"}`}
+              >
                 AI Engineer
-                <div className={`absolute left-0 right-0 top-1/2 h-0.5 ${isDark ? "bg-white" : "bg-black"}`} />
-              </span>
-              {" "}
-              <span className={`relative inline-block text-xs sm:text-sm lg:text-base font-medium ${isDark ? "text-white/30" : "text-gray-900/30"}`}>
+                <div
+                  className={`absolute left-0 right-0 top-1/2 h-0.5 ${isDark ? "bg-white" : "bg-black"}`}
+                />
+              </span>{" "}
+              <span
+                className={`relative inline-block text-xs sm:text-sm lg:text-base font-medium ${isDark ? "text-white/30" : "text-gray-900/30"}`}
+              >
                 Vibe Coder
-                <div className={`absolute left-0 right-0 top-1/2 h-0.5 ${isDark ? "bg-white" : "bg-black"}`} />
-              </span>
-              {" "}
-              <span className={`relative inline-block text-xs sm:text-sm lg:text-base font-medium ${isDark ? "text-white/30" : "text-gray-900/30"}`}>
+                <div
+                  className={`absolute left-0 right-0 top-1/2 h-0.5 ${isDark ? "bg-white" : "bg-black"}`}
+                />
+              </span>{" "}
+              <span
+                className={`relative inline-block text-xs sm:text-sm lg:text-base font-medium ${isDark ? "text-white/30" : "text-gray-900/30"}`}
+              >
                 Guesswork
-                <div className={`absolute left-0 right-0 top-1/2 h-0.5 ${isDark ? "bg-white" : "bg-black"}`} />
+                <div
+                  className={`absolute left-0 right-0 top-1/2 h-0.5 ${isDark ? "bg-white" : "bg-black"}`}
+                />
               </span>
               <br />
               <span>AI-Augmented</span>
@@ -258,19 +267,6 @@ export default function Hero({ isDark }: HeroProps) {
             I started engineering in the pre-AI era, where debugging meant
             understanding, not guessing. Now I use AI like a power tool: to
             accelerate output without outsourcing thinking.
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.38,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="text-sm font-medium tracking-wide gradient-text"
-          >
-            AI-driven delivery, human-grade architecture.
           </motion.p>
 
           {/* CTAs */}
