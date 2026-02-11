@@ -55,7 +55,7 @@ export default function Hero({ isDark }: HeroProps) {
       return undefined;
     }
 
-    const speed = isDeleting ? 12 : 22;
+    const speed = isDeleting ? 30 : 22;
     return setTimeout(
       () => setCharCount((c) => c + (isDeleting ? -1 : 1)),
       speed
@@ -140,7 +140,7 @@ export default function Hero({ isDark }: HeroProps) {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full opacity-20"
+            className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full opacity-20 hidden md:block"
             style={{
               background:
                 "radial-gradient(circle, rgba(59,130,246,0.4) 0%, transparent 70%)",
@@ -157,7 +157,7 @@ export default function Hero({ isDark }: HeroProps) {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full opacity-15"
+            className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full opacity-15 hidden md:block"
             style={{
               background:
                 "radial-gradient(circle, rgba(99,102,241,0.4) 0%, transparent 70%)",
@@ -167,9 +167,9 @@ export default function Hero({ isDark }: HeroProps) {
         </motion.div>
       </div>
 
-      {/* Cursor spotlight */}
+      {/* Cursor spotlight — desktop only (no hover cursor on touch) */}
       <div
-        className="fixed inset-0 pointer-events-none z-10 transition-opacity duration-300"
+        className="fixed inset-0 pointer-events-none z-10 transition-opacity duration-300 hidden md:block"
         style={{
           background: `radial-gradient(600px circle at ${spotX}px ${spotY}px, rgba(59,130,246,0.04), transparent 60%)`,
         }}
