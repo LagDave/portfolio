@@ -1,96 +1,247 @@
-import React from "react";
-import AnimatedSection from "./ui/AnimatedSection";
-import { ABOUT_CONTENT } from "../constants";
+import { useRef } from "react";
 import { motion } from "framer-motion";
+import { useMousePosition } from "../hooks/useMousePosition";
 
-const About: React.FC = () => {
+interface AboutProps {
+  isDark: boolean;
+}
+
+const TAGS = ["AI", "Cloud", "DX", "Performance", "Motion", "Design", "Scale"];
+
+const IMAGES = [
+  "/img1.webp",
+  "/img2.webp",
+  "/img3.webp",
+  "/img4.webp",
+];
+
+function TiltImage({
+  src,
+  index,
+  isDark,
+}: {
+  src: string;
+  index: number;
+  isDark: boolean;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    ref.current.style.transform = `perspective(600px) rotateY(${
+      x * 10
+    }deg) rotateX(${-y * 10}deg) scale(1.02)`;
+  };
+
+  const handleMouseLeave = () => {
+    if (!ref.current) return;
+    ref.current.style.transform =
+      "perspective(600px) rotateY(0deg) rotateX(0deg) scale(1)";
+  };
+
   return (
-    <div
-      id="about"
-      className="scroll-mt-24 w-full bg-white dark:bg-black py-12 md:py-24 relative"
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
     >
-      {/* Background decoration */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-800 to-transparent"></div>
+      <div
+        ref={ref}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className="group relative overflow-hidden rounded-2xl transition-all duration-500 cursor-pointer"
+        style={{ transformStyle: "preserve-3d" }}
+      >
+        <img
+          src={src}
+          alt={`About ${index + 1}`}
+          loading="lazy"
+          className="w-full aspect-square object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700"
+        />
+        <div
+          className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${
+            isDark
+              ? "shadow-[inset_0_0_60px_rgba(59,130,246,0.15)]"
+              : "shadow-[inset_0_0_60px_rgba(59,130,246,0.08)]"
+          }`}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      </div>
+    </motion.div>
+  );
+}
 
-      <AnimatedSection className="py-0">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-start">
-          {/* Image Grid Collage - First on mobile */}
-          <div className="relative order-1 md:order-1 overflow-hidden">
-            <div className="relative z-10 grid grid-cols-2 gap-3 md:gap-6">
-              <motion.div
-                whileHover={{ y: -10 }}
-                className="rounded-2xl overflow-hidden shadow-2xl shadow-slate-200 dark:shadow-none md:mb-16 md:-mt-16"
-              >
-                <img
-                  src="/img1.png"
-                  alt="Profile 1"
-                  className="w-full h-full aspect-square object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
-                />
-              </motion.div>
-              <motion.div
-                whileHover={{ y: -10 }}
-                className="rounded-2xl overflow-hidden shadow-2xl shadow-slate-200 dark:shadow-none md:mt-20"
-              >
-                <img
-                  src="/img2.png"
-                  alt="Profile 2"
-                  className="w-full h-full aspect-square object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
-                />
-              </motion.div>
-              <motion.div
-                whileHover={{ y: -10 }}
-                className="rounded-2xl overflow-hidden shadow-2xl shadow-slate-200 dark:shadow-none"
-              >
-                <img
-                  src="/img3.png"
-                  alt="Profile 3"
-                  className="w-full h-full aspect-square object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
-                />
-              </motion.div>
-              <motion.div
-                whileHover={{ y: -10 }}
-                className="rounded-2xl overflow-hidden shadow-2xl shadow-slate-200 dark:shadow-none md:-mb-16 md:mt-16"
-              >
-                <img
-                  src="/img4.png"
-                  alt="Profile 4"
-                  className="w-full h-full aspect-square object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
-                />
-              </motion.div>
-            </div>
-            {/* Decorative shapes */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-slate-50 dark:bg-slate-900 rounded-full blur-3xl -z-10" />
-          </div>
+function FloatingTags({ isDark }: { isDark: boolean }) {
+  const mouse = useMousePosition();
 
-          {/* Text Content */}
-          <div className="space-y-6 md:space-y-10 order-2 md:order-2">
-            <div>
-              <h2
-                className="text-3xl md:text-5xl lg:text-6xl leading-tight text-slate-900 dark:text-white mb-4 md:mb-6"
-                style={{
-                  fontFamily: '"Polysans Bulky", sans-serif',
-                  fontWeight: 400,
-                }}
-              >
-                The Dave Standard<span className="text-blue-600">.</span>
-              </h2>
-              <h3 className="text-lg md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-blue-600 to-slate-900 dark:from-white dark:via-blue-200 dark:to-white font-medium">
-                Engineering enjoyable software since forever.
-              </h3>
-            </div>
-
-            <div className="space-y-4 md:space-y-6 text-slate-600 dark:text-slate-400 text-base md:text-lg leading-relaxed">
-              {ABOUT_CONTENT.paragraphs.map((para, index) => (
-                <p key={index} className="transition-colors">
-                  {para}
-                </p>
-              ))}
-            </div>
-          </div>
-        </div>
-      </AnimatedSection>
+  return (
+    <div className="flex flex-wrap gap-3 mt-8">
+      {TAGS.map((tag, i) => {
+        const offsetX = Math.sin((mouse.x * 0.002 + i) * 0.5) * 3;
+        const offsetY = Math.cos((mouse.y * 0.002 + i) * 0.7) * 3;
+        return (
+          <motion.span
+            key={tag}
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5 + i * 0.08 }}
+            animate={{ x: offsetX, y: offsetY }}
+            className={`px-4 py-1.5 text-xs font-medium rounded-full border transition-colors duration-300 ${
+              isDark
+                ? "border-white/10 text-white/50 bg-white/[0.03] hover:border-electric/30 hover:text-electric"
+                : "border-black/8 text-gray-400 bg-black/[0.02] hover:border-electric/30 hover:text-electric"
+            }`}
+          >
+            {tag}
+          </motion.span>
+        );
+      })}
     </div>
   );
-};
+}
 
-export default About;
+export default function About({ isDark }: AboutProps) {
+  const ref = useRef<HTMLElement>(null);
+  return (
+    <section
+      ref={ref}
+      id="about"
+      className={`relative py-32 ${
+        isDark ? "bg-surface-dark" : "bg-surface-light"
+      }`}
+    >
+      <div className="section-divider" />
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-16">
+        {/* Section title */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="mb-20"
+        >
+          <h2
+            className={`font-display text-4xl sm:text-5xl font-bold tracking-tight ${
+              isDark ? "text-white" : "text-gray-900"
+            }`}
+          >
+            The Dave Standard
+            <span className="text-electric">.</span>
+          </h2>
+          <p
+            className={`mt-4 text-lg font-medium ${
+              isDark ? "text-white/60" : "text-gray-600"
+            }`}
+          >
+            Software that moves fast and makes sense.
+          </p>
+          <p
+            className={`mt-2 text-base ${
+              isDark ? "text-white/40" : "text-gray-400"
+            }`}
+          >
+            I'm pro-AI, and just as pro-understanding.
+            I don't ship "looks good in the demo" code. I ship systems that survive week 12.
+          </p>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          {/* Left – Image Grid */}
+          <div className="grid grid-cols-2 gap-4">
+            {IMAGES.map((src, i) => (
+              <TiltImage key={i} src={src} index={i} isDark={isDark} />
+            ))}
+          </div>
+
+          {/* Right – About Copy */}
+          <div className="space-y-6">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className={`text-lg leading-relaxed ${
+                isDark ? "text-white/60" : "text-gray-600"
+              }`}
+            >
+              Hey, I'm Rustine. Full-stack engineer, product-minded builder, and someone who still enjoys solving the hard parts.
+            </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className={`text-lg leading-relaxed ${
+                isDark ? "text-white/60" : "text-gray-600"
+              }`}
+            >
+              I've been doing this since before AI was the default copilot, when you earned progress by learning the system, not prompting it. That foundation never left. It's why I can move quickly without turning code into a mystery novel.
+            </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className={`text-lg leading-relaxed ${
+                isDark ? "text-white/60" : "text-gray-600"
+              }`}
+            >
+              Today, I build{" "}
+              <span className="gradient-text font-semibold">
+                AI-driven experiences with real engineering underneath
+              </span>
+              :
+            </motion.p>
+
+            <motion.ul
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.25 }}
+              className={`text-lg leading-relaxed space-y-3 ${
+                isDark ? "text-white/60" : "text-gray-600"
+              }`}
+            >
+              <li className="flex items-start gap-3">
+                <span className="mt-2 w-1.5 h-1.5 rounded-full bg-electric flex-shrink-0" />
+                AI features that feel magical because the plumbing is solid
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="mt-2 w-1.5 h-1.5 rounded-full bg-electric flex-shrink-0" />
+                Workflow automation that reduces busywork without creating future chaos
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="mt-2 w-1.5 h-1.5 rounded-full bg-electric flex-shrink-0" />
+                Systems that scale because they were designed to, not because we hoped
+              </li>
+            </motion.ul>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className={`text-lg leading-relaxed font-medium ${
+                isDark ? "text-white/70" : "text-gray-700"
+              }`}
+            >
+              AI makes shipping faster. Understanding makes shipping sustainable.
+              <br />
+              That combination is the whole point.
+            </motion.p>
+
+            {/* Floating tags */}
+            <FloatingTags isDark={isDark} />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

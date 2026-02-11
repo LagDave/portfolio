@@ -1,270 +1,409 @@
-import React, { useState, useRef } from "react";
-import AnimatedSection from "./ui/AnimatedSection";
-import { SOCIAL_LINKS } from "../constants";
-import { Send, ArrowUpRight, Loader2, Check } from "lucide-react";
-import ReCAPTCHA from "react-google-recaptcha";
-import axios from "axios";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Linkedin,
+  Github,
+  Facebook,
+  Mail,
+  MessageCircle,
+  Send,
+  Check,
+  Sparkles,
+} from "lucide-react";
 
-const Contact: React.FC = () => {
-  const [formData, setFormData] = useState({ name: "", email: "", body: "" });
-  const [status, setStatus] = useState<
-    "idle" | "loading" | "success" | "error" | "captcha_error"
-  >("idle");
-  const [captchaVerified, setCaptchaVerified] = useState(false);
-  const [captchaLoading, setCaptchaLoading] = useState(false);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
-  const captchaTokenRef = useRef<string | null>(null);
+interface ContactProps {
+  isDark: boolean;
+}
 
-  const handleCaptchaChange = (token: string | null) => {
-    setCaptchaLoading(false);
-    if (token) {
-      captchaTokenRef.current = token;
-      setCaptchaVerified(true);
-    } else {
-      captchaTokenRef.current = null;
-      setCaptchaVerified(false);
-    }
+const SOCIALS = [
+  {
+    icon: Linkedin,
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/rustine-dave-235a51237/",
+    color: "#0A66C2",
+  },
+  {
+    icon: Github,
+    label: "GitHub",
+    href: "https://github.com/lagdave/",
+    color: "#333",
+  },
+  {
+    icon: Facebook,
+    label: "Facebook",
+    href: "https://www.facebook.com/profile.php?id=61585996447935",
+    color: "#1877F2",
+  },
+  {
+    icon: Mail,
+    label: "Email",
+    href: "mailto:hi@rustinedave.com",
+    color: "#EA4335",
+  },
+  {
+    icon: MessageCircle,
+    label: "WhatsApp",
+    href: "https://wa.me/+639505425118",
+    color: "#25D366",
+  },
+];
+
+function Particle({ x, y }: { x: number; y: number }) {
+  return (
+    <motion.div
+      initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
+      animate={{
+        x: (Math.random() - 0.5) * 200,
+        y: (Math.random() - 0.5) * 200,
+        opacity: 0,
+        scale: 0,
+      }}
+      transition={{ duration: 1.2, ease: "easeOut" }}
+      className="absolute w-1.5 h-1.5 rounded-full bg-electric"
+      style={{ left: x, top: y }}
+    />
+  );
+}
+
+export default function Contact({ isDark }: ContactProps) {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [humanCheck, setHumanCheck] = useState(false);
+  const [holdProgress, setHoldProgress] = useState(0);
+  const [sent, setSent] = useState(false);
+  const [particles, setParticles] = useState<
+    { id: number; x: number; y: number }[]
+  >([]);
+  const holdTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const startHold = () => {
+    if (humanCheck) return;
+    holdTimer.current = setInterval(() => {
+      setHoldProgress((p) => {
+        if (p >= 100) {
+          if (holdTimer.current) clearInterval(holdTimer.current);
+          setHumanCheck(true);
+          return 100;
+        }
+        return p + 4;
+      });
+    }, 30);
   };
 
-  const handleCaptchaClick = () => {
-    if (captchaVerified) return;
-    setCaptchaLoading(true);
-    recaptchaRef.current?.execute();
+  const stopHold = () => {
+    if (holdTimer.current) clearInterval(holdTimer.current);
+    if (!humanCheck) setHoldProgress(0);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!captchaVerified || !captchaTokenRef.current) {
-      setStatus("captcha_error");
-      setTimeout(() => setStatus("idle"), 3000);
-      return;
+    if (!humanCheck) return;
+
+    // Particle burst
+    const rect = formRef.current?.getBoundingClientRect();
+    if (rect) {
+      const newParticles = Array.from({ length: 12 }, (_, i) => ({
+        id: Date.now() + i,
+        x: rect.width / 2,
+        y: rect.height / 2,
+      }));
+      setParticles(newParticles);
     }
 
-    setStatus("loading");
-    try {
-      await axios.post(
-        "https://hook.eu1.make.com/1vxq2sl9wckyzdehj94mrciu5w4daddn",
-        { ...formData, recaptchaToken: captchaTokenRef.current },
-      );
-      setStatus("success");
-      setFormData({ name: "", email: "", body: "" });
-      recaptchaRef.current?.reset();
-      captchaTokenRef.current = null;
-      setCaptchaVerified(false);
-      setTimeout(() => setStatus("idle"), 3000);
-    } catch {
-      setStatus("error");
-      recaptchaRef.current?.reset();
-      captchaTokenRef.current = null;
-      setCaptchaVerified(false);
-      setTimeout(() => setStatus("idle"), 3000);
-    }
+    setSent(true);
+    setTimeout(() => {
+      setSent(false);
+      setFormData({ name: "", email: "", message: "" });
+      setHumanCheck(false);
+      setHoldProgress(0);
+      setParticles([]);
+    }, 4000);
   };
+
+  const inputClasses =
+    "w-full px-5 py-3.5 rounded-2xl text-sm transition-all duration-300 bg-white text-gray-900 placeholder-gray-400 border border-white/20 focus:border-electric/40";
 
   return (
-    <div
+    <section
       id="contact"
-      className="scroll-mt-24 w-full bg-slate-50 dark:bg-[#0a0a0a] py-12 md:py-24 border-t border-slate-200 dark:border-white/5"
+      className={`relative py-32 ${
+        isDark ? "bg-surface-dark-elevated" : "bg-surface-light-elevated"
+      }`}
     >
-      <AnimatedSection className="py-0">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24 mb-12 md:mb-24">
-          {/* Contact Info */}
-          <div className="flex flex-col justify-between">
-            <div>
-              <h2
-                className="text-3xl md:text-7xl mb-4 md:mb-8 text-slate-900 dark:text-white tracking-tight"
-                style={{
-                  fontFamily: '"Polysans Bulky", sans-serif',
-                  fontWeight: 400,
-                }}
-              >
-                Let's build something fun
-                <span className="text-blue-600">.</span>
-              </h2>
-              <p className="text-base md:text-xl text-slate-500 dark:text-slate-400 mb-6 md:mb-12 max-w-md leading-relaxed">
-                Always open to product ideas, AI-driven builds, and meaningful
-                partnerships. If you want to create something functional, fun,
-                and never boring, let's do it.
-              </p>
-
-              <div className="flex flex-wrap gap-3">
-                {SOCIAL_LINKS.map((link) => (
-                  <a
-                    key={link.platform}
-                    href={link.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group flex items-center space-x-2 bg-white dark:bg-white/5 hover:bg-slate-900 hover:text-white dark:hover:bg-white text-slate-900 dark:text-white dark:hover:text-black px-5 py-3 rounded-full transition-all duration-300 border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-lg"
-                  >
-                    {link.icon && <span className="w-5 h-5">{link.icon}</span>}
-                    <span className="font-semibold">{link.platform}</span>
-                    <ArrowUpRight className="w-4 h-4 opacity-50 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Form */}
-          <div className="bg-white dark:bg-white/5 p-8 md:p-12 rounded-3xl border border-slate-100 dark:border-white/5 shadow-2xl shadow-slate-200/50 dark:shadow-none">
-            <h3
-              className="text-2xl mb-8 text-slate-900 dark:text-white"
-              style={{
-                fontFamily: '"Polysans Bulky", sans-serif',
-                fontWeight: 400,
-              }}
+      <div className="section-divider" />
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-16">
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          {/* Left */}
+          <div className="space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
             >
-              Get in Touch<span className="text-blue-600">.</span>
-            </h3>
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wide"
-                >
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  className="w-full bg-slate-50 dark:bg-black/50 border border-slate-900 dark:border-white/20 rounded-xl px-4 py-4 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white/40 focus:bg-white dark:focus:bg-black transition-all"
-                  placeholder="John Doe"
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wide"
-                >
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                  className="w-full bg-slate-50 dark:bg-black/50 border border-slate-900 dark:border-white/20 rounded-xl px-4 py-4 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white/40 focus:bg-white dark:focus:bg-black transition-all"
-                  placeholder="john@example.com"
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="message"
-                  className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wide"
-                >
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  rows={4}
-                  value={formData.body}
-                  onChange={(e) =>
-                    setFormData({ ...formData, body: e.target.value })
-                  }
-                  className="w-full bg-slate-50 dark:bg-black/50 border border-slate-900 dark:border-white/20 rounded-xl px-4 py-4 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white/40 focus:bg-white dark:focus:bg-black transition-all resize-none"
-                  placeholder="Tell me about your project..."
-                  required
-                />
-              </div>
-
-              {/* Custom reCAPTCHA Checkbox */}
-              <div
-                onClick={handleCaptchaClick}
-                className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-all ${
-                  captchaVerified
-                    ? "bg-slate-100 dark:bg-white/10 border-slate-900 dark:border-white"
-                    : "bg-slate-50 dark:bg-black/50 border-slate-200 dark:border-white/20 hover:border-slate-400 dark:hover:border-white/40"
+              <h2
+                className={`font-display text-4xl sm:text-5xl font-bold tracking-tight ${
+                  isDark ? "text-white" : "text-gray-900"
                 }`}
               >
-                <div
-                  className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all ${
-                    captchaVerified
-                      ? "bg-slate-900 border-slate-900 dark:bg-white dark:border-white"
-                      : "border-slate-400 dark:border-white/40"
-                  }`}
-                >
-                  {captchaLoading ? (
-                    <Loader2
-                      size={14}
-                      className="text-slate-600 dark:text-white animate-spin"
-                    />
-                  ) : captchaVerified ? (
-                    <Check size={14} className="text-white dark:text-black" />
-                  ) : null}
-                </div>
-                <span
-                  className={`text-sm font-medium ${
-                    captchaVerified
-                      ? "text-slate-900 dark:text-white"
-                      : "text-slate-600 dark:text-slate-400"
-                  }`}
-                >
-                  {captchaLoading
-                    ? "Verifying..."
-                    : captchaVerified
-                      ? "A human presence has been confirmed."
-                      : "Touch so I can sense your human spark"}
-                </span>
-              </div>
-
-              {/* Invisible reCAPTCHA - hidden badge */}
-              <ReCAPTCHA
-                ref={recaptchaRef}
-                sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
-                onChange={handleCaptchaChange}
-                size="invisible"
-                badge="bottomright"
-              />
-
-              <button
-                type="submit"
-                disabled={status === "loading" || !captchaVerified}
-                className="group relative w-full bg-slate-900 dark:bg-white text-white dark:text-black font-bold py-4 rounded-xl transition-all flex items-center justify-center space-x-2 shadow-xl shadow-slate-900/10 active:scale-[0.98] transform duration-100 overflow-hidden disabled:opacity-70 disabled:cursor-not-allowed"
+                Let's build something
+                <br />
+                worth maintaining
+                <span className="text-electric">.</span>
+              </h2>
+              <p
+                className={`mt-6 text-lg leading-relaxed max-w-md ${
+                  isDark ? "text-white/50" : "text-gray-500"
+                }`}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                {status === "loading" ? (
-                  <>
-                    <Loader2 size={18} className="relative z-10 animate-spin" />
-                    <span className="relative z-10">Sending...</span>
-                  </>
-                ) : status === "success" ? (
-                  <>
-                    <Check size={18} className="relative z-10" />
-                    <span className="relative z-10">Sent!</span>
-                  </>
-                ) : status === "error" ? (
-                  <span className="relative z-10">Error - Try Again</span>
-                ) : status === "captcha_error" ? (
-                  <span className="relative z-10">
-                    Please verify you're not a robot
-                  </span>
-                ) : (
-                  <>
-                    <span className="relative z-10">Send Message</span>
-                    <Send size={18} className="relative z-10" />
-                  </>
-                )}
-              </button>
-            </form>
+                If you're aiming for "ship it yesterday" and "it still works
+                next quarter," we'll get along.
+              </p>
+              <p
+                className={`mt-3 text-lg leading-relaxed max-w-md font-medium ${
+                  isDark ? "text-white/60" : "text-gray-600"
+                }`}
+              >
+                Bring the idea. I'll bring the speed and the structure.
+              </p>
+            </motion.div>
+
+            {/* Social pills */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="flex flex-wrap gap-3"
+            >
+              {SOCIALS.map((social, i) => (
+                <motion.a
+                  key={social.label}
+                  href={social.href}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 + i * 0.08 }}
+                  whileHover={{ y: -4, scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`group flex items-center gap-2.5 px-5 py-3 rounded-2xl text-sm font-medium border transition-all duration-300 ${
+                    isDark
+                      ? "border-white/[0.06] text-white/60 bg-white/[0.03] hover:border-electric/30 hover:text-electric hover:bg-electric/5 hover:shadow-lg hover:shadow-electric/10"
+                      : "border-black/[0.06] text-gray-500 bg-white hover:border-electric/30 hover:text-electric hover:bg-electric/5 hover:shadow-lg hover:shadow-electric/10"
+                  }`}
+                >
+                  <social.icon
+                    size={16}
+                    className="transition-transform duration-300 group-hover:scale-110"
+                  />
+                  {social.label}
+                </motion.a>
+              ))}
+            </motion.div>
           </div>
-        </div>
 
-        {/* Footer */}
-        <div className="border-t border-slate-200 dark:border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-slate-400 dark:text-slate-600 text-sm">
-          <p>© {new Date().getFullYear()} Rustine Dave. All rights reserved.</p>
-          <p className="mt-2 md:mt-0">Made with React & Tailwind</p>
+          {/* Right – Form */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+          >
+            <div
+              className={`relative rounded-3xl p-8 border overflow-hidden shadow-xl shadow-electric/15 hover:shadow-2xl hover:shadow-electric/20 transition-shadow duration-500 ${
+                isDark
+                  ? "bg-gradient-to-br from-blue-600/50 via-blue-500/50 to-indigo-600/50 border-white/10"
+                  : "bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 border-blue-400"
+              }`}
+            >
+              {/* Particles */}
+              <AnimatePresence>
+                {particles.map((p) => (
+                  <Particle key={p.id} x={p.x} y={p.y} />
+                ))}
+              </AnimatePresence>
+
+              <AnimatePresence mode="wait">
+                {sent ? (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="flex flex-col items-center justify-center py-16 text-center"
+                  >
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 15,
+                      }}
+                      className="w-16 h-16 rounded-full bg-electric/10 flex items-center justify-center mb-6"
+                    >
+                      <Check className="text-electric" size={28} />
+                    </motion.div>
+                    <h3
+                      className={`font-display text-2xl font-bold mb-2 ${
+                        isDark ? "text-white" : "text-gray-900"
+                      }`}
+                    >
+                      Message sent
+                      <span className="text-electric">.</span>
+                    </h3>
+                    <p
+                      className={`text-sm ${
+                        isDark ? "text-white/40" : "text-gray-500"
+                      }`}
+                    >
+                      I'll get back to you soon. Thanks for reaching out!
+                    </p>
+                  </motion.div>
+                ) : (
+                  <motion.form
+                    key="form"
+                    ref={formRef}
+                    onSubmit={handleSubmit}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="space-y-5"
+                  >
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="John Doe"
+                        value={formData.name}
+                        onChange={(e) =>
+                          setFormData({ ...formData, name: e.target.value })
+                        }
+                        required
+                        className={inputClasses}
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="email"
+                        placeholder="john@example.com"
+                        value={formData.email}
+                        onChange={(e) =>
+                          setFormData({ ...formData, email: e.target.value })
+                        }
+                        required
+                        className={inputClasses}
+                      />
+                    </div>
+                    <div>
+                      <textarea
+                        placeholder="Tell me about your project..."
+                        rows={4}
+                        value={formData.message}
+                        onChange={(e) =>
+                          setFormData({ ...formData, message: e.target.value })
+                        }
+                        required
+                        className={`${inputClasses} resize-none`}
+                      />
+                    </div>
+
+                    {/* Human check */}
+                    <div className="pt-1">
+                      <motion.button
+                        type="button"
+                        onMouseDown={startHold}
+                        onMouseUp={stopHold}
+                        onMouseLeave={stopHold}
+                        onTouchStart={startHold}
+                        onTouchEnd={stopHold}
+                        className={`relative w-full py-3.5 rounded-2xl text-sm font-medium flex items-center justify-center gap-2 overflow-hidden cursor-pointer border transition-all duration-300 ${
+                          humanCheck
+                            ? "border-white text-white"
+                            : "border-white/40 text-white/70"
+                        }`}
+                      >
+                        {/* Fill bar */}
+                        <div
+                          className="absolute left-0 top-0 h-full bg-white/20 transition-all duration-75"
+                          style={{ width: `${holdProgress}%` }}
+                        />
+                        <span className="relative z-10 flex items-center gap-2">
+                          {humanCheck ? (
+                            <>
+                              <Sparkles size={14} className="text-blue-600" />A
+                              human presence has been confirmed
+                            </>
+                          ) : (
+                            <>
+                              <Sparkles size={14} />
+                              Touch and hold so I can sense your human spark
+                            </>
+                          )}
+                        </span>
+                      </motion.button>
+                    </div>
+
+                    {/* Submit */}
+                    <motion.button
+                      type="submit"
+                      disabled={!humanCheck}
+                      whileHover={humanCheck ? { scale: 1.02 } : {}}
+                      whileTap={humanCheck ? { scale: 0.98 } : {}}
+                      className={`relative w-full py-4 rounded-2xl text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer overflow-hidden ${
+                        humanCheck
+                          ? "bg-white text-blue-600 shadow-xl shadow-white/25 hover:shadow-white/40"
+                          : isDark
+                            ? "bg-white/5 text-white/20 cursor-not-allowed"
+                            : "bg-gray-100 text-gray-300 cursor-not-allowed"
+                      }`}
+                    >
+                      {/* Gradient sheen */}
+                      {humanCheck && (
+                        <motion.div
+                          className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity"
+                          style={{
+                            background:
+                              "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%)",
+                          }}
+                          animate={{ x: ["-100%", "200%"] }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            repeatDelay: 3,
+                          }}
+                        />
+                      )}
+                      <Send size={16} />
+                      Send Message
+                    </motion.button>
+                  </motion.form>
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.div>
         </div>
-      </AnimatedSection>
-    </div>
+      </div>
+
+      {/* Footer */}
+      <div className="mt-32 border-t border-white/[0.04]">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p
+            className={`text-sm ${isDark ? "text-white/30" : "text-gray-400"}`}
+          >
+            &copy; {new Date().getFullYear()} Rustine Dave. All rights reserved.
+          </p>
+          <p
+            className={`text-xs ${isDark ? "text-white/20" : "text-gray-300"}`}
+          >
+            Made with{" "}
+            <span className="gradient-text font-medium">React & Tailwind</span>
+          </p>
+        </div>
+      </div>
+    </section>
   );
-};
-
-export default Contact;
+}

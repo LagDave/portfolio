@@ -1,19 +1,14 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<!doctype html>
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/rustinedave-favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rustine Dave | Software Engineer</title>
-    <meta name="description" content="Hi, I'm Rustine Dave - a passionate software engineer who loves to solve problems and build applications for the web. I eat them for breakfast!">
-
-    <!-- fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+    <title>Rustine Dave — Software Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <style>
-      /* Custom PolySans fonts for headings */
       @font-face {
         font-family: "Polysans Bulky";
         src: url("/fonts/PolySans Bulky.ttf");
@@ -26,40 +21,9 @@
         font-family: "Polysans Neutral";
         src: url("/fonts/PolySans Neutral.ttf");
       }
-
-      body {
-        font-family: 'Source Sans Pro', sans-serif;
-        background-color: #ffffff;
-        color: #0f172a;
-        transition: background-color 0.3s ease, color 0.3s ease;
-      }
-      .dark body {
-        background-color: #050505;
-        color: #ffffff;
-      }
-      /* Custom Scrollbar */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 4px;
-      }
-      .dark ::-webkit-scrollbar-thumb {
-        background: #333;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8;
-      }
-      .dark ::-webkit-scrollbar-thumb:hover {
-        background: #555;
-      }
     </style>
   </head>
-  <body class="bg-white text-slate-900 dark:bg-black dark:text-white transition-colors duration-300">
+  <body class="antialiased">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
