@@ -191,27 +191,27 @@ export default function Hero({ isDark }: HeroProps) {
               }`}
             >
               <span
-                className={`relative inline-block text-xs sm:text-sm lg:text-base font-medium ${isDark ? "text-white/30" : "text-gray-900/30"}`}
+                className={`relative inline-block text-xs sm:text-sm lg:text-base font-medium ${isDark ? "text-white/50" : "text-gray-900/30"}`}
               >
                 AI Engineer
                 <div
-                  className={`absolute left-0 right-0 top-1/2 h-0.5 ${isDark ? "bg-white" : "bg-black"}`}
+                  className={`absolute left-0 right-0 top-1/2 h-[.5px] ${isDark ? "bg-white" : "bg-black"}`}
                 />
               </span>{" "}
               <span
-                className={`relative inline-block text-xs sm:text-sm lg:text-base font-medium ${isDark ? "text-white/30" : "text-gray-900/30"}`}
+                className={`relative inline-block text-xs sm:text-sm lg:text-base font-medium ${isDark ? "text-white/50" : "text-gray-900/30"}`}
               >
                 Vibe Coder
                 <div
-                  className={`absolute left-0 right-0 top-1/2 h-0.5 ${isDark ? "bg-white" : "bg-black"}`}
+                  className={`absolute left-0 right-0 top-1/2 h-[.5px] ${isDark ? "bg-white" : "bg-black"}`}
                 />
               </span>{" "}
               <span
-                className={`relative inline-block text-xs sm:text-sm lg:text-base font-medium ${isDark ? "text-white/30" : "text-gray-900/30"}`}
+                className={`relative inline-block text-xs sm:text-sm lg:text-base font-medium ${isDark ? "text-white/50" : "text-gray-900/30"}`}
               >
                 Guesswork
                 <div
-                  className={`absolute left-0 right-0 top-1/2 h-0.5 ${isDark ? "bg-white" : "bg-black"}`}
+                  className={`absolute left-0 right-0 top-1/2 h-[.5px] ${isDark ? "bg-white" : "bg-black"}`}
                 />
               </span>
               <br />

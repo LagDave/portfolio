@@ -65,7 +65,7 @@ const FEATURED_TECH: TechItem[] = [
   {
     name: "n8n",
     icon: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/n8n.svg",
-    description: "Workflow Automation",
+    description: "Automation",
     size: "medium",
     gradient: "from-red-500/20 to-orange-500/20",
   },
@@ -79,7 +79,7 @@ const FEATURED_TECH: TechItem[] = [
   {
     name: "Supabase",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg",
-    description: "Backend as a Service",
+    description: "BaaS Platform",
     size: "medium",
     gradient: "from-emerald-500/20 to-green-500/20",
   },
@@ -178,17 +178,20 @@ function TechCard({
 
       <div className="relative z-10 h-full flex flex-col justify-between">
         {/* Icon */}
-        <div className={`${iconSizes[tech.size]} mb-4 flex items-center justify-center`}>
+        <div
+          className={`${iconSizes[tech.size]} mb-4 flex items-center justify-center`}
+        >
           <img
             src={tech.icon}
             alt={tech.name}
             className={`w-full h-full object-contain transition-all duration-500
               opacity-60 group-hover:opacity-100
-              ${needsOrange
-                ? "grayscale group-hover:filter-[brightness(0)_saturate(100%)_invert(50%)_sepia(98%)_saturate(1500%)_hue-rotate(3deg)_brightness(92%)]"
-                : needsDarken
-                  ? `brightness-0 ${isDark ? "invert group-hover:invert" : ""}`
-                  : `grayscale group-hover:grayscale-0 ${isDark ? "invert-[0.85] group-hover:invert-0" : ""}`
+              ${
+                needsOrange
+                  ? "grayscale group-hover:filter-[brightness(0)_saturate(100%)_invert(50%)_sepia(98%)_saturate(1500%)_hue-rotate(3deg)_brightness(92%)]"
+                  : needsDarken
+                    ? `brightness-0 ${isDark ? "invert group-hover:invert" : ""}`
+                    : `grayscale group-hover:grayscale-0 ${isDark ? "invert-[0.85] group-hover:invert-0" : ""}`
               }
               ${needsInvert && isDark ? "invert" : ""}
             `}
@@ -237,9 +240,7 @@ function MobileTechItem({
       transition={{ delay: index * 0.05, duration: 0.4 }}
       viewport={{ once: true }}
       className={`flex items-center gap-4 p-4 rounded-xl border ${
-        isDark
-          ? "bg-white/[0.03] border-white/5"
-          : "bg-white border-gray-100"
+        isDark ? "bg-white/[0.03] border-white/5" : "bg-white border-gray-100"
       }`}
     >
       <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center">
@@ -305,7 +306,9 @@ export default function Technologies({ isDark }: TechnologiesProps) {
               isDark ? "text-white/40" : "text-gray-500"
             }`}
           >
-            Tools change. Principles don't. I use modern stacks to build products that are fast to ship, easy to reason about, and built to evolve.
+            Tools change. Principles don't. I use modern stacks to build
+            products that are fast to ship, easy to reason about, and built to
+            evolve.
           </p>
         </motion.div>
 
@@ -355,7 +358,6 @@ export default function Technologies({ isDark }: TechnologiesProps) {
               isDark={isDark}
             />
           ))}
-
         </div>
       </div>
     </section>

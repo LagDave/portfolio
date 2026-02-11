@@ -9,6 +9,9 @@ import {
   Send,
   Check,
   Sparkles,
+  LucideHeart,
+  LucideCoffee,
+  LucideBot,
 } from "lucide-react";
 
 interface ContactProps {
@@ -119,7 +122,7 @@ export default function Contact({ isDark }: ContactProps) {
             email: formData.email,
             body: formData.body,
           }),
-        }
+        },
       );
 
       if (!res.ok) throw new Error("Failed");
@@ -359,7 +362,7 @@ export default function Contact({ isDark }: ContactProps) {
                           ) : (
                             <>
                               <Sparkles size={14} />
-                              Touch and hold so I can sense your human spark
+                              Hold so I can sense your human spark
                             </>
                           )}
                         </span>
@@ -427,13 +430,18 @@ export default function Contact({ isDark }: ContactProps) {
           <p
             className={`text-sm ${isDark ? "text-white/30" : "text-gray-400"}`}
           >
-            &copy; {new Date().getFullYear()} Rustine Dave. All rights reserved.
+            &copy; {new Date().getFullYear()} Rustine Dave. AI-Augmented
+            Software Engineer
           </p>
           <p
-            className={`text-xs ${isDark ? "text-white/20" : "text-gray-300"}`}
+            className={`text-xs flex items-center gap-2 ${isDark ? "text-white/20" : "text-gray-300"}`}
           >
             Made with{" "}
-            <span className="gradient-text font-medium">React & Tailwind</span>
+            <span className="flex items-center gap-2 font-medium">
+              <LucideHeart size={15} className="text-rose-500" />{" "}
+              <LucideCoffee size={15} className="text-amber-500" />
+              <LucideBot size={15} className="text-electric" />
+            </span>
           </p>
         </div>
       </div>
