@@ -69,11 +69,13 @@ export default function Contact({ isDark }: ContactProps) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    message: "",
+    body: "",
   });
   const [humanCheck, setHumanCheck] = useState(false);
   const [holdProgress, setHoldProgress] = useState(0);
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState(false);
   const [particles, setParticles] = useState<
     { id: number; x: number; y: number }[]
   >([]);
@@ -99,29 +101,54 @@ export default function Contact({ isDark }: ContactProps) {
     if (!humanCheck) setHoldProgress(0);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!humanCheck) return;
+    if (!humanCheck || sending) return;
 
-    // Particle burst
-    const rect = formRef.current?.getBoundingClientRect();
-    if (rect) {
-      const newParticles = Array.from({ length: 12 }, (_, i) => ({
-        id: Date.now() + i,
-        x: rect.width / 2,
-        y: rect.height / 2,
-      }));
-      setParticles(newParticles);
+    setSending(true);
+    setError(false);
+
+    try {
+      const res = await fetch(
+        "https://hook.eu1.make.com/1vxq2sl9wckyzdehj94mrciu5w4daddn",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            body: formData.body,
+          }),
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed");
+
+      // Particle burst
+      const rect = formRef.current?.getBoundingClientRect();
+      if (rect) {
+        const newParticles = Array.from({ length: 12 }, (_, i) => ({
+          id: Date.now() + i,
+          x: rect.width / 2,
+          y: rect.height / 2,
+        }));
+        setParticles(newParticles);
+      }
+
+      setSent(true);
+      setTimeout(() => {
+        setSent(false);
+        setFormData({ name: "", email: "", body: "" });
+        setHumanCheck(false);
+        setHoldProgress(0);
+        setParticles([]);
+      }, 4000);
+    } catch {
+      setError(true);
+      setTimeout(() => setError(false), 4000);
+    } finally {
+      setSending(false);
     }
-
-    setSent(true);
-    setTimeout(() => {
-      setSent(false);
-      setFormData({ name: "", email: "", message: "" });
-      setHumanCheck(false);
-      setHoldProgress(0);
-      setParticles([]);
-    }, 4000);
   };
 
   const inputClasses =
@@ -244,23 +271,15 @@ export default function Contact({ isDark }: ContactProps) {
                         stiffness: 300,
                         damping: 15,
                       }}
-                      className="w-16 h-16 rounded-full bg-electric/10 flex items-center justify-center mb-6"
+                      className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center mb-6"
                     >
-                      <Check className="text-electric" size={28} />
+                      <Check className="text-white" size={28} />
                     </motion.div>
-                    <h3
-                      className={`font-display text-2xl font-bold mb-2 ${
-                        isDark ? "text-white" : "text-gray-900"
-                      }`}
-                    >
+                    <h3 className="font-display text-2xl font-bold mb-2 text-white">
                       Message sent
-                      <span className="text-electric">.</span>
+                      <span className="text-white/60">.</span>
                     </h3>
-                    <p
-                      className={`text-sm ${
-                        isDark ? "text-white/40" : "text-gray-500"
-                      }`}
-                    >
+                    <p className="text-sm text-white/60">
                       I'll get back to you soon. Thanks for reaching out!
                     </p>
                   </motion.div>
@@ -302,9 +321,9 @@ export default function Contact({ isDark }: ContactProps) {
                       <textarea
                         placeholder="Tell me about your project..."
                         rows={4}
-                        value={formData.message}
+                        value={formData.body}
                         onChange={(e) =>
-                          setFormData({ ...formData, message: e.target.value })
+                          setFormData({ ...formData, body: e.target.value })
                         }
                         required
                         className={`${inputClasses} resize-none`}
@@ -347,14 +366,28 @@ export default function Contact({ isDark }: ContactProps) {
                       </motion.button>
                     </div>
 
+                    {/* Error message */}
+                    <AnimatePresence>
+                      {error && (
+                        <motion.p
+                          initial={{ opacity: 0, y: -5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0 }}
+                          className="text-sm text-red-300 text-center"
+                        >
+                          Something went wrong. Please try again.
+                        </motion.p>
+                      )}
+                    </AnimatePresence>
+
                     {/* Submit */}
                     <motion.button
                       type="submit"
-                      disabled={!humanCheck}
-                      whileHover={humanCheck ? { scale: 1.02 } : {}}
-                      whileTap={humanCheck ? { scale: 0.98 } : {}}
+                      disabled={!humanCheck || sending}
+                      whileHover={humanCheck && !sending ? { scale: 1.02 } : {}}
+                      whileTap={humanCheck && !sending ? { scale: 0.98 } : {}}
                       className={`relative w-full py-4 rounded-2xl text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer overflow-hidden ${
-                        humanCheck
+                        humanCheck && !sending
                           ? "bg-white text-blue-600 shadow-xl shadow-white/25 hover:shadow-white/40"
                           : isDark
                             ? "bg-white/5 text-white/20 cursor-not-allowed"
@@ -362,7 +395,7 @@ export default function Contact({ isDark }: ContactProps) {
                       }`}
                     >
                       {/* Gradient sheen */}
-                      {humanCheck && (
+                      {humanCheck && !sending && (
                         <motion.div
                           className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity"
                           style={{
@@ -378,7 +411,7 @@ export default function Contact({ isDark }: ContactProps) {
                         />
                       )}
                       <Send size={16} />
-                      Send Message
+                      {sending ? "Sending..." : "Send Message"}
                     </motion.button>
                   </motion.form>
                 )}
