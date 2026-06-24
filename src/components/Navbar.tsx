@@ -9,9 +9,8 @@ interface NavbarProps {
 }
 
 const NAV_LINKS = [
-  { id: "about", label: "About" },
-  { id: "experience", label: "Experience" },
-  { id: "technologies", label: "Technologies" },
+  { id: "about", label: "Standard" },
+  { id: "technologies", label: "Stack" },
   { id: "contact", label: "Contact" },
 ];
 
@@ -35,28 +34,38 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className={`fixed top-0 left-0 right-0 z-50 border-b transition-all duration-500 ${
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className={`fixed top-0 left-0 right-0 z-50 border-b transition-colors duration-500 ${
         scrolled
           ? isDark
-            ? "bg-surface-dark/80 glass border-white/5 shadow-lg shadow-black/20"
-            : "bg-white/80 glass border-black/5 shadow-lg shadow-black/5"
+            ? "bg-carbon/85 backdrop-blur-md border-dark-hairline"
+            : "bg-paper/85 backdrop-blur-md border-hairline shadow-[0_1px_2px_rgba(10,10,10,0.04),0_8px_24px_rgba(10,10,10,0.05)]"
           : "bg-transparent border-transparent"
       }`}
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
+          {/* Wordmark */}
           <motion.button
             onClick={() => scrollTo("hero")}
-            className="font-display text-lg font-bold tracking-tight cursor-pointer"
-            whileHover={{ scale: 1.02 }}
+            className="flex items-baseline gap-2 cursor-pointer"
+            whileHover={{ x: 1 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span className={isDark ? "text-white" : "text-gray-900"}>
+            <span
+              className={`font-display text-lg font-semibold tracking-tight ${
+                isDark ? "text-dark-ink" : "text-black"
+              }`}
+            >
               Rustine Dave
             </span>
-            <span className="text-electric">.</span>
+            <span
+              className={`font-mono text-[0.625rem] tracking-tight ${
+                isDark ? "text-dark-muted" : "text-muted"
+              }`}
+            >
+              /eng
+            </span>
           </motion.button>
 
           {/* Desktop Links */}
@@ -65,19 +74,23 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
               <button
                 key={link.id}
                 onClick={() => scrollTo(link.id)}
-                className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 cursor-pointer rounded-lg ${
+                className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 cursor-pointer ${
                   active === link.id
-                    ? "text-electric"
+                    ? isDark
+                      ? "text-dark-ink"
+                      : "text-black"
                     : isDark
-                      ? "text-white/60 hover:text-white"
-                      : "text-gray-500 hover:text-gray-900"
+                      ? "text-dark-muted hover:text-dark-ink"
+                      : "text-muted hover:text-black"
                 }`}
               >
                 {link.label}
                 {active === link.id && (
                   <motion.div
                     layoutId="nav-indicator"
-                    className="absolute bottom-0 left-2 right-2 h-0.5 bg-gradient-to-r from-electric to-indigo rounded-full"
+                    className={`absolute bottom-1 left-4 right-4 h-px ${
+                      isDark ? "bg-dark-ink" : "bg-black"
+                    }`}
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -87,15 +100,15 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
 
           {/* Right side */}
           <div className="flex items-center gap-3">
-            {/* Theme toggle */}
             <motion.button
               onClick={toggleTheme}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className={`relative w-9 h-9 rounded-xl flex items-center justify-center cursor-pointer transition-colors ${
+              whileHover={{ y: -1 }}
+              whileTap={{ scale: 0.92 }}
+              aria-label="Toggle color theme"
+              className={`relative w-9 h-9 rounded-md border flex items-center justify-center cursor-pointer transition-colors ${
                 isDark
-                  ? "bg-white/5 hover:bg-white/10 text-white/70"
-                  : "bg-black/5 hover:bg-black/10 text-gray-600"
+                  ? "border-dark-line text-dark-muted hover:text-dark-ink hover:border-dark-ink"
+                  : "border-line text-muted hover:text-black hover:border-black"
               }`}
             >
               <AnimatePresence mode="wait">
@@ -107,7 +120,7 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
                     exit={{ rotate: 90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Sun size={16} />
+                    <Sun size={15} />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -117,30 +130,33 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
                     exit={{ rotate: -90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Moon size={16} />
+                    <Moon size={15} />
                   </motion.div>
                 )}
               </AnimatePresence>
             </motion.button>
 
-            {/* Resume button */}
             <motion.a
               href="/files/Resume.pdf"
               target="_blank"
               rel="noreferrer"
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.96 }}
-              className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold bg-electric text-white shadow-lg shadow-electric/25 hover:shadow-electric/40 transition-shadow duration-300"
+              className={`hidden md:inline-flex items-center px-5 py-2 rounded-md text-sm font-semibold transition-colors duration-300 ${
+                isDark
+                  ? "bg-dark-ink text-carbon hover:bg-white"
+                  : "bg-black text-paper hover:bg-ink"
+              }`}
             >
               Resume
             </motion.a>
 
-            {/* Mobile menu toggle */}
             <motion.button
               onClick={() => setMobileOpen(!mobileOpen)}
               whileTap={{ scale: 0.9 }}
-              className={`md:hidden w-9 h-9 rounded-xl flex items-center justify-center cursor-pointer ${
-                isDark ? "text-white/70" : "text-gray-600"
+              aria-label="Toggle menu"
+              className={`md:hidden w-9 h-9 rounded-md border flex items-center justify-center cursor-pointer ${
+                isDark ? "border-dark-line text-dark-ink" : "border-line text-black"
               }`}
             >
               {mobileOpen ? <X size={18} /> : <Menu size={18} />}
@@ -158,21 +174,23 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
             exit={{ opacity: 0, height: 0 }}
             className={`md:hidden overflow-hidden border-t ${
               isDark
-                ? "bg-surface-dark/95 border-white/5"
-                : "bg-white/95 border-black/5"
-            } glass`}
+                ? "bg-carbon/95 border-dark-hairline"
+                : "bg-paper/95 border-hairline"
+            } backdrop-blur-md`}
           >
-            <div className="px-6 py-4 flex flex-col gap-2">
+            <div className="px-6 py-4 flex flex-col gap-1">
               {NAV_LINKS.map((link) => (
                 <button
                   key={link.id}
                   onClick={() => scrollTo(link.id)}
-                  className={`text-left py-2 px-3 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+                  className={`text-left py-2.5 px-3 rounded-md text-sm font-medium transition-colors cursor-pointer ${
                     active === link.id
-                      ? "text-electric bg-electric/10"
+                      ? isDark
+                        ? "text-dark-ink bg-dark-surface"
+                        : "text-black bg-surface"
                       : isDark
-                        ? "text-white/60 hover:text-white"
-                        : "text-gray-500 hover:text-gray-900"
+                        ? "text-dark-muted hover:text-dark-ink"
+                        : "text-muted hover:text-black"
                   }`}
                 >
                   {link.label}
@@ -182,7 +200,9 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
                 href="/files/Resume.pdf"
                 target="_blank"
                 rel="noreferrer"
-                className="mt-2 text-center py-2.5 px-5 rounded-full text-sm font-semibold bg-electric text-white"
+                className={`mt-2 text-center py-2.5 px-5 rounded-md text-sm font-semibold ${
+                  isDark ? "bg-dark-ink text-carbon" : "bg-black text-paper"
+                }`}
               >
                 Resume
               </a>

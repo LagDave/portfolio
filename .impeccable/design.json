@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-25",
+  "title": "Design System: Rustine Dave — Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "paper": { "role": "neutral", "displayName": "Drafting White", "canonical": "oklch(1 0 0)", "tonalRamp": ["#0a0a0a", "#1a1a1a", "#2e2e2e", "#595959", "#8a8a8a", "#bdbdbd", "#e3e3e3", "#ffffff"] },
+      "ink": { "role": "neutral", "displayName": "Schematic Ink", "canonical": "oklch(0.21 0 0)", "tonalRamp": ["#0a0a0a", "#1a1a1a", "#2e2e2e", "#4a4a4a", "#6b6b6b", "#9a9a9a", "#cfcfcf", "#f2f2f2"] },
+      "muted-ink": { "role": "neutral", "displayName": "Muted Ink", "canonical": "oklch(0.46 0 0)", "tonalRamp": ["#1a1a1a", "#2e2e2e", "#454545", "#595959", "#6f6f6f", "#8f8f8f", "#bcbcbc", "#e8e8e8"] },
+      "black": { "role": "primary", "displayName": "Pure Black", "canonical": "oklch(0.13 0 0)", "tonalRamp": ["#000000", "#0a0a0a", "#161616", "#1f1f1f", "#2e2e2e", "#4a4a4a", "#7a7a7a", "#bdbdbd"] },
+      "surface": { "role": "neutral", "displayName": "Surface Grey", "canonical": "oklch(0.97 0 0)", "tonalRamp": ["#1f1f1f", "#2e2e2e", "#4a4a4a", "#6f6f6f", "#9a9a9a", "#cfcfcf", "#ededed", "#f5f5f5"] },
+      "tech-logo": { "role": "secondary", "displayName": "Tech-Logo Color", "canonical": "varies (React #61DAFB, TypeScript #3178C6, …)", "tonalRamp": ["#3178C6", "#61DAFB", "#F0DB4F", "#E34F26", "#336791", "#FF6C37", "#4FC08D", "#FFCA28"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display (Playfair)", "purpose": "Hero + the single biggest serif statement per section. One per viewport." },
+      "headline": { "displayName": "Headline (Playfair)", "purpose": "Section titles in serif." },
+      "title": { "displayName": "Title (Plus Jakarta)", "purpose": "Card and sub-section titles, in sans to separate from serif headlines." },
+      "body": { "displayName": "Body (Plus Jakarta)", "purpose": "All reading copy. 65–75ch measure." },
+      "label": { "displayName": "Label (JetBrains Mono)", "purpose": "Technical annotations: coordinates, captions, metadata, typewriter line." }
+    },
+    "shadows": [
+      { "name": "lift", "value": "0 1px 2px rgba(10,10,10,0.06), 0 8px 24px rgba(10,10,10,0.08)", "purpose": "Hover state on cards/tiles and the floating navbar after scroll." },
+      { "name": "float", "value": "0 12px 48px rgba(10,10,10,0.12)", "purpose": "True overlays: the contact card, modals." }
+    ],
+    "motion": [
+      { "name": "ease-out-expo", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Primary reveal + entrance easing. Exponential ease-out, no bounce." },
+      { "name": "ease-standard", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "State transitions (hover, color, border)." },
+      { "name": "duration-micro", "value": "180ms", "purpose": "Hover/press micro-interactions." },
+      { "name": "duration-reveal", "value": "720ms", "purpose": "Scroll-driven section reveals (GSAP/Framer)." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Solid black CTA on paper; inverts in dark mode. Lifts on hover.",
+      "html": "<button class=\"ds-btn-primary\">View Resume <svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:10px;background:#0a0a0a;color:#fff;font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;font-size:.9375rem;padding:14px 28px;border:1px solid #0a0a0a;border-radius:6px;cursor:pointer;transition:transform 180ms cubic-bezier(0.4,0,0.2,1),box-shadow 180ms,background 180ms;}.ds-btn-primary:hover{background:#1a1a1a;transform:translateY(-2px);box-shadow:0 1px 2px rgba(10,10,10,0.06),0 8px 24px rgba(10,10,10,0.08);}.ds-btn-primary:focus-visible{outline:2px solid #0a0a0a;outline-offset:2px;}.ds-btn-primary svg{transition:transform 180ms cubic-bezier(0.4,0,0.2,1);}.ds-btn-primary:hover svg{transform:translateX(3px);}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Hairline-outlined secondary button, no fill at rest.",
+      "html": "<button class=\"ds-btn-ghost\">Let's build something real</button>",
+      "css": ".ds-btn-ghost{display:inline-flex;align-items:center;gap:10px;background:transparent;color:#1a1a1a;font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;font-size:.9375rem;padding:14px 28px;border:1px solid #d4d4d4;border-radius:6px;cursor:pointer;transition:background 180ms,border-color 180ms,color 180ms;}.ds-btn-ghost:hover{background:#f5f5f5;border-color:#1a1a1a;color:#0a0a0a;}.ds-btn-ghost:focus-visible{outline:2px solid #0a0a0a;outline-offset:2px;}"
+    },
+    {
+      "name": "Tag Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Flat monochrome capability tag. No fill color ever.",
+      "html": "<span class=\"ds-chip\">Performance</span>",
+      "css": ".ds-chip{display:inline-flex;align-items:center;background:#fff;color:#595959;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.75rem;letter-spacing:.04em;padding:6px 14px;border:1px solid #e3e3e3;border-radius:999px;transition:border-color 180ms,color 180ms;}.ds-chip:hover{border-color:#1a1a1a;color:#0a0a0a;}"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Hairline field; border goes black on focus, no colored glow.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"john@example.com\" />",
+      "css": ".ds-input{width:100%;background:#fff;color:#1a1a1a;font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:.9375rem;padding:14px 18px;border:1px solid #d4d4d4;border-radius:6px;transition:border-color 180ms,box-shadow 180ms;}.ds-input::placeholder{color:#595959;}.ds-input:focus{outline:none;border-color:#0a0a0a;box-shadow:inset 0 0 0 1px #0a0a0a;}"
+    },
+    {
+      "name": "Nav Link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Sans nav link; active state is an ink underline, not a colored pill.",
+      "html": "<a class=\"ds-nav-link ds-nav-link--active\" href=\"#about\">About</a>",
+      "css": ".ds-nav-link{position:relative;display:inline-block;color:#595959;font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:500;font-size:.875rem;padding:8px 4px;text-decoration:none;transition:color 180ms;}.ds-nav-link:hover{color:#1a1a1a;}.ds-nav-link--active{color:#0a0a0a;}.ds-nav-link--active::after{content:\"\";position:absolute;left:4px;right:4px;bottom:0;height:1px;background:#0a0a0a;}"
+    },
+    {
+      "name": "Content Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Flat-at-rest card defined by its hairline border; lifts on hover.",
+      "html": "<article class=\"ds-card\"><span class=\"ds-card__label\">[ 02 · ABOUT ]</span><h3 class=\"ds-card__title\">Speed with structure</h3><p class=\"ds-card__body\">Systems that scale because they were designed to, not because we hoped.</p></article>",
+      "css": ".ds-card{background:#fff;border:1px solid #e3e3e3;border-radius:10px;padding:28px;transition:transform 180ms cubic-bezier(0.4,0,0.2,1),box-shadow 180ms,border-color 180ms;}.ds-card:hover{transform:translateY(-3px);border-color:#d4d4d4;box-shadow:0 1px 2px rgba(10,10,10,0.06),0 8px 24px rgba(10,10,10,0.08);}.ds-card__label{display:block;color:#595959;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.75rem;letter-spacing:.04em;margin-bottom:14px;}.ds-card__title{margin:0 0 8px;color:#0a0a0a;font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;font-size:1.25rem;line-height:1.3;}.ds-card__body{margin:0;color:#595959;font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:1.0625rem;line-height:1.62;}"
+    },
+    {
+      "name": "Blueprint Coordinate Label",
+      "kind": "custom",
+      "refersTo": "coordinate-label",
+      "description": "Signature mono drafting callout used as an occasional section marker.",
+      "html": "<span class=\"ds-coord\">X:1440 Y:900 · ENGINEERING BLUEPRINT</span>",
+      "css": ".ds-coord{display:inline-flex;align-items:center;gap:8px;color:#595959;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.75rem;letter-spacing:.04em;text-transform:uppercase;}.ds-coord::before{content:\"\";width:18px;height:1px;background:#d4d4d4;}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Engineering Blueprint",
+    "overview": "The portfolio of an engineer who started before AI was the default copilot and now uses it as a power tool — so the interface is built like a precise technical drawing: a true white drafting surface, black ink, a measured grid, hairline rules, and monospace coordinate labels. The system is monochrome by doctrine; the only chroma permitted anywhere is the brand color of the technology logos themselves, rendered full-saturation against the grey field. Motion is engineered, not garnish — a Three.js wireframe field, GSAP scroll choreography, and Framer Motion micro-interactions, each with a reduced-motion fallback.",
+    "keyCharacteristics": [
+      "True-neutral monochrome surface; tech-logo brand color is the sole accent.",
+      "Serif display (Playfair) + humanist sans body (Plus Jakarta) + technical mono (JetBrains Mono).",
+      "Visible measured grid, hairline rules, mono coordinate/section labels.",
+      "Crisp corners, generous negative space, drafting-set restraint.",
+      "Motion is engineered (Three.js / GSAP / Framer Motion), never ornamental."
+    ],
+    "rules": [
+      { "name": "The Logos-Are-The-Only-Color Rule", "body": "Chroma is forbidden on every surface except the technology logo marks. No accent color of our own — not on links, buttons, focus rings, or a single dot. Emphasis comes from weight, size, and contrast within greyscale.", "section": "colors" },
+      { "name": "The True-Neutral Rule", "body": "Every grey is chroma 0. No warm paper/cream/sand tint, no cool slate tint. Warm-neutral near-whites are the 2026 AI default and are forbidden.", "section": "colors" },
+      { "name": "The Mono-Is-For-Machines Rule", "body": "JetBrains Mono is reserved for things a machine would print: coordinates, counts, status, the animated code line. Never set prose in mono.", "section": "typography" },
+      { "name": "The One-Serif-Statement Rule", "body": "Playfair earns its drama by scarcity. One serif statement owns each viewport; supporting text is sans or mono.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Surfaces rest flat with a 1px border. A shadow at rest is wrong — shadows are earned by hover/focus and true overlays.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep every surface true-neutral greyscale (chroma 0) and let only the technology logos carry color, at full saturation.",
+      "Do pair Playfair Display (serif, headlines only) with Plus Jakarta Sans (body) and JetBrains Mono (technical labels) — three jobs, no overlap.",
+      "Do separate surfaces with a 1px hairline and the paper→surface→elevated ramp; reserve shadow for hover/focus and true overlays.",
+      "Do treat motion as part of the build: Three.js wireframe atmosphere, GSAP scroll choreography, Framer Motion micro-interactions — each with a prefers-reduced-motion fallback.",
+      "Do cap body measure at 65–75ch and hold body/caption text at ≥4.5:1 (Muted Ink #595959 or darker on white).",
+      "Do use the mono Blueprint Coordinate Label as a deliberate, occasional system."
+    ],
+    "donts": [
+      "Don't introduce any accent color of our own — no blue links, buttons, focus rings, dots, or the old electric #3b82f6. The logos are the only color.",
+      "Don't use background-clip:text gradient text or any gradient as decoration.",
+      "Don't ship the generic SaaS / purple-gradient template, glassmorphism-by-default, or the hero-metric cliché.",
+      "Don't build the crowded dev-portfolio look — no skill bars, percentage meters, badge walls, or busy timelines.",
+      "Don't go neon-cyberpunk or corporate stock-photo agency.",
+      "Don't tint the neutrals warm or cool; chroma stays at 0.",
+      "Don't put a mono coordinate eyebrow above every section, and don't set prose in the serif or in mono.",
+      "Don't gate content visibility behind a motion-triggered reveal; animate an already-visible default."
+    ]
+  }
+}

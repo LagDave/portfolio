@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import { motion } from "framer-motion";
-import { useMousePosition } from "../hooks/useMousePosition";
 
 interface AboutProps {
   isDark: boolean;
@@ -8,12 +7,7 @@ interface AboutProps {
 
 const TAGS = ["AI", "Cloud", "DX", "Performance", "Motion", "Design", "Scale"];
 
-const IMAGES = [
-  "/img1.webp",
-  "/img2.webp",
-  "/img3.webp",
-  "/img4.webp",
-];
+const IMAGES = ["/img1.webp", "/img2.webp", "/img3.webp", "/img4.webp"];
 
 function TiltImage({
   src,
@@ -31,214 +25,185 @@ function TiltImage({
     const rect = ref.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
-    ref.current.style.transform = `perspective(600px) rotateY(${
-      x * 10
-    }deg) rotateX(${-y * 10}deg) scale(1.02)`;
+    ref.current.style.transform = `perspective(700px) rotateY(${
+      x * 8
+    }deg) rotateX(${-y * 8}deg) scale(1.015)`;
   };
 
   const handleMouseLeave = () => {
     if (!ref.current) return;
     ref.current.style.transform =
-      "perspective(600px) rotateY(0deg) rotateX(0deg) scale(1)";
+      "perspective(700px) rotateY(0deg) rotateX(0deg) scale(1)";
   };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
+      transition={{ duration: 0.6, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
     >
       <div
         ref={ref}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        className="group relative overflow-hidden rounded-2xl transition-all duration-500 cursor-pointer"
+        className={`group relative overflow-hidden rounded-md border transition-[transform,box-shadow,border-color] duration-500 cursor-pointer ${
+          isDark
+            ? "border-dark-hairline hover:border-dark-line"
+            : "border-hairline hover:border-line"
+        }`}
         style={{ transformStyle: "preserve-3d" }}
       >
         <img
           src={src}
-          alt={`About ${index + 1}`}
+          alt={`Rustine Dave at work — frame ${index + 1}`}
           loading="lazy"
-          className="w-full aspect-square object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700"
+          className="w-full aspect-square object-cover grayscale contrast-[1.05]"
         />
         <div
           className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${
             isDark
-              ? "shadow-[inset_0_0_60px_rgba(59,130,246,0.15)]"
-              : "shadow-[inset_0_0_60px_rgba(59,130,246,0.08)]"
+              ? "bg-gradient-to-t from-carbon/30 to-transparent"
+              : "bg-gradient-to-t from-paper/20 to-transparent"
           }`}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
     </motion.div>
   );
 }
 
-function FloatingTags({ isDark }: { isDark: boolean }) {
-  const mouse = useMousePosition();
-
-  return (
-    <div className="flex flex-wrap gap-3 mt-8">
-      {TAGS.map((tag, i) => {
-        const offsetX = Math.sin((mouse.x * 0.002 + i) * 0.5) * 3;
-        const offsetY = Math.cos((mouse.y * 0.002 + i) * 0.7) * 3;
-        return (
-          <motion.span
-            key={tag}
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.5 + i * 0.08 }}
-            animate={{ x: offsetX, y: offsetY }}
-            className={`px-4 py-1.5 text-xs font-medium rounded-full border transition-colors duration-300 ${
-              isDark
-                ? "border-white/10 text-white/50 bg-white/[0.03] hover:border-electric/30 hover:text-electric"
-                : "border-black/8 text-gray-400 bg-black/[0.02] hover:border-electric/30 hover:text-electric"
-            }`}
-          >
-            {tag}
-          </motion.span>
-        );
-      })}
-    </div>
-  );
-}
-
 export default function About({ isDark }: AboutProps) {
-  const ref = useRef<HTMLElement>(null);
+  const inkText = isDark ? "text-dark-ink" : "text-black";
+  const bodyText = isDark ? "text-dark-muted" : "text-muted";
+
   return (
     <section
-      ref={ref}
       id="about"
-      className={`relative py-32 ${
-        isDark ? "bg-surface-dark" : "bg-surface-light"
-      }`}
+      className={`relative py-28 md:py-36 ${isDark ? "bg-carbon" : "bg-paper"}`}
     >
       <div className="section-divider" />
       <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-16">
         {/* Section title */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 26 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="mb-20"
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-16 md:mb-20 max-w-2xl"
         >
           <h2
-            className={`font-display text-4xl sm:text-5xl font-bold tracking-tight ${
-              isDark ? "text-white" : "text-gray-900"
-            }`}
+            className={`font-display font-semibold tracking-[-0.015em] leading-[1.05] ${inkText}`}
+            style={{ fontSize: "clamp(2rem, 4vw, 3.25rem)" }}
           >
-            The Dave Standard
-            <span className="text-electric">.</span>
+            The Dave Standard<span className={bodyText}>.</span>
           </h2>
           <p
-            className={`mt-4 text-lg font-medium ${
-              isDark ? "text-white/60" : "text-gray-600"
+            className={`mt-5 text-lg font-medium ${
+              isDark ? "text-dark-ink/80" : "text-ink"
             }`}
           >
             Software that moves fast and makes sense.
           </p>
-          <p
-            className={`mt-2 text-base ${
-              isDark ? "text-white/40" : "text-gray-400"
-            }`}
-          >
-            I'm pro-AI, and just as pro-understanding.
-            I don't ship "looks good in the demo" code. I ship systems that survive week 12.
+          <p className={`mt-3 text-base leading-relaxed ${bodyText}`}>
+            I'm pro-AI, and just as pro-understanding. I don't ship "looks good
+            in the demo" code. I ship systems that survive week 12.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
-          {/* Left – Image Grid */}
+        <div className="grid lg:grid-cols-2 gap-14 lg:gap-16 items-start">
+          {/* Image grid */}
           <div className="grid grid-cols-2 gap-4">
             {IMAGES.map((src, i) => (
               <TiltImage key={i} src={src} index={i} isDark={isDark} />
             ))}
           </div>
 
-          {/* Right – About Copy */}
+          {/* Copy */}
           <div className="space-y-6">
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className={`text-lg leading-relaxed ${
-                isDark ? "text-white/60" : "text-gray-600"
-              }`}
-            >
-              Hey, I'm Rustine. Full-stack engineer, product-minded builder, and someone who still enjoys solving the hard parts.
-            </motion.p>
+            {[
+              "Hey, I'm Rustine. Full-stack engineer, product-minded builder, and someone who still enjoys solving the hard parts.",
+              "I've been doing this since before AI was the default copilot, when you earned progress by learning the system, not prompting it. That foundation never left. It's why I can move quickly without turning code into a mystery novel.",
+            ].map((para, i) => (
+              <motion.p
+                key={i}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.08 + i * 0.06 }}
+                className={`text-lg leading-relaxed ${bodyText}`}
+              >
+                {para}
+              </motion.p>
+            ))}
 
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.15 }}
-              className={`text-lg leading-relaxed ${
-                isDark ? "text-white/60" : "text-gray-600"
-              }`}
-            >
-              I've been doing this since before AI was the default copilot, when you earned progress by learning the system, not prompting it. That foundation never left. It's why I can move quickly without turning code into a mystery novel.
-            </motion.p>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className={`text-lg leading-relaxed ${
-                isDark ? "text-white/60" : "text-gray-600"
-              }`}
+              className={`text-lg leading-relaxed ${bodyText}`}
             >
               Today, I build{" "}
-              <span className="gradient-text font-semibold">
+              <span className={`font-semibold ${inkText}`}>
                 AI-driven experiences with real engineering underneath
               </span>
               :
             </motion.p>
 
             <motion.ul
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.25 }}
-              className={`text-lg leading-relaxed space-y-3 ${
-                isDark ? "text-white/60" : "text-gray-600"
-              }`}
+              transition={{ duration: 0.6, delay: 0.26 }}
+              className={`text-lg leading-relaxed space-y-3 ${bodyText}`}
             >
-              <li className="flex items-start gap-3">
-                <span className="mt-2 w-1.5 h-1.5 rounded-full bg-electric flex-shrink-0" />
-                AI features that feel magical because the plumbing is solid
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-2 w-1.5 h-1.5 rounded-full bg-electric flex-shrink-0" />
-                Workflow automation that reduces busywork without creating future chaos
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-2 w-1.5 h-1.5 rounded-full bg-electric flex-shrink-0" />
-                Systems that scale because they were designed to, not because we hoped
-              </li>
+              {[
+                "AI features that feel magical because the plumbing is solid",
+                "Workflow automation that reduces busywork without creating future chaos",
+                "Systems that scale because they were designed to, not because we hoped",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span
+                    className={`mt-2.5 w-3 h-px shrink-0 ${
+                      isDark ? "bg-dark-line" : "bg-line"
+                    }`}
+                  />
+                  {item}
+                </li>
+              ))}
             </motion.ul>
 
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className={`text-lg leading-relaxed font-medium ${
-                isDark ? "text-white/70" : "text-gray-700"
-              }`}
+              transition={{ duration: 0.6, delay: 0.32 }}
+              className={`text-lg leading-relaxed font-medium ${inkText}`}
             >
               AI makes shipping faster. Understanding makes shipping sustainable.
               <br />
               That combination is the whole point.
             </motion.p>
 
-            {/* Floating tags */}
-            <FloatingTags isDark={isDark} />
+            {/* Tags */}
+            <div className="flex flex-wrap gap-2.5 pt-2">
+              {TAGS.map((tag, i) => (
+                <motion.span
+                  key={tag}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.4 + i * 0.05 }}
+                  className={`px-3.5 py-1.5 font-mono text-xs tracking-[0.02em] rounded-full border transition-colors duration-300 ${
+                    isDark
+                      ? "border-dark-hairline text-dark-muted hover:border-dark-ink hover:text-dark-ink"
+                      : "border-hairline text-muted hover:border-black hover:text-black"
+                  }`}
+                >
+                  {tag}
+                </motion.span>
+              ))}
+            </div>
           </div>
         </div>
       </div>

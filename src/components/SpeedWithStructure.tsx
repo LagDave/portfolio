@@ -5,87 +5,90 @@ interface SpeedWithStructureProps {
   isDark: boolean;
 }
 
+const FEATURES = [
+  {
+    icon: Zap,
+    title: "Speed",
+    desc: "AI-compressed delivery without shortcuts on architecture.",
+  },
+  {
+    icon: Shield,
+    title: "Structure",
+    desc: "Intentional design that survives beyond the first sprint.",
+  },
+  {
+    icon: Eye,
+    title: "Accountability",
+    desc: "Observable systems with clear ownership and traceability.",
+  },
+];
+
 export default function SpeedWithStructure({ isDark }: SpeedWithStructureProps) {
   return (
-    <section
-      className={`relative py-20 ${
-        isDark ? "bg-surface-dark" : "bg-surface-light"
-      }`}
-    >
+    <section className={`relative py-16 md:py-24 ${isDark ? "bg-carbon" : "bg-paper"}`}>
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className={`relative rounded-3xl overflow-hidden p-10 md:p-16 ${
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className={`relative rounded-xl overflow-hidden p-10 md:p-16 border ${
             isDark
-              ? "bg-gradient-to-br from-blue-600/50 via-blue-500/50 to-indigo-600/50"
-              : "bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600"
+              ? "bg-dark-surface border-dark-line"
+              : "bg-black border-black"
           }`}
         >
-          <div className="text-center max-w-3xl mx-auto">
-            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white">
+          {/* Blueprint grid inside the slab */}
+          <div className="absolute inset-0 blueprint-grid text-white pointer-events-none" />
+
+          <div className="relative text-center max-w-3xl mx-auto">
+            <span className="font-mono text-[0.7rem] tracking-[0.04em] uppercase text-white/40">
+              Speed with structure
+            </span>
+            <h2 className="mt-4 font-display font-semibold tracking-[-0.015em] leading-[1.08] text-white"
+              style={{ fontSize: "clamp(1.6rem, 3.5vw, 2.75rem)" }}
+            >
               Fast prototypes are easy.
               <br />
               Sustainable systems are engineered.
             </h2>
 
-            <p className="mt-6 text-base sm:text-lg leading-relaxed text-white/70 max-w-2xl mx-auto">
-              When code is produced without structure, teams pay later: fragile behavior, slow changes, unclear ownership. I use AI to compress time on repetitive work, while keeping design intentional and observable.
+            <p className="mt-6 text-base sm:text-lg leading-relaxed text-white/65 max-w-2xl mx-auto">
+              When code is produced without structure, teams pay later: fragile
+              behavior, slow changes, unclear ownership. I use AI to compress
+              time on repetitive work, while keeping design intentional and
+              observable.
             </p>
           </div>
 
-          {/* Feature cards */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-12 grid md:grid-cols-3 gap-5"
-          >
-            {[
-              {
-                icon: Zap,
-                title: "Speed",
-                desc: "AI-compressed delivery without shortcuts on architecture.",
-              },
-              {
-                icon: Shield,
-                title: "Structure",
-                desc: "Intentional design that survives beyond the first sprint.",
-              },
-              {
-                icon: Eye,
-                title: "Accountability",
-                desc: "Observable systems with clear ownership and traceability.",
-              },
-            ].map((item, i) => (
+          {/* Feature tiles */}
+          <div className="relative mt-12 grid md:grid-cols-3 gap-4">
+            {FEATURES.map((item, i) => (
               <motion.div
                 key={item.title}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.3 + i * 0.1 }}
-                className="p-5 rounded-2xl bg-white/10 border border-white/10 backdrop-blur-sm text-center"
+                transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
+                className="p-6 rounded-lg bg-white/[0.04] border border-white/12 text-left transition-colors duration-300 hover:border-white/30"
               >
-                <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center mx-auto mb-3">
-                  <item.icon size={20} className="text-white" />
+                <div className="w-9 h-9 rounded-md border border-white/15 flex items-center justify-center mb-4">
+                  <item.icon size={17} className="text-white" />
                 </div>
-                <h3 className="font-display text-base font-bold text-white mb-1.5">
+                <h3 className="font-display text-lg font-semibold text-white mb-1.5">
                   {item.title}
                 </h3>
-                <p className="text-sm text-white/60 leading-relaxed">
+                <p className="text-sm text-white/55 leading-relaxed">
                   {item.desc}
                 </p>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
 
-          {/* Tagline + CTA */}
-          <div className="mt-12 text-center">
-            <p className="text-lg font-display font-bold text-white">
-              Speed with structure. Output with accountability.
+          {/* CTA */}
+          <div className="relative mt-12 text-center">
+            <p className="font-mono text-sm text-white/70">
+              Output with accountability.
             </p>
             <motion.button
               onClick={() =>
@@ -93,9 +96,9 @@ export default function SpeedWithStructure({ isDark }: SpeedWithStructureProps) 
                   .getElementById("contact")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
-              whileHover={{ y: -3, scale: 1.02 }}
+              whileHover={{ y: -2 }}
               whileTap={{ scale: 0.97 }}
-              className="mt-6 inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl text-sm font-semibold bg-white text-blue-600 shadow-xl shadow-black/15 hover:shadow-black/25 transition-shadow duration-300 cursor-pointer group"
+              className="mt-6 inline-flex items-center gap-2.5 px-7 py-3.5 rounded-md text-sm font-semibold bg-white text-black hover:bg-white/90 transition-colors duration-300 cursor-pointer group"
             >
               Let's build it right
               <ArrowRight

@@ -8,10 +8,7 @@ import {
   MessageCircle,
   Send,
   Check,
-  Sparkles,
-  LucideHeart,
-  LucideCoffee,
-  LucideBot,
+  Terminal,
 } from "lucide-react";
 
 interface ContactProps {
@@ -19,39 +16,14 @@ interface ContactProps {
 }
 
 const SOCIALS = [
-  {
-    icon: Linkedin,
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/in/rustine-dave-235a51237/",
-    color: "#0A66C2",
-  },
-  {
-    icon: Github,
-    label: "GitHub",
-    href: "https://github.com/lagdave/",
-    color: "#333",
-  },
-  {
-    icon: Facebook,
-    label: "Facebook",
-    href: "https://www.facebook.com/profile.php?id=61585996447935",
-    color: "#1877F2",
-  },
-  {
-    icon: Mail,
-    label: "Email",
-    href: "mailto:hi@rustinedave.com",
-    color: "#EA4335",
-  },
-  {
-    icon: MessageCircle,
-    label: "WhatsApp",
-    href: "https://wa.me/+639505425118",
-    color: "#25D366",
-  },
+  { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/rustine-dave-235a51237/" },
+  { icon: Github, label: "GitHub", href: "https://github.com/lagdave/" },
+  { icon: Facebook, label: "Facebook", href: "https://www.facebook.com/profile.php?id=61585996447935" },
+  { icon: Mail, label: "Email", href: "mailto:hi@rustinedave.com" },
+  { icon: MessageCircle, label: "WhatsApp", href: "https://wa.me/+639505425118" },
 ];
 
-function Particle({ x, y }: { x: number; y: number }) {
+function Particle({ x, y, isDark }: { x: number; y: number; isDark: boolean }) {
   return (
     <motion.div
       initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
@@ -62,26 +34,20 @@ function Particle({ x, y }: { x: number; y: number }) {
         scale: 0,
       }}
       transition={{ duration: 1.2, ease: "easeOut" }}
-      className="absolute w-1.5 h-1.5 rounded-full bg-electric"
+      className={`absolute w-1.5 h-1.5 rounded-full ${isDark ? "bg-dark-ink" : "bg-black"}`}
       style={{ left: x, top: y }}
     />
   );
 }
 
 export default function Contact({ isDark }: ContactProps) {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    body: "",
-  });
+  const [formData, setFormData] = useState({ name: "", email: "", body: "" });
   const [humanCheck, setHumanCheck] = useState(false);
   const [holdProgress, setHoldProgress] = useState(0);
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState(false);
-  const [particles, setParticles] = useState<
-    { id: number; x: number; y: number }[]
-  >([]);
+  const [particles, setParticles] = useState<{ id: number; x: number; y: number }[]>([]);
   const holdTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -107,37 +73,28 @@ export default function Contact({ isDark }: ContactProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!humanCheck || sending) return;
-
     setSending(true);
     setError(false);
-
     try {
       const res = await fetch(
         "https://hook.eu1.make.com/1vxq2sl9wckyzdehj94mrciu5w4daddn",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: formData.name,
-            email: formData.email,
-            body: formData.body,
-          }),
+          body: JSON.stringify(formData),
         },
       );
-
       if (!res.ok) throw new Error("Failed");
-
-      // Particle burst
       const rect = formRef.current?.getBoundingClientRect();
       if (rect) {
-        const newParticles = Array.from({ length: 12 }, (_, i) => ({
-          id: Date.now() + i,
-          x: rect.width / 2,
-          y: rect.height / 2,
-        }));
-        setParticles(newParticles);
+        setParticles(
+          Array.from({ length: 12 }, (_, i) => ({
+            id: Date.now() + i,
+            x: rect.width / 2,
+            y: rect.height / 2,
+          })),
+        );
       }
-
       setSent(true);
       setTimeout(() => {
         setSent(false);
@@ -154,82 +111,75 @@ export default function Contact({ isDark }: ContactProps) {
     }
   };
 
-  const inputClasses =
-    "w-full px-5 py-3.5 rounded-2xl text-sm transition-all duration-300 bg-white text-gray-900 placeholder-gray-400 border border-white/20 focus:border-electric/40";
+  const inkText = isDark ? "text-dark-ink" : "text-black";
+  const mutedText = isDark ? "text-dark-muted" : "text-muted";
+
+  const inputClasses = `w-full px-5 py-3.5 rounded-md text-sm font-body transition-colors duration-300 ${
+    isDark
+      ? "bg-carbon text-dark-ink placeholder-dark-muted border border-dark-line focus:border-dark-ink"
+      : "bg-paper text-ink placeholder-muted border border-line focus:border-black"
+  }`;
 
   return (
     <section
       id="contact"
-      className={`relative py-32 ${
-        isDark ? "bg-surface-dark-elevated" : "bg-surface-light-elevated"
-      }`}
+      className={`relative py-28 md:py-36 ${isDark ? "bg-carbon" : "bg-paper"}`}
     >
       <div className="section-divider" />
       <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-16">
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
+        <div className="grid lg:grid-cols-2 gap-14 lg:gap-16 items-start">
           {/* Left */}
           <div className="space-y-8">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 26 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             >
               <h2
-                className={`font-display text-4xl sm:text-5xl font-bold tracking-tight ${
-                  isDark ? "text-white" : "text-gray-900"
-                }`}
+                className={`font-display font-semibold tracking-[-0.015em] leading-[1.05] ${inkText}`}
+                style={{ fontSize: "clamp(2rem, 4vw, 3.25rem)" }}
               >
                 Let's build something
                 <br />
-                worth maintaining
-                <span className="text-electric">.</span>
+                worth maintaining<span className={mutedText}>.</span>
               </h2>
-              <p
-                className={`mt-6 text-lg leading-relaxed max-w-md ${
-                  isDark ? "text-white/50" : "text-gray-500"
-                }`}
-              >
-                If you're aiming for "ship it yesterday" and "it still works
-                next quarter," we'll get along.
+              <p className={`mt-6 text-lg leading-relaxed max-w-md ${mutedText}`}>
+                If you're aiming for "ship it yesterday" and "it still works next
+                quarter," we'll get along.
               </p>
-              <p
-                className={`mt-3 text-lg leading-relaxed max-w-md font-medium ${
-                  isDark ? "text-white/60" : "text-gray-600"
-                }`}
-              >
+              <p className={`mt-3 text-lg leading-relaxed max-w-md font-medium ${inkText}`}>
                 Bring the idea. I'll bring the speed and the structure.
               </p>
             </motion.div>
 
             {/* Social pills */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="flex flex-wrap gap-3"
+              className="flex flex-wrap gap-2.5"
             >
               {SOCIALS.map((social, i) => (
                 <motion.a
                   key={social.label}
                   href={social.href}
-                  initial={{ opacity: 0, y: 15 }}
+                  target="_blank"
+                  rel="noreferrer"
+                  initial={{ opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: 0.3 + i * 0.08 }}
-                  whileHover={{ y: -4, scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`group flex items-center gap-2.5 px-5 py-3 rounded-2xl text-sm font-medium border transition-all duration-300 ${
+                  transition={{ delay: 0.3 + i * 0.06 }}
+                  whileHover={{ y: -3 }}
+                  whileTap={{ scale: 0.96 }}
+                  className={`group flex items-center gap-2.5 px-4 py-2.5 rounded-md text-sm font-medium border transition-colors duration-300 ${
                     isDark
-                      ? "border-white/[0.06] text-white/60 bg-white/[0.03] hover:border-electric/30 hover:text-electric hover:bg-electric/5 hover:shadow-lg hover:shadow-electric/10"
-                      : "border-black/[0.06] text-gray-500 bg-white hover:border-electric/30 hover:text-electric hover:bg-electric/5 hover:shadow-lg hover:shadow-electric/10"
+                      ? "border-dark-hairline text-dark-muted hover:border-dark-ink hover:text-dark-ink"
+                      : "border-hairline text-muted hover:border-black hover:text-black"
                   }`}
                 >
-                  <social.icon
-                    size={16}
-                    className="transition-transform duration-300 group-hover:scale-110"
-                  />
+                  <social.icon size={16} className="transition-transform duration-300 group-hover:scale-110" />
                   {social.label}
                 </motion.a>
               ))}
@@ -238,22 +188,21 @@ export default function Contact({ isDark }: ContactProps) {
 
           {/* Right – Form */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 26 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.15 }}
           >
             <div
-              className={`relative rounded-3xl p-8 border overflow-hidden shadow-xl shadow-electric/15 hover:shadow-2xl hover:shadow-electric/20 transition-shadow duration-500 ${
+              className={`relative rounded-xl p-7 sm:p-8 border overflow-hidden ${
                 isDark
-                  ? "bg-gradient-to-br from-blue-600/50 via-blue-500/50 to-indigo-600/50 border-white/10"
-                  : "bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 border-blue-400"
+                  ? "bg-dark-surface border-dark-line"
+                  : "bg-surface border-hairline"
               }`}
             >
-              {/* Particles */}
               <AnimatePresence>
                 {particles.map((p) => (
-                  <Particle key={p.id} x={p.x} y={p.y} />
+                  <Particle key={p.id} x={p.x} y={p.y} isDark={isDark} />
                 ))}
               </AnimatePresence>
 
@@ -261,29 +210,26 @@ export default function Contact({ isDark }: ContactProps) {
                 {sent ? (
                   <motion.div
                     key="success"
-                    initial={{ opacity: 0, scale: 0.9 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
                     className="flex flex-col items-center justify-center py-16 text-center"
                   >
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 15,
-                      }}
-                      className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center mb-6"
+                      transition={{ type: "spring", stiffness: 300, damping: 16 }}
+                      className={`w-16 h-16 rounded-full flex items-center justify-center mb-6 ${
+                        isDark ? "bg-dark-ink" : "bg-black"
+                      }`}
                     >
-                      <Check className="text-white" size={28} />
+                      <Check className={isDark ? "text-carbon" : "text-paper"} size={28} />
                     </motion.div>
-                    <h3 className="font-display text-2xl font-bold mb-2 text-white">
-                      Message sent
-                      <span className="text-white/60">.</span>
+                    <h3 className={`font-display text-2xl font-semibold mb-2 ${inkText}`}>
+                      Message sent<span className={mutedText}>.</span>
                     </h3>
-                    <p className="text-sm text-white/60">
-                      I'll get back to you soon. Thanks for reaching out!
+                    <p className={`text-sm ${mutedText}`}>
+                      I'll get back to you soon. Thanks for reaching out.
                     </p>
                   </motion.div>
                 ) : (
@@ -294,125 +240,101 @@ export default function Contact({ isDark }: ContactProps) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="space-y-5"
+                    className="space-y-4"
                   >
-                    <div>
-                      <input
-                        type="text"
-                        placeholder="John Doe"
-                        value={formData.name}
-                        onChange={(e) =>
-                          setFormData({ ...formData, name: e.target.value })
-                        }
-                        required
-                        className={inputClasses}
-                      />
+                    <div className={`font-mono text-[0.7rem] tracking-[0.04em] uppercase mb-2 ${mutedText}`}>
+                      // new_message
                     </div>
-                    <div>
-                      <input
-                        type="email"
-                        placeholder="john@example.com"
-                        value={formData.email}
-                        onChange={(e) =>
-                          setFormData({ ...formData, email: e.target.value })
-                        }
-                        required
-                        className={inputClasses}
-                      />
-                    </div>
-                    <div>
-                      <textarea
-                        placeholder="Tell me about your project..."
-                        rows={4}
-                        value={formData.body}
-                        onChange={(e) =>
-                          setFormData({ ...formData, body: e.target.value })
-                        }
-                        required
-                        className={`${inputClasses} resize-none`}
-                      />
-                    </div>
+                    <input
+                      type="text"
+                      placeholder="John Doe"
+                      aria-label="Your name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      required
+                      className={inputClasses}
+                    />
+                    <input
+                      type="email"
+                      placeholder="john@example.com"
+                      aria-label="Your email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      required
+                      className={inputClasses}
+                    />
+                    <textarea
+                      placeholder="Tell me about your project..."
+                      aria-label="Your message"
+                      rows={4}
+                      value={formData.body}
+                      onChange={(e) => setFormData({ ...formData, body: e.target.value })}
+                      required
+                      className={`${inputClasses} resize-none`}
+                    />
 
                     {/* Human check */}
                     <div className="pt-1">
-                      <motion.button
+                      <button
                         type="button"
                         onMouseDown={startHold}
                         onMouseUp={stopHold}
                         onMouseLeave={stopHold}
                         onTouchStart={startHold}
                         onTouchEnd={stopHold}
-                        className={`relative w-full py-3.5 rounded-2xl text-sm font-medium flex items-center justify-center gap-2 overflow-hidden cursor-pointer border transition-all duration-300 ${
-                          humanCheck
-                            ? "border-white text-white"
-                            : "border-white/40 text-white/70"
+                        className={`relative w-full py-3.5 rounded-md text-sm font-mono flex items-center justify-center gap-2 overflow-hidden cursor-pointer border transition-colors duration-300 ${
+                          isDark
+                            ? humanCheck
+                              ? "border-dark-ink text-dark-ink"
+                              : "border-dark-line text-dark-muted"
+                            : humanCheck
+                              ? "border-black text-black"
+                              : "border-line text-muted"
                         }`}
                       >
-                        {/* Fill bar */}
                         <div
-                          className="absolute left-0 top-0 h-full bg-white/20 transition-all duration-75"
+                          className={`absolute left-0 top-0 h-full transition-all duration-75 ${
+                            isDark ? "bg-dark-ink/12" : "bg-black/8"
+                          }`}
                           style={{ width: `${holdProgress}%` }}
                         />
                         <span className="relative z-10 flex items-center gap-2">
-                          {humanCheck ? (
-                            <>
-                              <Sparkles size={14} className="text-blue-600" />A
-                              human presence has been confirmed
-                            </>
-                          ) : (
-                            <>
-                              <Sparkles size={14} />
-                              Hold so I can sense your human spark
-                            </>
-                          )}
+                          <Terminal size={14} />
+                          {humanCheck
+                            ? "human presence confirmed"
+                            : "hold to confirm you're human"}
                         </span>
-                      </motion.button>
+                      </button>
                     </div>
 
-                    {/* Error message */}
                     <AnimatePresence>
                       {error && (
                         <motion.p
                           initial={{ opacity: 0, y: -5 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0 }}
-                          className="text-sm text-red-300 text-center"
+                          className={`font-mono text-xs text-center ${inkText}`}
                         >
-                          Something went wrong. Please try again.
+                          ! something went wrong — please try again
                         </motion.p>
                       )}
                     </AnimatePresence>
 
-                    {/* Submit */}
                     <motion.button
                       type="submit"
                       disabled={!humanCheck || sending}
-                      whileHover={humanCheck && !sending ? { scale: 1.02 } : {}}
+                      whileHover={humanCheck && !sending ? { y: -2 } : {}}
                       whileTap={humanCheck && !sending ? { scale: 0.98 } : {}}
-                      className={`relative w-full py-4 rounded-2xl text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer overflow-hidden ${
+                      className={`relative w-full py-4 rounded-md text-sm font-semibold flex items-center justify-center gap-2 transition-colors duration-300 overflow-hidden ${
                         humanCheck && !sending
-                          ? "bg-white text-blue-600 shadow-xl shadow-white/25 hover:shadow-white/40"
+                          ? isDark
+                            ? "bg-dark-ink text-carbon cursor-pointer hover:bg-white"
+                            : "bg-black text-paper cursor-pointer hover:bg-ink"
                           : isDark
-                            ? "bg-white/5 text-white/20 cursor-not-allowed"
-                            : "bg-gray-100 text-gray-300 cursor-not-allowed"
+                            ? "bg-dark-elevated text-dark-muted cursor-not-allowed"
+                            : "bg-elevated text-muted cursor-not-allowed"
                       }`}
                     >
-                      {/* Gradient sheen */}
-                      {humanCheck && !sending && (
-                        <motion.div
-                          className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity"
-                          style={{
-                            background:
-                              "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%)",
-                          }}
-                          animate={{ x: ["-100%", "200%"] }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            repeatDelay: 3,
-                          }}
-                        />
-                      )}
                       <Send size={16} />
                       {sending ? "Sending..." : "Send Message"}
                     </motion.button>
@@ -425,23 +347,13 @@ export default function Contact({ isDark }: ContactProps) {
       </div>
 
       {/* Footer */}
-      <div className="mt-32 border-t border-white/[0.04]">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p
-            className={`text-sm ${isDark ? "text-white/30" : "text-gray-400"}`}
-          >
-            &copy; {new Date().getFullYear()} Rustine Dave. AI-Augmented
-            Software Engineer
+      <div className={`mt-28 border-t ${isDark ? "border-dark-hairline" : "border-hairline"}`}>
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className={`text-sm ${mutedText}`}>
+            &copy; {new Date().getFullYear()} Rustine Dave. AI-Augmented Software Engineer
           </p>
-          <p
-            className={`text-xs flex items-center gap-2 ${isDark ? "text-white/20" : "text-gray-300"}`}
-          >
-            Made with{" "}
-            <span className="flex items-center gap-2 font-medium">
-              <LucideHeart size={15} className="text-rose-500" />{" "}
-              <LucideCoffee size={15} className="text-amber-500" />
-              <LucideBot size={15} className="text-electric" />
-            </span>
+          <p className={`font-mono text-[0.7rem] tracking-[0.04em] uppercase ${mutedText}`}>
+            speed × structure
           </p>
         </div>
       </div>

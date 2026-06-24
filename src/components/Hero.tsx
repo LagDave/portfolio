@@ -1,7 +1,14 @@
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, lazy, Suspense } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Mail } from "lucide-react";
-import { useMousePosition } from "../hooks/useMousePosition";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+// Code-split the WebGL scene: hero text paints first, Three.js streams in after.
+const BlueprintScene = lazy(() => import("./BlueprintScene"));
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const HERO_PHRASES = [
   "10x speed. 10x clarity. 10x craft.",
@@ -17,45 +24,37 @@ const HERO_PHRASES = [
   "Less chaos. More coherence. Faster iteration.",
 ];
 
+const STRUCK = ["AI Engineer", "Vibe Coder", "Guesswork"];
+
 interface HeroProps {
   isDark: boolean;
 }
 
 export default function Hero({ isDark }: HeroProps) {
   const ref = useRef<HTMLElement>(null);
-  const mouse = useMousePosition();
+  const canvasWrap = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
+  const opacityOut = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
 
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const opacityOut = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-
-  const spotX = mouse.x;
-  const spotY = mouse.y;
-
-  // Typewriter state
+  // Typewriter
   const [phraseIdx, setPhraseIdx] = useState(0);
   const [charCount, setCharCount] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const tick = useCallback(() => {
     const phrase = HERO_PHRASES[phraseIdx];
-
     if (!isDeleting && charCount === phrase.length) {
-      // Pause at full phrase before deleting
-      return setTimeout(() => setIsDeleting(true), 1500);
+      return setTimeout(() => setIsDeleting(true), 1600);
     }
-
     if (isDeleting && charCount === 0) {
-      // Move to next phrase
       setIsDeleting(false);
       setPhraseIdx((i) => (i + 1) % HERO_PHRASES.length);
       return undefined;
     }
-
-    const speed = isDeleting ? 30 : 22;
+    const speed = isDeleting ? 28 : 24;
     return setTimeout(
       () => setCharCount((c) => c + (isDeleting ? -1 : 1)),
       speed,
@@ -69,199 +68,145 @@ export default function Hero({ isDark }: HeroProps) {
     };
   }, [tick]);
 
+  // GSAP: headline line reveal + scene scroll-parallax
+  useGSAP(
+    () => {
+      const reduce = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      if (reduce) return;
+
+      gsap.from(".hero-line-inner", {
+        yPercent: 120,
+        duration: 1.1,
+        ease: "expo.out",
+        stagger: 0.12,
+        delay: 0.15,
+      });
+
+      if (canvasWrap.current) {
+        gsap.to(canvasWrap.current, {
+          yPercent: 18,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ref.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
+    },
+    { scope: ref },
+  );
+
+  const inkText = isDark ? "text-dark-ink" : "text-black";
+  const mutedText = isDark ? "text-dark-muted" : "text-muted";
+
   return (
     <section
       ref={ref}
       id="hero"
-      className={`relative min-h-screen flex items-center ${
-        isDark ? "bg-surface-dark" : "bg-surface-light"
+      className={`relative min-h-screen flex items-center overflow-hidden ${
+        isDark ? "bg-carbon" : "bg-paper"
       }`}
     >
-      {/* Background container — clips the hero image overflow */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Spinning orb constellation */}
-        <img
-          src="/spin.svg"
-          alt=""
-          className="absolute md:hidden w-44 h-44 sm:w-56 sm:h-56"
-          style={{
-            right: "-3%",
-            top: "9%",
-          }}
-        />
-        <img
-          src="/spin.svg"
-          alt=""
-          className="absolute hidden md:block w-170 h-170"
-          style={{
-            right: "7%",
-            top: "2%",
-          }}
-        />
-
-        {/* Right banner image — offset top-right on mobile, extends beyond on desktop */}
-        <img
-          src="/right-banner.png"
-          alt=""
-          className="absolute md:hidden w-48 sm:w-56 h-auto rounded-2xl"
-          style={{
-            right: "-21%",
-            top: "8%",
-            transform: "rotate(-43deg)",
-          }}
-        />
+      {/* Background field */}
+      <div className="absolute inset-0 pointer-events-none">
         <div
-          className="absolute inset-0 hidden md:block"
-          style={{
-            backgroundImage: "url(/right-banner.png)",
-            backgroundPosition: "calc(113% + 4vw) calc(101% + 32.5vh)",
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "56%",
-          }}
-        />
-
-        {/* Dot grid */}
-        <div
-          className={`absolute inset-0 dot-grid ${
+          className={`absolute inset-0 blueprint-grid ${
             isDark ? "text-white" : "text-black"
           }`}
         />
-
-        {/* Gradient orbs */}
-        <motion.div style={{ y: bgY }} className="absolute inset-0">
-          <motion.div
-            animate={{
-              x: [0, 30, -20, 0],
-              y: [0, -40, 20, 0],
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full opacity-20 hidden md:block"
-            style={{
-              background:
-                "radial-gradient(circle, rgba(59,130,246,0.4) 0%, transparent 70%)",
-              filter: "blur(80px)",
-            }}
-          />
-          <motion.div
-            animate={{
-              x: [0, -30, 20, 0],
-              y: [0, 30, -20, 0],
-            }}
-            transition={{
-              duration: 25,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full opacity-15 hidden md:block"
-            style={{
-              background:
-                "radial-gradient(circle, rgba(99,102,241,0.4) 0%, transparent 70%)",
-              filter: "blur(80px)",
-            }}
-          />
-        </motion.div>
+        <div ref={canvasWrap} className="absolute inset-0">
+          <Suspense fallback={null}>
+            <BlueprintScene isDark={isDark} />
+          </Suspense>
+        </div>
+        {/* Edge fades so text stays legible over the scene */}
+        <div
+          className={`absolute inset-0 ${
+            isDark
+              ? "bg-gradient-to-r from-carbon via-carbon/40 to-transparent"
+              : "bg-gradient-to-r from-paper via-paper/40 to-transparent"
+          }`}
+        />
       </div>
 
-      {/* Cursor spotlight — desktop only (no hover cursor on touch) */}
+      {/* Corner coordinate label — signature, used once */}
       <div
-        className="fixed inset-0 pointer-events-none z-10 transition-opacity duration-300 hidden md:block"
-        style={{
-          background: `radial-gradient(600px circle at ${spotX}px ${spotY}px, rgba(59,130,246,0.04), transparent 60%)`,
-        }}
-      />
+        className={`absolute top-24 right-6 lg:right-10 hidden sm:flex items-center gap-2 font-mono text-[0.7rem] tracking-[0.04em] uppercase ${mutedText}`}
+      >
+        <span className="w-5 h-px bg-current opacity-40" />
+        Engineering Blueprint · v2
+      </div>
 
       {/* Content */}
       <motion.div
         style={{ opacity: opacityOut }}
-        className="relative z-20 mx-auto max-w-7xl px-6 lg:px-8 w-full pt-37.5 md:pt-24 pb-16"
+        className="relative z-20 mx-auto max-w-7xl px-6 lg:px-8 w-full pt-32 md:pt-24 pb-20"
       >
-        <div className="max-w-2xl space-y-8">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        <div className="max-w-3xl">
+          {/* Struck eyebrow */}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-7">
+            {STRUCK.map((w) => (
+              <span
+                key={w}
+                className={`relative font-mono text-[0.7rem] sm:text-xs tracking-[0.04em] uppercase ${mutedText}`}
+              >
+                {w}
+                <span className="absolute left-0 right-0 top-1/2 h-px bg-current" />
+              </span>
+            ))}
+          </div>
+
+          {/* Headline */}
+          <h1
+            className={`font-display font-semibold tracking-[-0.02em] leading-[0.98] ${inkText}`}
+            style={{ fontSize: "clamp(2.75rem, 7vw, 5rem)" }}
           >
-            <h1
-              className={`font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] ${
-                isDark ? "text-white" : "text-gray-900"
-              }`}
+            <span className="block overflow-hidden pb-[0.08em]">
+              <span className="hero-line-inner block">AI-Augmented</span>
+            </span>
+            <span className="block overflow-hidden pb-[0.08em]">
+              <span className="hero-line-inner block">
+                Software Engineer
+                <span className={mutedText}>.</span>
+              </span>
+            </span>
+          </h1>
+
+          {/* Mono typewriter line */}
+          <div className="mt-7 flex items-center gap-3 min-h-[1.75rem]">
+            <span
+              className={`font-mono text-[0.7rem] tracking-[0.04em] uppercase ${mutedText} shrink-0`}
             >
-              <span
-                className={`relative inline-block text-xs sm:text-sm lg:text-base font-medium ${isDark ? "text-white/50" : "text-gray-900/30"}`}
-              >
-                AI Engineer
-                <div
-                  className={`absolute left-0 right-0 top-1/2 h-[.5px] ${isDark ? "bg-white" : "bg-black"}`}
-                />
-              </span>{" "}
-              <span
-                className={`relative inline-block text-xs sm:text-sm lg:text-base font-medium ${isDark ? "text-white/50" : "text-gray-900/30"}`}
-              >
-                Vibe Coder
-                <div
-                  className={`absolute left-0 right-0 top-1/2 h-[.5px] ${isDark ? "bg-white" : "bg-black"}`}
-                />
-              </span>{" "}
-              <span
-                className={`relative inline-block text-xs sm:text-sm lg:text-base font-medium ${isDark ? "text-white/50" : "text-gray-900/30"}`}
-              >
-                Guesswork
-                <div
-                  className={`absolute left-0 right-0 top-1/2 h-[.5px] ${isDark ? "bg-white" : "bg-black"}`}
-                />
-              </span>
-              <br />
-              <span>AI-Augmented</span>
-              <br />
-              <span>Software Engineer</span>
-              <span className="text-electric">.</span>
-            </h1>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.15,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-          >
-            <h2 className="font-display text-xs sm:text-lg lg:text-xl font-medium leading-snug flex items-center gap-2">
-              <img
-                src="/loading.svg"
-                alt=""
-                className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 shrink-0"
+              {">"}
+            </span>
+            <span className={`font-mono text-sm sm:text-base ${inkText}`}>
+              {HERO_PHRASES[phraseIdx].slice(0, charCount)}
+              <motion.span
+                aria-hidden
+                className={`inline-block w-[2px] h-[1.05em] ml-[1px] -mb-[2px] align-middle ${
+                  isDark ? "bg-dark-ink" : "bg-black"
+                }`}
+                animate={{ opacity: [1, 0] }}
+                transition={{
+                  duration: 0.5,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                }}
               />
-              <span className="gradient-text">
-                {HERO_PHRASES[phraseIdx].slice(0, charCount)}
-                <motion.span
-                  animate={{ opacity: [1, 0] }}
-                  transition={{
-                    duration: 0.25,
-                    repeat: Infinity,
-                    repeatType: "reverse",
-                  }}
-                  className="inline-block w-0.5 h-[1em] bg-electric ml-0.5 align-middle"
-                />
-              </span>
-            </h2>
-          </motion.div>
+            </span>
+          </div>
 
+          {/* Paragraph */}
           <motion.p
-            initial={{ opacity: 0, y: 25 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.3,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className={`text-sm sm:text-lg lg:text-xl leading-relaxed max-w-xl ${
-              isDark ? "text-white" : "text-gray-900"
+            transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className={`mt-7 text-base sm:text-lg leading-relaxed max-w-xl ${
+              isDark ? "text-dark-muted" : "text-muted"
             }`}
           >
             I started engineering in the pre-AI era, where debugging meant
@@ -273,20 +218,20 @@ export default function Hero({ isDark }: HeroProps) {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.45,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="flex flex-wrap gap-4 pt-2"
+            transition={{ duration: 0.8, delay: 0.62, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-wrap gap-3 pt-9"
           >
             <motion.a
               href="/files/Resume.pdf"
               target="_blank"
               rel="noreferrer"
-              whileHover={{ y: -3, scale: 1.02 }}
+              whileHover={{ y: -2 }}
               whileTap={{ scale: 0.97 }}
-              className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl text-sm font-semibold bg-electric text-white shadow-xl shadow-electric/25 hover:shadow-electric/40 transition-shadow duration-300"
+              className={`group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-md text-sm font-semibold transition-colors duration-300 ${
+                isDark
+                  ? "bg-dark-ink text-carbon hover:bg-white"
+                  : "bg-black text-paper hover:bg-ink"
+              }`}
             >
               View Resume
               <ArrowRight
@@ -300,12 +245,12 @@ export default function Hero({ isDark }: HeroProps) {
                   .getElementById("contact")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
-              whileHover={{ y: -3, scale: 1.02 }}
+              whileHover={{ y: -2 }}
               whileTap={{ scale: 0.97 }}
-              className={`inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl text-sm font-semibold border cursor-pointer transition-colors duration-300 ${
+              className={`inline-flex items-center gap-2.5 px-7 py-3.5 rounded-md text-sm font-semibold border cursor-pointer transition-colors duration-300 ${
                 isDark
-                  ? "border-white/10 text-white/80 hover:border-electric/30 hover:bg-white/5"
-                  : "border-black/10 text-gray-700 hover:border-electric/30 hover:bg-electric/5"
+                  ? "border-dark-line text-dark-ink hover:bg-dark-surface hover:border-dark-ink"
+                  : "border-line text-ink hover:bg-surface hover:border-black"
               }`}
             >
               <Mail size={16} />
@@ -325,15 +270,11 @@ export default function Hero({ isDark }: HeroProps) {
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className={`w-5 h-8 rounded-full border-2 flex items-start justify-center p-1 ${
-            isDark ? "border-white/20" : "border-black/20"
+          className={`w-5 h-8 rounded-full border flex items-start justify-center p-1 ${
+            isDark ? "border-dark-line" : "border-line"
           }`}
         >
-          <motion.div
-            animate={{ opacity: [0.2, 1, 0.2] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="w-1 h-2 rounded-full bg-electric"
-          />
+          <div className={`w-1 h-2 rounded-full ${isDark ? "bg-dark-muted" : "bg-muted"}`} />
         </motion.div>
       </motion.div>
     </section>

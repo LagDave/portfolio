@@ -3,7 +3,6 @@ import { useTheme } from "./hooks/useTheme";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
-import Experience from "./components/Experience";
 import Technologies from "./components/Technologies";
 import SpeedWithStructure from "./components/SpeedWithStructure";
 import Contact from "./components/Contact";
@@ -68,17 +67,17 @@ export default function App() {
   return (
     <div
       className={`noise-overlay relative ${
-        isDark ? "bg-surface-dark text-white" : "bg-surface-light text-gray-900"
+        isDark ? "bg-carbon text-dark-ink" : "bg-paper text-ink"
       }`}
     >
       {/* Dev mode overlay */}
       {devMode && (
-        <div className="fixed top-20 right-4 z-[9999] font-mono text-xs text-electric bg-black/80 border border-electric/30 rounded-xl p-4 space-y-1 backdrop-blur-sm">
-          <div className="text-electric font-bold mb-2">// DEV MODE</div>
+        <div className="fixed top-20 right-4 z-[9999] font-mono text-xs text-white bg-black/85 border border-white/20 rounded-md p-4 space-y-1 backdrop-blur-sm">
+          <div className="font-bold mb-2">// DEV MODE</div>
           <div>FPS: {fps}</div>
           <div>Theme: {isDark ? "dark" : "light"}</div>
           <div>Viewport: {typeof window !== "undefined" ? `${window.innerWidth}x${window.innerHeight}` : ""}</div>
-          <div className="text-white/30 mt-2">Konami to toggle</div>
+          <div className="text-white/40 mt-2">Konami to toggle</div>
         </div>
       )}
 
@@ -86,7 +85,6 @@ export default function App() {
       <Hero isDark={isDark} />
       <About isDark={isDark} />
       <SpeedWithStructure isDark={isDark} />
-      <Experience isDark={isDark} />
       <Technologies isDark={isDark} />
       <Contact isDark={isDark} />
     </div>
