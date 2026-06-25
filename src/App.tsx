@@ -6,6 +6,7 @@ import About from "./components/About";
 import Technologies from "./components/Technologies";
 import SpeedWithStructure from "./components/SpeedWithStructure";
 import Contact from "./components/Contact";
+import CustomCursor from "./components/CustomCursor";
 
 // Konami code Easter egg
 const KONAMI = [
@@ -81,6 +82,7 @@ export default function App() {
         </div>
       )}
 
+      <CustomCursor />
       <Navbar isDark={isDark} toggleTheme={toggle} />
       <Hero isDark={isDark} />
       <About isDark={isDark} />

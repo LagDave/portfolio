@@ -1,9 +1,10 @@
-import { useRef, useState, useEffect, useCallback, lazy, Suspense } from "react";
+import { useRef, useState, useEffect, lazy, Suspense } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Mail } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { Magnetic } from "./Magnetic";
 
 // Code-split the WebGL scene: hero text paints first, Three.js streams in after.
 const BlueprintScene = lazy(() => import("./BlueprintScene"));
@@ -44,29 +45,25 @@ export default function Hero({ isDark }: HeroProps) {
   const [charCount, setCharCount] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const tick = useCallback(() => {
-    const phrase = HERO_PHRASES[phraseIdx];
-    if (!isDeleting && charCount === phrase.length) {
-      return setTimeout(() => setIsDeleting(true), 1600);
-    }
-    if (isDeleting && charCount === 0) {
-      setIsDeleting(false);
-      setPhraseIdx((i) => (i + 1) % HERO_PHRASES.length);
-      return undefined;
-    }
-    const speed = isDeleting ? 28 : 24;
-    return setTimeout(
-      () => setCharCount((c) => c + (isDeleting ? -1 : 1)),
-      speed,
-    );
-  }, [charCount, isDeleting, phraseIdx]);
-
   useEffect(() => {
-    const id = tick();
-    return () => {
-      if (id) clearTimeout(id);
-    };
-  }, [tick]);
+    const phrase = HERO_PHRASES[phraseIdx];
+    const atFull = !isDeleting && charCount === phrase.length;
+    const atEmpty = isDeleting && charCount === 0;
+    const delay = atFull ? 1600 : isDeleting ? 28 : 24;
+
+    const id = setTimeout(() => {
+      if (atFull) {
+        setIsDeleting(true);
+      } else if (atEmpty) {
+        setIsDeleting(false);
+        setPhraseIdx((i) => (i + 1) % HERO_PHRASES.length);
+      } else {
+        setCharCount((c) => c + (isDeleting ? -1 : 1));
+      }
+    }, delay);
+
+    return () => clearTimeout(id);
+  }, [charCount, isDeleting, phraseIdx]);
 
   // GSAP: headline line reveal + scene scroll-parallax
   useGSAP(
@@ -118,7 +115,7 @@ export default function Hero({ isDark }: HeroProps) {
             isDark ? "text-white" : "text-black"
           }`}
         />
-        <div ref={canvasWrap} className="absolute inset-0">
+        <div ref={canvasWrap} className="absolute inset-0 opacity-40 md:opacity-100">
           <Suspense fallback={null}>
             <BlueprintScene isDark={isDark} />
           </Suspense>
@@ -221,41 +218,43 @@ export default function Hero({ isDark }: HeroProps) {
             transition={{ duration: 0.8, delay: 0.62, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-wrap gap-3 pt-9"
           >
-            <motion.a
-              href="/files/Resume.pdf"
-              target="_blank"
-              rel="noreferrer"
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              className={`group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-md text-sm font-semibold transition-colors duration-300 ${
-                isDark
-                  ? "bg-dark-ink text-carbon hover:bg-white"
-                  : "bg-black text-paper hover:bg-ink"
-              }`}
-            >
-              View Resume
-              <ArrowRight
-                size={16}
-                className="group-hover:translate-x-1 transition-transform"
-              />
-            </motion.a>
-            <motion.button
-              onClick={() =>
-                document
-                  .getElementById("contact")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              className={`inline-flex items-center gap-2.5 px-7 py-3.5 rounded-md text-sm font-semibold border cursor-pointer transition-colors duration-300 ${
-                isDark
-                  ? "border-dark-line text-dark-ink hover:bg-dark-surface hover:border-dark-ink"
-                  : "border-line text-ink hover:bg-surface hover:border-black"
-              }`}
-            >
-              <Mail size={16} />
-              Let's Build Something Real
-            </motion.button>
+            <Magnetic className="inline-flex">
+              <motion.a
+                href="/files/Resume.pdf"
+                target="_blank"
+                rel="noreferrer"
+                whileTap={{ scale: 0.97 }}
+                className={`group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-md text-sm font-semibold transition-colors duration-300 ${
+                  isDark
+                    ? "bg-dark-ink text-carbon hover:bg-white"
+                    : "bg-black text-paper hover:bg-ink"
+                }`}
+              >
+                View Resume
+                <ArrowRight
+                  size={16}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </motion.a>
+            </Magnetic>
+            <Magnetic className="inline-flex">
+              <motion.button
+                onClick={() =>
+                  document
+                    .getElementById("contact")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+                whileTap={{ scale: 0.97 }}
+                className={`inline-flex items-center gap-2.5 px-7 py-3.5 rounded-md text-sm font-semibold border cursor-pointer transition-colors duration-300 ${
+                  isDark
+                    ? "border-dark-line text-dark-ink hover:bg-dark-surface hover:border-dark-ink"
+                    : "border-line text-ink hover:bg-surface hover:border-black"
+                }`}
+              >
+                <Mail size={16} />
+                Let's Build Something Real
+              </motion.button>
+            </Magnetic>
           </motion.div>
         </div>
       </motion.div>

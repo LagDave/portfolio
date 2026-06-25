@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Zap, Shield, Eye } from "lucide-react";
 
 interface SpeedWithStructureProps {
@@ -24,10 +25,18 @@ const FEATURES = [
 ];
 
 export default function SpeedWithStructure({ isDark }: SpeedWithStructureProps) {
+  const slabRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: slabRef,
+    offset: ["start end", "end start"],
+  });
+  const gridY = useTransform(scrollYProgress, [0, 1], [-36, 36]);
+
   return (
     <section className={`relative py-16 md:py-24 ${isDark ? "bg-carbon" : "bg-paper"}`}>
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <motion.div
+          ref={slabRef}
           initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -38,8 +47,11 @@ export default function SpeedWithStructure({ isDark }: SpeedWithStructureProps) 
               : "bg-black border-black"
           }`}
         >
-          {/* Blueprint grid inside the slab */}
-          <div className="absolute inset-0 blueprint-grid text-white pointer-events-none" />
+          {/* Blueprint grid inside the slab — parallax on scroll */}
+          <motion.div
+            style={{ y: gridY }}
+            className="absolute -top-20 -bottom-20 inset-x-0 blueprint-grid text-white pointer-events-none"
+          />
 
           <div className="relative text-center max-w-3xl mx-auto">
             <span className="font-mono text-[0.7rem] tracking-[0.04em] uppercase text-white/40">

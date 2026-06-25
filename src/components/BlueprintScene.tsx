@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState, useEffect, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { useInView } from "../hooks/useInView";
 
 /* ───────────────────────────────────────────────
    The Engineering Blueprint — monochrome WebGL scene.
@@ -14,6 +15,23 @@ interface SceneProps {
   reduced: boolean;
   lowPower: boolean;
 }
+
+// Deterministic pseudo-random in [0,1) — keeps the particle layout stable
+// across renders and avoids impure Math.random() calls during render.
+const hash = (n: number) => {
+  const s = Math.sin(n) * 43758.5453;
+  return s - Math.floor(s);
+};
+
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const isLowPowerDevice = () => {
+  if (typeof window === "undefined") return false;
+  const cores = navigator.hardwareConcurrency ?? 8;
+  return cores <= 4 || window.matchMedia("(pointer: coarse)").matches;
+};
 
 function Geode({ isDark, reduced }: { isDark: boolean; reduced: boolean }) {
   const group = useRef<THREE.Group>(null);
@@ -63,10 +81,10 @@ function ParticleField({
   const positions = useMemo(() => {
     const arr = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
-      // Distribute on a spherical shell with jitter.
-      const r = 3.4 + Math.random() * 2.6;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(2 * Math.random() - 1);
+      // Distribute on a spherical shell with jitter (deterministic).
+      const r = 3.4 + hash(i * 1.13 + 0.5) * 2.6;
+      const theta = hash(i * 2.39 + 1.7) * Math.PI * 2;
+      const phi = Math.acos(2 * hash(i * 3.71 + 2.3) - 1);
       arr[i * 3] = r * Math.sin(phi) * Math.cos(theta);
       arr[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
       arr[i * 3 + 2] = r * Math.cos(phi);
@@ -113,34 +131,31 @@ function Scene({ isDark, reduced, lowPower }: SceneProps) {
 }
 
 export default function BlueprintScene({ isDark }: { isDark: boolean }) {
-  const [reduced, setReduced] = useState(false);
-  const [lowPower, setLowPower] = useState(false);
+  const [reduced, setReduced] = useState(prefersReducedMotion);
+  const [lowPower] = useState(isLowPowerDevice);
+  const { ref, inView } = useInView<HTMLDivElement>("250px");
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     const set = () => setReduced(mq.matches);
-    set();
     mq.addEventListener("change", set);
-
-    const cores = navigator.hardwareConcurrency ?? 8;
-    const coarse = window.matchMedia("(pointer: coarse)").matches;
-    setLowPower(cores <= 4 || coarse);
-
     return () => mq.removeEventListener("change", set);
   }, []);
 
   return (
-    <Canvas
-      camera={{ position: [0, 0, 6.2], fov: 42 }}
-      dpr={lowPower ? [1, 1.25] : [1, 1.8]}
-      frameloop={reduced ? "demand" : "always"}
-      gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-      style={{ pointerEvents: "none" }}
-      aria-hidden="true"
-    >
-      <Suspense fallback={null}>
-        <Scene isDark={isDark} reduced={reduced} lowPower={lowPower} />
-      </Suspense>
-    </Canvas>
+    <div ref={ref} className="absolute inset-0">
+      <Canvas
+        camera={{ position: [0, 0, 6.2], fov: 42 }}
+        dpr={lowPower ? [1, 1.25] : [1, 1.8]}
+        frameloop={reduced || !inView ? "demand" : "always"}
+        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+        style={{ pointerEvents: "none" }}
+        aria-hidden="true"
+      >
+        <Suspense fallback={null}>
+          <Scene isDark={isDark} reduced={reduced} lowPower={lowPower} />
+        </Suspense>
+      </Canvas>
+    </div>
   );
 }
