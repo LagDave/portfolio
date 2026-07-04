@@ -65,7 +65,7 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
                 Rustine Dave
               </span>
               <span className={`font-mono text-[0.625rem] tracking-tight ${isDark ? "text-dark-muted" : "text-muted"}`}>
-                /ai-swe
+                /ai-augmented-swe
               </span>
             </motion.button>
 

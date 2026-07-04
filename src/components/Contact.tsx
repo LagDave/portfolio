@@ -415,7 +415,7 @@ export default function Contact({ isDark }: ContactProps) {
                   </h3>
                 </button>
                 <p className={`mt-4 font-mono text-[0.7rem] tracking-[0.04em] uppercase ${mutedText}`}>
-                  AI-Augmented Software Engineer · /ai-swe
+                  AI-Augmented Software Engineer · /ai-augmented-swe
                 </p>
               </div>
 
