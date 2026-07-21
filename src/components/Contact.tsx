@@ -467,7 +467,7 @@ export default function Contact({ isDark }: ContactProps) {
             </div>
 
             {/* baseline */}
-            <div className={`mt-10 flex flex-col sm:flex-row items-center justify-between gap-3 font-mono text-[0.65rem] tracking-[0.04em] uppercase ${mutedText}`}>
+            <div className={`mt-10 flex flex-col items-start justify-between gap-3 text-left font-mono text-[0.65rem] uppercase tracking-[0.04em] sm:flex-row sm:items-center ${mutedText}`}>
               <span>&copy; {new Date().getFullYear()} Rustine Dave</span>
               <span>speed × structure</span>
               <span>X0 Y0 · EOF</span>

@@ -1,0 +1,69 @@
+{
+  "plan": "plans/07212026-connect-stack-fragment-to-explanation",
+  "generatedAt": "2026-07-21",
+  "status": "In Progress",
+  "items": [
+    {
+      "id": "T1",
+      "title": "Stack fragments render without the inner framed background",
+      "surface": "ui",
+      "precondition": "Run the portfolio locally at a desktop viewport of at least 1024px.",
+      "steps": [
+        "Open the portfolio and scroll to the Product Stack section.",
+        "Inspect the area behind the black stack fragments."
+      ],
+      "expected": "The fragments sit directly on the section blueprint grid; there is no white card, nested border, nested grid, or center guideline behind them.",
+      "status": "pass",
+      "evidence": "Local headless Chrome render at 1920x1400 confirmed the fragments on the section grid with the inner card/frame removed.",
+      "notes": "The browser-control runtime was unavailable, so this item used a temporary direct render fixture that was removed after inspection.",
+      "waiver": ""
+    },
+    {
+      "id": "T2",
+      "title": "Connector follows the hovered, focused, or selected fragment",
+      "surface": "ui",
+      "precondition": "Run the portfolio locally at a desktop viewport of at least 1024px.",
+      "steps": [
+        "Hover each fragment in turn and confirm the explanation card updates.",
+        "Tab through the fragments and confirm focus updates the same state.",
+        "Click or tap a fragment and confirm the selection persists.",
+        "Watch the connector endpoints move from that fragment to the explanation card."
+      ],
+      "expected": "A curved guide and directional dash flow attach the active fragment to the explanation card without crossing the stack.",
+      "status": "pending",
+      "evidence": "",
+      "notes": "Requires an interactive browser run; headless screenshot mode paused the Framer interaction choreography.",
+      "waiver": ""
+    },
+    {
+      "id": "T3",
+      "title": "Connector remains attached during resize and sticky scrolling",
+      "surface": "ui",
+      "precondition": "The Product Stack section is open at desktop width.",
+      "steps": [
+        "Resize the viewport while a fragment is selected.",
+        "Scroll until the explanation card enters and leaves its sticky position."
+      ],
+      "expected": "The connector recalculates without visible drift and remains attached at both ends.",
+      "status": "pending",
+      "evidence": "",
+      "notes": "Requires an interactive browser run.",
+      "waiver": ""
+    },
+    {
+      "id": "T4",
+      "title": "Reduced motion and small-screen fallbacks remain usable",
+      "surface": "ui",
+      "precondition": "Browser developer tools can emulate reduced motion and a viewport below 1024px.",
+      "steps": [
+        "Enable prefers-reduced-motion and inspect the connector.",
+        "Resize below 1024px and select several fragments."
+      ],
+      "expected": "Reduced motion keeps a static guide without repeated dash/pulse animation; small screens hide the decorative connector while selection and explanation updates still work.",
+      "status": "pending",
+      "evidence": "",
+      "notes": "Requires an interactive browser run.",
+      "waiver": ""
+    }
+  ]
+}

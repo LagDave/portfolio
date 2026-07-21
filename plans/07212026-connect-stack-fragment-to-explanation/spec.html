@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Connect Stack Fragment to Explanation Spec</title>
+  <style>
+    :root { color-scheme: light; --paper:#fff; --ink:#080808; --muted:#5f5f5f; --line:#d8d8d8; --soft:#f5f5f5; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.5; }
+    .spec-shell { width:min(1120px,calc(100% - 32px)); margin:0 auto; padding:48px 0; }
+    .spec-hero,.spec-card,.task-card { border:1px solid var(--line); border-radius:8px; background:var(--paper); }
+    .spec-hero { border-color:var(--ink); padding:32px; margin-bottom:20px; }
+    .hero-topline { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px; }
+    .spec-card { padding:28px; margin-top:16px; }
+    .task-card { padding:20px; background:var(--soft); margin-top:12px; }
+    .eyebrow,dt { color:var(--muted); font-size:.78rem; font-weight:700; text-transform:uppercase; }
+    .eyebrow { margin:0; }
+    .status-pill { display:inline-flex; align-items:center; min-height:34px; padding:0 12px; border:1px solid var(--ink); border-radius:999px; background:var(--ink); color:var(--paper); font-size:.78rem; font-weight:800; text-transform:uppercase; }
+    .status-card { border-color:var(--ink) !important; }
+    h1,h2,h3,p { margin-top:0; }
+    h1 { max-width:840px; margin-bottom:24px; font-size:clamp(2.25rem,6vw,5rem); line-height:.95; }
+    h2 { font-size:1.35rem; }
+    h3 { font-size:1rem; }
+    code { padding:.1rem .3rem; border:1px solid var(--line); border-radius:4px; background:var(--soft); font-size:.92em; }
+    .meta-grid,.split-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+    .meta-grid { margin:0; }
+    .meta-grid div,.split-grid>div { border:1px solid var(--line); border-radius:8px; padding:16px; }
+    dd { margin:4px 0 0; font-weight:700; }
+    .checklist { list-style:none; padding-left:0; }
+    .checklist li { display:flex; gap:10px; align-items:flex-start; padding:10px 0; border-top:1px solid var(--line); }
+    @media (max-width:640px) { .spec-shell { width:min(100% - 20px,1120px); padding:24px 0; } .spec-hero,.spec-card { padding:20px; } }
+  </style>
+</head>
+<body>
+  <main class="spec-shell">
+    <header class="spec-hero">
+      <div class="hero-topline">
+        <p class="eyebrow">Portfolio Plan Spec</p>
+        <span class="status-pill">In Progress</span>
+      </div>
+      <h1>Connect the selected stack fragment to its explanation</h1>
+      <dl class="meta-grid">
+        <div class="status-card"><dt>Status</dt><dd>In Progress</dd></div>
+        <div><dt>Plan Folder</dt><dd>plans/07212026-connect-stack-fragment-to-explanation</dd></div>
+        <div><dt>Size</dt><dd>Small</dd></div>
+        <div><dt>Risk</dt><dd>Level 2</dd></div>
+      </dl>
+    </header>
+
+    <section class="spec-card" id="why">
+      <h2>Why</h2>
+      <p>The framed background makes the stack illustration feel like a card inside the section, while the explanation card has no clear visual relationship to the fragment that controls it.</p>
+    </section>
+
+    <section class="spec-card" id="what">
+      <h2>What</h2>
+      <p>Remove the stack illustration's inner framed/grid background and draw a responsive animated connector from the hovered, focused, or selected fragment to the explanation card. The flow animation must stop for users who prefer reduced motion.</p>
+      <p><strong>Assumption:</strong> “pyramid background” means the large white bordered panel and its nested grid behind the black fragments, not the section-level blueprint grid.</p>
+    </section>
+
+    <section class="spec-card" id="context">
+      <h2>Context</h2>
+      <h3>Relevant Files</h3>
+      <ul>
+        <li><code>src/components/Technologies.tsx</code> — owns stack fragment selection and the explanation card.</li>
+        <li><code>src/hooks/useElementConnector.ts</code> — new geometry hook for the relationship between live DOM elements.</li>
+      </ul>
+      <h3>Patterns To Follow</h3>
+      <ul>
+        <li>Use the existing local hook shape in <code>src/hooks/useMousePosition.ts</code>: frame-scheduled browser events with complete cleanup.</li>
+        <li>Use the installed Framer Motion dependency for motion and its reduced-motion preference.</li>
+        <li>Apply Code Constitution §1.2, §2.1, §2.2, §4.2, §13.2, §17.2, and §20.3. The Alloro-specific API triad in §12.1 does not apply to this standalone portfolio.</li>
+      </ul>
+      <p><strong>Reference file:</strong> <code>src/hooks/useMousePosition.ts</code> — closest analog for requestAnimationFrame scheduling and event cleanup.</p>
+    </section>
+
+    <section class="spec-card" id="constraints">
+      <h2>Constraints</h2>
+      <div class="split-grid">
+        <div>
+          <h3>Must</h3>
+          <ul>
+            <li>Preserve hover, focus, pointer, and click selection.</li>
+            <li>Recalculate connector geometry when layout or sticky positioning changes.</li>
+            <li>Keep the connector decorative and non-interactive.</li>
+            <li>Honor <code>prefers-reduced-motion</code>.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Must Not</h3>
+          <ul>
+            <li>Do not add a dependency.</li>
+            <li>Do not touch unrelated dirty files.</li>
+            <li>Do not use fixed connector coordinates.</li>
+          </ul>
+        </div>
+      </div>
+      <h3>Out Of Scope</h3>
+      <ul>
+        <li>Changing stack copy, fragment geometry, or explanation content.</li>
+        <li>Drawing the decorative connector when the explanation card stacks below the fragments on small screens.</li>
+      </ul>
+    </section>
+
+    <section class="spec-card" id="risk">
+      <h2>Risk</h2>
+      <p><strong>Level:</strong> 2 — responsive geometry and sticky positioning can make a fixed SVG connector drift.</p>
+      <h3>Risks Identified</h3>
+      <ul>
+        <li>Connector endpoints can become stale after resize, font/layout changes, or sticky-card movement. <strong>Mitigation:</strong> measure the actual source, target, and container bounds with frame scheduling, resize observation, scroll updates, and desktop media-query gating.</li>
+        <li>Continuous dash motion can harm accessibility. <strong>Mitigation:</strong> render a static connector under reduced motion.</li>
+      </ul>
+      <p><strong>Blast radius:</strong> the Technologies section only; consumers are <code>src/App.tsx</code> and visitors interacting with that section.</p>
+      <h3>Pushback</h3>
+      <ul><li>A fixed CSS line would be simpler, but it would not stay attached to fragments of different widths. Live measurement is the recommended path.</li></ul>
+    </section>
+
+    <section class="spec-card" id="tasks">
+      <h2>Tasks</h2>
+      <article class="task-card">
+        <h3>T1: Stack surface cleanup and connector geometry</h3>
+        <dl>
+          <div><dt>Do</dt><dd>Remove the inner framed background, expose element refs, calculate a curved path between the active fragment and explanation card, and update on layout changes.</dd></div>
+          <div><dt>Files</dt><dd><code>src/components/Technologies.tsx</code>, <code>src/hooks/useElementConnector.ts</code></dd></div>
+          <div><dt>Depends on</dt><dd>None</dd></div>
+          <div><dt>Verify</dt><dd><code>npm run build</code></dd></div>
+        </dl>
+      </article>
+      <article class="task-card">
+        <h3>T2: Animated and accessible flow treatment</h3>
+        <dl>
+          <div><dt>Do</dt><dd>Draw the base path and directional dash flow, add source/target ports, preserve keyboard semantics, and disable repeated motion when requested.</dd></div>
+          <div><dt>Files</dt><dd><code>src/components/Technologies.tsx</code></dd></div>
+          <div><dt>Depends on</dt><dd>T1</dd></div>
+          <div><dt>Verify</dt><dd>Manual browser checks at desktop width plus reduced-motion inspection.</dd></div>
+        </dl>
+      </article>
+    </section>
+
+    <section class="spec-card" id="done">
+      <h2>Done</h2>
+      <ul class="checklist">
+        <li><input type="checkbox" checked disabled> <code>npm run build</code> passes.</li>
+        <li><input type="checkbox" checked disabled> <code>npm run lint</code> passes or only unrelated pre-existing failures remain.</li>
+        <li><input type="checkbox" disabled> Hovering, focusing, or clicking each desktop fragment moves the connector and updates the explanation.</li>
+        <li><input type="checkbox" disabled> The connector stays attached after resize and while the explanation card is sticky.</li>
+        <li><input type="checkbox" disabled> Reduced-motion mode has no continuous connector animation.</li>
+        <li><input type="checkbox" disabled> Small-screen selection remains usable without a decorative line crossing the stack.</li>
+      </ul>
+    </section>
+
+    <section class="spec-card" id="revision-log">
+      <h2>Revision Log</h2>
+      <article class="revision-entry">
+        <h3>Rev 1 - 2026-07-21</h3>
+        <p><strong>Change:</strong> Recorded the passing build and lint gates after implementation.</p>
+        <p><strong>Reason:</strong> Keep the spec checklist aligned with completed automated verification while interactive acceptance remains pending.</p>
+        <p><strong>Updated Done criteria:</strong> No criteria changed; only verified states were recorded.</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
