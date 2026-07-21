@@ -1,0 +1,214 @@
+{
+  "plan": "plans/07212026-stack-pyramid-connector-fix",
+  "generatedAt": "2026-07-21",
+  "status": "Passed",
+  "items": [
+    {
+      "id": "T1",
+      "title": "Pyramid renders as one continuous enlarged shape at desktop width",
+      "surface": "ui",
+      "precondition": "Dev server on http://localhost:5170, viewport ≥1024px",
+      "steps": [
+        "1. Open http://localhost:5170 and scroll to the Stack section (#technologies)",
+        "2. Observe the 7 stacked layers"
+      ],
+      "expected": "All 7 layers are full stacked rows with monotonic widths (narrow top, wide base); no side-by-side split row; no stray connector circle floating mid-pyramid",
+      "status": "pass",
+      "evidence": "evidence/stack-hover.png — full pyramid, continuous silhouette (run by Playwright agent)",
+      "notes": "White circle in original bug report was the site's CustomCursor at the parked pointer position, not a UI element",
+      "waiver": ""
+    },
+    {
+      "id": "T2",
+      "title": "Animated connector draws from active layer to explanation card",
+      "surface": "ui",
+      "precondition": "Viewport ≥1024px (connector is desktop-only)",
+      "steps": [
+        "1. Scroll the Stack section into view",
+        "2. Hover the 'App Logic' layer",
+        "3. Observe the card content and the connector line"
+      ],
+      "expected": "Card swaps to App Logic; a line draws in from the slab's visible slanted edge (port circle sits ON the edge) to the card's left edge, with flowing dashes and a pulsing end dot",
+      "status": "pass",
+      "evidence": "evidence/stack-hover.png (light), evidence/stack-dark.png (dark) — connector visible in both themes",
+      "notes": "Root cause fixed: pathLength and custom strokeDasharray no longer animate on the same path",
+      "waiver": ""
+    },
+    {
+      "id": "T3",
+      "title": "Mobile stacking intact, connector hidden",
+      "surface": "ui",
+      "precondition": "Viewport 390px",
+      "steps": [
+        "1. Resize to 390×844",
+        "2. Scroll through the Stack section"
+      ],
+      "expected": "Layers render full-width and readable, explanation card stacks below the pyramid, connector SVG is display:none",
+      "status": "pass",
+      "evidence": "evidence/stack-mobile.png; getComputedStyle check returned connectorHiddenOnMobile: true",
+      "notes": "",
+      "waiver": ""
+    },
+    {
+      "id": "T5",
+      "title": "(Rev 1) Card matches fragment material; apex cap; scaled pyramid; prominent connector",
+      "surface": "ui",
+      "precondition": "Viewport ≥1024px, both themes",
+      "steps": [
+        "1. Scroll to the Stack section in light mode, hover 'Stored Information'",
+        "2. Compare the card's background material to the pyramid slabs",
+        "3. Observe the text-free triangle capping the pyramid",
+        "4. Toggle dark mode and re-check the connector"
+      ],
+      "expected": "Card shares the slab sheen/border material; apex triangle base aligns with the first slab's top edge; pyramid capped at 44rem with larger small type; connector clearly visible (thick draw line + chunky flowing dashes) in both themes",
+      "status": "pass",
+      "evidence": "evidence/stack-rev1.png (dark), evidence/stack-rev1-light.png (light) — run by Playwright agent",
+      "notes": "",
+      "waiver": ""
+    },
+    {
+      "id": "T6",
+      "title": "(Rev 2) Scaffold crew animates along left slope; tech tray swaps per fragment",
+      "surface": "ui",
+      "precondition": "Viewport ≥1024px, both themes",
+      "steps": [
+        "1. Scroll to the Stack section and watch the left side of the pyramid",
+        "2. Hover 'App Screens', then 'Launch and Hosting'",
+        "3. Toggle dark mode and re-check the tray icons"
+      ],
+      "expected": "A worker figure sits on a plank at each slab's left edge (subtle work-loop animation); a small block loops bottom-to-apex along the slope corner line without crossing onto slabs; below the card a 'Preferred tools' tray animates out/in with the fragment's brand-color icons; near-black marks (Vercel, Copilot, Express) render light in dark mode",
+      "status": "pass",
+      "evidence": "evidence/stack-rev2b.png (light, App Screens tray), evidence/stack-rev2-dark.png (dark, Launch tray) — run by Playwright agent",
+      "notes": "Hoist path corrected mid-review: linear 0%→27% matches the row corner line exactly",
+      "waiver": ""
+    },
+    {
+      "id": "T7",
+      "title": "(Rev 3) Varied pictogram crew; AWS/GCP/Azure in hosting tray; label removed",
+      "surface": "ui",
+      "precondition": "Viewport ≥1024px",
+      "steps": [
+        "1. Scroll to the Stack section and inspect the workers on the left slope",
+        "2. Activate 'Launch and Hosting' and inspect the tray below the card"
+      ],
+      "expected": "Workers are chunky pictogram figures in distinct poses on varied rigs (plank, rope-hung platform, block piers, ladder with climber); hosting tray shows AWS, GCP, Azure, Vercel, Docker, GH Actions, Cloudflare with correct brand marks; no 'Preferred tools' label",
+      "status": "pass",
+      "evidence": "evidence/stack-rev3-light.png (light, hosting tray), evidence/stack-rev3.png (dark, crew variety) — run by Playwright agent",
+      "notes": "AWS/Azure paths inlined from archived simple-icons v9 (both marks removed from current library on vendor request)",
+      "waiver": ""
+    },
+    {
+      "id": "T8",
+      "title": "(Rev 4) Limb-only worker animation; synced hoist interaction; AI tray icons",
+      "surface": "ui",
+      "precondition": "Viewport ≥1024px",
+      "steps": [
+        "1. Watch the crew: bodies should hold still while one limb works",
+        "2. Watch a full hoist cycle: base worker shoves, box climbs the slope, apex receiver reaches as it arrives",
+        "3. Activate 'AI-Assisted Building' and check the tray"
+      ],
+      "expected": "No whole-body wobble; loader/box/receiver share one synchronized timeline; AI tray shows Claude Code, ChatGPT, Gemini, Kimi, Copilot with correct marks",
+      "status": "pass",
+      "evidence": "evidence/stack-rev4-ai2.png (AI tray + crew), evidence/stack-rev4-ai.png (box mid-hoist on the slope) — run by Playwright agent",
+      "notes": "OpenAI mark inlined from archived simple-icons v9 (removed from current library); Gemini/Kimi from current package",
+      "waiver": ""
+    },
+    {
+      "id": "T9",
+      "title": "(Rev 5) Tower crane scene replaces figures; Hero card wrap + Explore removal",
+      "surface": "ui",
+      "precondition": "Viewport ≥1024px",
+      "steps": [
+        "1. Scroll to the Stack section: lattice crane at the left, jib over the apex",
+        "2. Watch a full 16s cycle: signaler waves, block lifts, trolley slides, block lowers at the apex, receiver reaches, cable retracts before returning",
+        "3. In the Hero deck's projects slide, hover the KuyaDB tile"
+      ],
+      "expected": "Crane renders in clean drafting linework with zero console errors; mast passes behind slabs; both figures visible outside slab regions; Hero card shows no Explore chip and the description wraps in balanced lines",
+      "status": "pass",
+      "evidence": "evidence/stack-rev5.png (jib/apex/receiver), evidence/stack-rev5-base2.png (mast base + signaler); Explore absence verified via DOM text check — run by Playwright agent",
+      "notes": "Fixed during review: framer needs initial{{y2}} to seed animated SVG attrs (console error), and the hook cable now retracts at the apex before the return slide",
+      "waiver": ""
+    },
+    {
+      "id": "T10",
+      "title": "(Rev 6) Crane scene removed; section back to clean pyramid + connector + tray",
+      "surface": "ui",
+      "precondition": "Viewport ≥1024px",
+      "steps": [
+        "1. Scroll to the Stack section",
+        "2. Confirm no crane, figures, or hoist elements render; hover layers to confirm connector and tray still work"
+      ],
+      "expected": "Left space is clean; pyramid, apex cap, connector, and tech tray behave as in T2/T7/T8; zero console errors",
+      "status": "pass",
+      "evidence": "evidence/stack-rev6-clean.png — run by Playwright agent",
+      "notes": "Rev 5 crane item (T9) superseded by removal",
+      "waiver": ""
+    },
+    {
+      "id": "T11",
+      "title": "(Rev 7) Composition-fixed crane: tie-ins, jib clear of crown, no figures",
+      "surface": "ui",
+      "precondition": "Viewport ≥1024px, both themes",
+      "steps": [
+        "1. Scroll to the Stack section",
+        "2. Verify the mast stands at the base corner with tie-in braces ending on the slope edges",
+        "3. Watch a cycle: block lifts by the mast, slides, lands on the top layer's left shoulder — never touching the apex cap",
+        "4. Toggle dark mode"
+      ],
+      "expected": "Crane reads structurally attached to the pyramid; no crane element crosses the crown/cap; no figures; clean in both themes with zero console errors",
+      "status": "pass",
+      "evidence": "evidence/stack-rev7.png (light), evidence/stack-rev7-dark.png (dark) — run by Playwright agent",
+      "notes": "Supersedes T9 (Rev 5 crane) and T10's removal state per user's 'Fix the crane' choice",
+      "waiver": ""
+    },
+    {
+      "id": "T12",
+      "title": "(Rev 8) Crane sans blocks; DB tray additions; centered layout; pointed peak; Codex label",
+      "surface": "ui",
+      "precondition": "Viewport ≥1024px",
+      "steps": [
+        "1. Verify the crane has no counterweight/cab blocks (linework + trolley/block only)",
+        "2. Hover 'Stored Information': tray shows PostgreSQL, Knex.js, Redis, MongoDB, MSSQL",
+        "3. Verify fragment texts and the section heading are centered, with clear space between heading and the taller pointed apex cap",
+        "4. Focus 'AI-Assisted Building': tray shows Codex instead of ChatGPT"
+      ],
+      "expected": "All four adjustments render; block lands beside the taller peak on the top layer's shoulder; zero console errors",
+      "status": "pass",
+      "evidence": "evidence/stack-rev8-peak.png (peak + centered layout + crane), evidence/stack-rev8-centered.png (centered heading + tray); Codex/Kimi presence verified via DOM text check — run by Playwright agent",
+      "notes": "MSSQL mark inlined from archived simple-icons v9 (Microsoft marks removed from current library)",
+      "waiver": ""
+    },
+    {
+      "id": "T13",
+      "title": "(Rev 9) Mobile accordion: tap to expand per-fragment panel, one at a time",
+      "surface": "ui",
+      "precondition": "Viewport 390×844",
+      "steps": [
+        "1. Scroll to the Stack section and tap 'App Screens'",
+        "2. Observe the inline panel (description, why it matters, tech chips)",
+        "3. Tap 'Stored Information'",
+        "4. Resize to desktop and confirm card/connector/tray unchanged"
+      ],
+      "expected": "Panel expands under the tapped layer with brand-color chips; tapping another collapses the previous (exactly one open); bottom card/tray hidden on mobile; desktop layout unaffected",
+      "status": "pass",
+      "evidence": "evidence/stack-mobile-accordion.png; DOM checks: rightColHidden true on mobile, openPanels 1 after switch (MongoDB chip present), asideVisible true + mobilePanelsVisible 0 on desktop",
+      "notes": "",
+      "waiver": ""
+    },
+    {
+      "id": "T4",
+      "title": "Build gates clean",
+      "surface": "cli",
+      "precondition": "Repo root",
+      "steps": [
+        "1. npx tsc --noEmit",
+        "2. npm run lint"
+      ],
+      "expected": "Zero TypeScript errors, zero lint failures",
+      "status": "pass",
+      "evidence": "tsc exit 0; eslint exit 0",
+      "notes": "",
+      "waiver": ""
+    }
+  ]
+}

@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stack Pyramid + Connector Fix Spec</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #ffffff;
+      --ink: #080808;
+      --muted: #5f5f5f;
+      --line: #d8d8d8;
+      --soft: #f5f5f5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+    .spec-shell { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0; }
+    .spec-hero, .spec-card, .task-card { border: 1px solid var(--line); border-radius: 8px; background: var(--paper); }
+    .spec-hero { border-color: var(--ink); padding: 32px; margin-bottom: 20px; }
+    .hero-topline { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+    .spec-card { padding: 28px; margin-top: 16px; }
+    .task-card { padding: 20px; background: var(--soft); margin-top: 12px; }
+    .eyebrow, dt { color: var(--muted); font-size: 0.78rem; font-weight: 700; letter-spacing: 0; text-transform: uppercase; }
+    .eyebrow { margin: 0; }
+    .status-pill { display: inline-flex; align-items: center; min-height: 34px; padding: 0 12px; border: 1px solid var(--ink); border-radius: 999px; background: var(--ink); color: var(--paper); font-size: 0.78rem; font-weight: 800; letter-spacing: 0; text-transform: uppercase; }
+    .status-card { border-color: var(--ink); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 840px; margin-bottom: 24px; font-size: clamp(2.25rem, 6vw, 5rem); line-height: 0.95; letter-spacing: 0; }
+    h2 { font-size: 1.35rem; letter-spacing: 0; }
+    h3 { font-size: 1rem; letter-spacing: 0; }
+    code { padding: 0.1rem 0.3rem; border: 1px solid var(--line); border-radius: 4px; background: var(--soft); font-size: 0.92em; }
+    .meta-grid, .split-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+    .meta-grid { margin: 0; }
+    .meta-grid div, .split-grid > div { border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    dd { margin: 4px 0 0; font-weight: 700; }
+    .checklist { list-style: none; padding-left: 0; }
+    .checklist li { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-top: 1px solid var(--line); }
+    @media (max-width: 640px) {
+      .spec-shell { width: min(100% - 20px, 1120px); padding: 24px 0; }
+      .spec-hero, .spec-card { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="spec-shell">
+    <header class="spec-hero">
+      <div class="hero-topline">
+        <p class="eyebrow">Alloro Plan Spec</p>
+        <span class="status-pill">Completed</span>
+      </div>
+      <h1>Stack Pyramid + Connector Fix</h1>
+      <dl class="meta-grid">
+        <div class="status-card"><dt>Status</dt><dd>Completed</dd></div>
+        <div><dt>Plan Folder</dt><dd>plans/07212026-stack-pyramid-connector-fix</dd></div>
+        <div><dt>Size</dt><dd>Small</dd></div>
+        <div><dt>Risk</dt><dd>Level 1</dd></div>
+        <div><dt>Mode</dt><dd>--instant (-i), primary checkout (no worktree by mode design)</dd></div>
+      </dl>
+    </header>
+
+    <section class="spec-card" id="why">
+      <h2>Why</h2>
+      <p>The Stack section's pyramid renders broken: layers 5–6 are split into a side-by-side grid that shatters the pyramid silhouette, the layer-to-card connector never draws (a stray port circle floats mid-diagram), and the explanation card remounts on every hover, leaving HMR ghost duplicates in dev. The user wants the pyramid enlarged and a working animated connector to the side explanation card.</p>
+    </section>
+
+    <section class="spec-card" id="what">
+      <h2>What</h2>
+      <p>A clean, enlarged 7-row stacked pyramid (monotonic width progression, continuous trapezoid edges) filling its grid column, plus a visible animated SVG connector (draw-in line, marching dashes, pulsing end dot) from the active layer's right edge to the sticky explanation card. Done when the pyramid reads as one continuous shape at lg+, hovering/focusing any layer redraws the connector, and reduced motion gets a static line.</p>
+      <h3>Root causes (diagnosed)</h3>
+      <ul>
+        <li><strong>Broken shape:</strong> layers index 4–5 render in a <code>sm:grid-cols-2</code> grid; widths not monotonic (96% row under 100% rows).</li>
+        <li><strong>Invisible connector:</strong> one <code>motion.path</code> animates <code>pathLength</code> while also setting custom <code>strokeDasharray="3 10"</code> and animating <code>strokeDashoffset</code> — Framer implements <code>pathLength</code> by rewriting <code>stroke-dasharray</code>, so they conflict and the path never shows. Split into two paths: a solid draw-in path (pathLength only) and a dash-flow path (dashoffset only).</li>
+        <li><strong>Ghost cards:</strong> <code>key={activeLayer.id}</code> on <code>motion.aside</code> remounts the whole sticky card per hover; move the key to an inner content block.</li>
+      </ul>
+      <h3>Assumptions (auto-resolved per -i)</h3>
+      <ul>
+        <li>Pyramid orientation stays apex-up → widest at bottom (AI-Assisted Building as foundation), matching the existing iceberg metaphor.</li>
+        <li>The two "lower" layers become full stacked rows; the 2-col treatment is removed entirely (also simplifies mobile).</li>
+        <li>Explanation card stays at 24rem column; enlargement comes from removing the 46rem inner cap, taller rows, and bigger type.</li>
+      </ul>
+    </section>
+
+    <section class="spec-card" id="risk">
+      <h2>Risk</h2>
+      <p><strong>Level:</strong> 1 — isolated to one presentational component + its hook. Blast radius: <code>Technologies.tsx</code> is consumed only by <code>App.tsx</code>; <code>useElementConnector.ts</code> only by <code>Technologies.tsx</code>.</p>
+      <ul>
+        <li>Connector geometry can go stale while the card is sticky during scroll. <strong>Mitigation:</strong> hook already re-measures on scroll/resize/ResizeObserver; keep aside mounted so the target ref is stable.</li>
+        <li>Framer pathLength/dasharray conflict must not be reintroduced. <strong>Mitigation:</strong> two separate paths, each animating one mechanism.</li>
+      </ul>
+    </section>
+
+    <section class="spec-card" id="tasks">
+      <h2>Tasks</h2>
+      <article class="task-card">
+        <h3>T1: Rebuild pyramid as continuous 7-row stack, enlarged</h3>
+        <dl>
+          <div><dt>Do</dt><dd>Remove 2-col split; monotonic widths 46→100%; symmetric trapezoid clip-paths whose top edges align with the row above's bottom edge; drop per-row offsets and the compact variant; remove 46rem cap; taller rows and larger type.</dd></div>
+          <div><dt>Files</dt><dd><code>src/components/Technologies.tsx</code></dd></div>
+          <div><dt>Depends on</dt><dd>none</dd></div>
+          <div><dt>Verify</dt><dd>Manual: pyramid reads as one shape at lg+, no stray circle, mobile stack intact</dd></div>
+        </dl>
+      </article>
+      <article class="task-card">
+        <h3>T2: Fix animated connector + stabilize aside</h3>
+        <dl>
+          <div><dt>Do</dt><dd>Split FlowConnector into solid draw-in path (pathLength) + dash-flow path (strokeDashoffset); keep port + pulsing end dot; move <code>key</code> from <code>motion.aside</code> to inner content block; honor reduced motion.</dd></div>
+          <div><dt>Files</dt><dd><code>src/components/Technologies.tsx</code>, <code>src/hooks/useElementConnector.ts</code></dd></div>
+          <div><dt>Depends on</dt><dd>T1</dd></div>
+          <div><dt>Verify</dt><dd>Manual: hover each layer at lg+ → line draws to the card with flowing dashes; <code>npx tsc --noEmit</code> zero errors</dd></div>
+        </dl>
+      </article>
+    </section>
+
+    <section class="spec-card" id="revision-log">
+      <h2>Revision Log</h2>
+      <article class="revision-entry">
+        <h3>Rev 1 - 2026-07-21</h3>
+        <p><strong>Change:</strong> Explanation card now uses the same slab material as the pyramid fragments (shared <code>SLAB_SHEEN</code> gradient + fragment border/background classes); added a decorative text-free apex triangle whose base aligns with the first slab's top edge (sm+ only); pyramid scaled down (44rem cap, 4.5rem rows, smaller title clamp) while small type was enlarged (slab eyebrow/tools 0.7/0.66rem, card eyebrow 0.7rem, card body text-base); connector made more prominent (draw 2.25px full opacity, dashes 3.5px, rail 0.28, bigger port and pulse dot).</p>
+        <p><strong>Reason:</strong> User QA: card background didn't match the pyramid fragments, pyramid felt too large with too-small supporting text, and the connector was hard to see.</p>
+        <p><strong>Updated Done criteria:</strong> Added Rev 1 items below.</p>
+      </article>
+      <article class="revision-entry">
+        <h3>Rev 2 - 2026-07-22</h3>
+        <p><strong>Change:</strong> Added animated scaffold crew: a tiny ink-drawn worker on a plank docked to each slab's left slanted edge (bob/work loop, staggered, desktop-only) plus a hoisted fragment block riding the slope's corner line (0%→27%) bottom-to-apex on a 9s loop; added a per-fragment "Preferred tools" tray below the sticky card showing full-color brand icons (via new <code>simple-icons</code> data dependency) that animate out/in with stagger on layer change (<code>AnimatePresence mode="wait"</code>). Near-black brand marks flip to light ink in dark mode via a luminance check. Card + tray now share one sticky wrapper.</p>
+        <p><strong>Reason:</strong> User QA: fill the empty left space with "people building the pyramid," and surface preferred technologies per fragment below the card with animation.</p>
+        <p><strong>Updated Done criteria:</strong> Added Rev 2 items below. New dependency <code>simple-icons</code> justified: user requested brand tech icons; pure icon-data package, tree-shaken to the 20 imported icons, no runtime code. Full-color logos are the design system's single sanctioned chroma.</p>
+      </article>
+      <article class="revision-entry">
+        <h3>Rev 3 - 2026-07-22</h3>
+        <p><strong>Change:</strong> Replaced thin stickmen with pictogram-style workers (thick round-cap strokes, filled heads) in five poses (carry, hammer, point, pull, climb) across four varied rigs (post plank, rope-hung platform, block piers, leaning ladder) assigned per layer via a <code>CREW_VARIANTS</code> table with varied durations/delays; added AWS, GCP, Azure to the Launch and Hosting tray (AWS/Azure paths inlined from archived simple-icons v9 since both were removed from the library on vendor request; GCP via <code>siGooglecloud</code>); removed the "Preferred tools" label above the tray.</p>
+        <p><strong>Reason:</strong> User QA: stickmen looked bad, scaffolds too repetitive, hosting stack incomplete, label unwanted.</p>
+        <p><strong>Updated Done criteria:</strong> Added Rev 3 items below.</p>
+      </article>
+      <article class="revision-entry">
+        <h3>Rev 4 - 2026-07-22</h3>
+        <p><strong>Change:</strong> Workers now animate individual limbs only (hammer arm swings at the shoulder, carry arms lift the block, pull arms drag rope + block together, climber's arm reaches, pointing arm gestures) — bodies hold still; the hoist box is now part of a synchronized load→hoist→receive sequence (<code>HoistSequence</code>, one shared 10s timeline): a base worker shoves the box off at cycle start, the box rides the slope, and an apex receiver on a hung platform reaches out as it arrives (layer 0's docked foreman removed in favor of the receiver); AI fragment tray now lists Claude Code, ChatGPT, Gemini, Kimi, Copilot (OpenAI path inlined from archived simple-icons v9; Gemini/Kimi from current package).</p>
+        <p><strong>Reason:</strong> User QA: whole-body wobble looked wrong, box should be interacted with by the figures, AI stack incomplete.</p>
+        <p><strong>Updated Done criteria:</strong> Added Rev 4 items below.</p>
+      </article>
+      <article class="revision-entry">
+        <h3>Rev 5 - 2026-07-22</h3>
+        <p><strong>Change:</strong> Replaced the per-layer stickmen-on-scaffolds entirely with a drafting-style tower crane (<code>CraneScene</code>): lattice mast at the pyramid's left, jib reaching over the apex, counterweight/cab, and the fragment block on a hook cable running one shared 16s timeline — load, lift, slide, lower, place, retract, return. Two solid pictogram figures work the same timeline: a signaler at the base waving the lift up, a receiver on the top layer reaching as the block lands. Geometry lives in a stretched 768×720 viewBox so it tracks the pyramid proportionally; the mast passes behind the slabs (z-order) like a crane behind a building. Deleted <code>CrewPoseShapes</code>/<code>CrewStructure</code>/<code>ScaffoldWorker</code>/<code>HoistSequence</code>. Also (user mid-turn request): Hero lab card — removed the Explore chip and balanced the description wrap (<code>text-wrap: balance</code>, slightly larger text).</p>
+        <p><strong>Reason:</strong> User QA: the hand-drawn figures looked "pathetic" — organic figures at ~20px can't look precise; the crane speaks the blueprint's own geometric language. Hero card: unwanted Explore button and ugly mid-phrase word wrap during the expand animation.</p>
+        <p><strong>Updated Done criteria:</strong> Added Rev 5 items below; Rev 3's "varied rigs" item and Rev 4's crew items are superseded by the crane scene.</p>
+      </article>
+      <article class="revision-entry">
+        <h3>Rev 6 - 2026-07-22</h3>
+        <p><strong>Change:</strong> Removed the tower crane scene entirely (<code>CraneScene</code> deleted). The left space returns to clean drafting emptiness; the pyramid, connector, apex cap, and tech tray are unchanged.</p>
+        <p><strong>Reason:</strong> User QA: rejected the crane composition ("nope") after rejecting the figure crews — the decoration was not earning its place. Restraint restored per the design system; direction for the left space to be decided by the user.</p>
+        <p><strong>Updated Done criteria:</strong> Rev 5's crane item is superseded/withdrawn; Rev 4's limb-animation and hoist-interaction items are moot (elements removed). Remaining criteria unchanged.</p>
+      </article>
+      <article class="revision-entry">
+        <h3>Rev 7 - 2026-07-22</h3>
+        <p><strong>Change:</strong> Rebuilt the crane with the composition fixed, per user choice ("Fix the crane"): mast anchored at the base corner and structurally tied to the pyramid with three horizontal tie-in braces whose endpoints sit on the slope corner line (286,60)→(64,714); jib shortened to stop well short of the crown (tip at viewBox 330 vs cap corner 322+); block lands on the top layer's left shoulder, never on the apex cap; all figures removed. Same 16s load→lift→slide→lower→place→retract→return timeline, zero console errors.</p>
+        <p><strong>Reason:</strong> User QA: rejected Rev 5's composition (crane floating disconnected, elements over the crown, figures on the cap); chose the fixed-crane option over leaving the space clean or drafting annotations.</p>
+        <p><strong>Updated Done criteria:</strong> Replaces the withdrawn Rev 5 crane item.</p>
+      </article>
+      <article class="revision-entry">
+        <h3>Rev 8 - 2026-07-22</h3>
+        <p><strong>Change:</strong> Removed the crane's counterweight and cab blocks (pure linework now); data tray adds MongoDB (current package) and MSSQL (path inlined from archived simple-icons v9); fragment text centered in each slab; section heading block centered with more space below (<code>mt-16 lg:mt-20</code>); apex cap made a true pointed peak (44px → 80px tall, same base) rising into the freed space, with the crane's landing spot (placed y 49→83, trolley dx 224→204) and tie-in endpoints recomputed for the new geometry; AI tray's ChatGPT chip relabeled Codex (same OpenAI mark).</p>
+        <p><strong>Reason:</strong> User QA (four mid-iteration requests): remove the two boxes on the crane; add MongoDB/MSSQL to the data fragment; center fragment texts and the heading with breathing room; make the cap pointed and raised; relabel ChatGPT to Codex.</p>
+        <p><strong>Updated Done criteria:</strong> Added Rev 8 items below.</p>
+      </article>
+      <article class="revision-entry">
+        <h3>Rev 9 - 2026-07-22</h3>
+        <p><strong>Change:</strong> Mobile (&lt;lg) behavior is now an accordion: tapping a layer expands an inline panel directly beneath it (description, "Why it matters", and the tech chips in slab material, dark-adapted icon fills); opening another layer collapses the previous (AnimatePresence height animation, one panel at a time). The right-column card + tray are hidden below lg since their content lives in the panels. Desktop behavior unchanged (card, connector, tray verified intact).</p>
+        <p><strong>Reason:</strong> User QA: on mobile the stacked slabs had no way to reveal per-fragment detail; requested tap-to-expand with explanation and logos, one open at a time.</p>
+        <p><strong>Updated Done criteria:</strong> Added Rev 9 item below.</p>
+      </article>
+    </section>
+
+    <section class="spec-card" id="done">
+      <h2>Done</h2>
+      <ul class="checklist">
+        <li><input type="checkbox" disabled> <code>npx tsc --noEmit</code> — zero errors from this change</li>
+        <li><input type="checkbox" disabled> <code>npm run lint</code> — no new failures</li>
+        <li><input type="checkbox" disabled> Manual: pyramid enlarged, continuous silhouette, no stray connector circle</li>
+        <li><input type="checkbox" disabled> Manual: animated connector draws from active layer to explanation card on hover/focus at lg+</li>
+        <li><input type="checkbox" disabled> No regressions in mobile stacking or reduced-motion behavior</li>
+        <li><input type="checkbox" disabled> (Rev 1) Card background matches pyramid fragment material in both themes</li>
+        <li><input type="checkbox" disabled> (Rev 1) Text-free apex triangle caps the pyramid, base aligned with first slab</li>
+        <li><input type="checkbox" disabled> (Rev 1) Pyramid scaled down; slab/card small type enlarged and readable</li>
+        <li><input type="checkbox" disabled> (Rev 1) Connector clearly visible in light and dark themes</li>
+        <li><input type="checkbox" disabled> (Rev 2) Animated scaffold workers + hoisted block track the left slope at lg+, static under reduced motion, hidden on mobile</li>
+        <li><input type="checkbox" disabled> (Rev 2) Tech tray below the card swaps with staggered in/out animation per fragment; brand colors correct in light, near-black marks readable in dark</li>
+        <li><input type="checkbox" disabled> (Rev 3) Crew reads as varied pictogram figures on distinct rigs, no two adjacent layers identical</li>
+        <li><input type="checkbox" disabled> (Rev 3) Hosting tray shows AWS, GCP, Azure with correct marks; no "Preferred tools" label</li>
+        <li><input type="checkbox" disabled> (Rev 4) Worker bodies static, only limbs animate; loader/box/receiver stay in sync across the 10s hoist cycle</li>
+        <li><input type="checkbox" disabled> (Rev 4) AI tray shows Claude Code, ChatGPT, Gemini, Kimi, Copilot with correct marks</li>
+        <li><input type="checkbox" disabled> (Rev 5) Tower crane renders in clean drafting linework, tracks the pyramid at any width, zero console errors; signaler and receiver visible outside slab regions; cable retracts before the return leg</li>
+        <li><input type="checkbox" disabled> (Rev 5) Hero lab card: no Explore chip; description wraps with balanced lines during the expand animation</li>
+        <li><input type="checkbox" disabled> (Rev 7) Crane reads structurally attached (tie-ins on the slope), jib clear of the crown, block lands on the top layer's shoulder, no figures, both themes, zero console errors</li>
+        <li><input type="checkbox" disabled> (Rev 8) Crane linework only (no counterweight/cab blocks); block lands on the recomputed shoulder beside the taller peak</li>
+        <li><input type="checkbox" disabled> (Rev 8) Data tray shows PostgreSQL, Knex.js, Redis, MongoDB, MSSQL; AI tray shows Codex (not ChatGPT)</li>
+        <li><input type="checkbox" disabled> (Rev 8) Fragment texts and section heading centered; heading has clear space above the pointed peak</li>
+        <li><input type="checkbox" disabled> (Rev 9) Mobile: tapping a layer expands its inline panel (explanation + logos), one open at a time; desktop card/connector/tray unchanged</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
