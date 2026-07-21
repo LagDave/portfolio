@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agentic Workflow Section Spec</title>
+  <style>
+    :root { color-scheme: light; --paper:#ffffff; --ink:#080808; --muted:#5f5f5f; --line:#d8d8d8; --soft:#f5f5f5; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:Inter,ui-sans-serif,system-ui,sans-serif; line-height:1.5; }
+    .spec-shell { width:min(1120px,calc(100% - 32px)); margin:0 auto; padding:48px 0; }
+    .spec-hero, .spec-card, .task-card { border:1px solid var(--line); border-radius:8px; background:var(--paper); }
+    .spec-hero { border-color:var(--ink); padding:32px; margin-bottom:20px; }
+    .hero-topline { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px; }
+    .spec-card { padding:28px; margin-top:16px; }
+    .task-card { padding:20px; background:var(--soft); margin-top:12px; }
+    .eyebrow, dt { color:var(--muted); font-size:0.78rem; font-weight:700; text-transform:uppercase; }
+    .eyebrow { margin:0; }
+    .status-pill { display:inline-flex; align-items:center; min-height:34px; padding:0 12px; border:1px solid var(--ink); border-radius:999px; background:var(--ink); color:var(--paper); font-size:0.78rem; font-weight:800; text-transform:uppercase; }
+    .status-card { border-color:var(--ink); }
+    h1,h2,h3,p { margin-top:0; }
+    h1 { max-width:840px; margin-bottom:24px; font-size:clamp(2.25rem,6vw,5rem); line-height:0.95; }
+    h2 { font-size:1.35rem; } h3 { font-size:1rem; }
+    code { padding:0.1rem 0.3rem; border:1px solid var(--line); border-radius:4px; background:var(--soft); font-size:0.92em; }
+    .meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin:0; }
+    .meta-grid div { border:1px solid var(--line); border-radius:8px; padding:16px; }
+    dd { margin:4px 0 0; font-weight:700; }
+    .checklist { list-style:none; padding-left:0; }
+    .checklist li { display:flex; gap:10px; align-items:flex-start; padding:10px 0; border-top:1px solid var(--line); }
+  </style>
+</head>
+<body>
+  <main class="spec-shell">
+    <header class="spec-hero">
+      <div class="hero-topline">
+        <p class="eyebrow">Plan Spec</p>
+        <span class="status-pill">Completed</span>
+      </div>
+      <h1>Agentic Workflow Section</h1>
+      <dl class="meta-grid">
+        <div class="status-card"><dt>Status</dt><dd>Completed</dd></div>
+        <div><dt>Plan Folder</dt><dd>plans/07222026-agentic-workflow-section</dd></div>
+        <div><dt>Size</dt><dd>Medium</dd></div>
+        <div><dt>Risk</dt><dd>Level 1</dd></div>
+        <div><dt>Mode</dt><dd>--instant (-i), primary checkout</dd></div>
+      </dl>
+    </header>
+
+    <section class="spec-card" id="why">
+      <h2>Why</h2>
+      <p>The "Speed with Structure" section makes generic claims (Speed / Structure / Accountability tiles). Dave's actual differentiator is a concrete, battle-tested controlled agentic engineering workflow — a command-gated process with plan artifacts, risk pushback, verification gates, and a numbered Code Constitution — built and honed since the earliest AI-coding setups, before agents were as capable as today. The section should show that system instead of describing virtues.</p>
+    </section>
+
+    <section class="spec-card" id="what">
+      <h2>What</h2>
+      <p>Rebuild the section's card row as a 5-stage workflow pipeline (Explore → Plan → Execute → Verify → Finalize) with command chips; add a provenance line about the system's history; add a "Learn the workflow" button opening an accessible modal that briefly explains every command, the artifact contract, and a summary of the Code Constitution; add a Download AGENTS.md button serving a company-neutral <code>public/files/AGENTS.md</code>; note that the Code Constitution is available on request (tailored per stack).</p>
+      <h3>Assumptions (auto-resolved per -i)</h3>
+      <ul>
+        <li>Headline, intro copy, and the "Let's build it right" CTA stay; only the tile row and the CTA block gain the new content.</li>
+        <li>The numbered 5-step pipeline is legitimate sequence semantics (a real ordered process), not decorative scaffolding.</li>
+        <li>AGENTS.md is authored fresh from the private workflow doc with all company/client/personal-identity references removed (no Alloro, no client names, no personal email, no company file paths); large inline HTML templates are summarized as artifact contracts rather than embedded.</li>
+        <li>Modal is theme-consistent dark (the section slab is dark in both themes), closes on Esc/backdrop/X, locks body scroll.</li>
+      </ul>
+    </section>
+
+    <section class="spec-card" id="risk">
+      <h2>Risk</h2>
+      <p><strong>Level:</strong> 1 — one presentational component + one new static file. Blast radius: <code>SpeedWithStructure.tsx</code> consumed only by <code>App.tsx</code>; <code>public/files/</code> already serves Resume.pdf the same way.</p>
+      <ul>
+        <li>Leaking company-specific details into the public AGENTS.md. <strong>Mitigation:</strong> author from scratch against a scrub list (Alloro, client names, personal email, company paths, Feature Friyays); grep the final file for the scrub list before shipping.</li>
+      </ul>
+    </section>
+
+    <section class="spec-card" id="tasks">
+      <h2>Tasks</h2>
+      <article class="task-card">
+        <h3>T1: Author company-neutral AGENTS.md</h3>
+        <dl>
+          <div><dt>Do</dt><dd>Generic controlled-agentic-workflow document: philosophy + provenance, command gate table, all modes, plan-folder/spec artifact contract, acceptance artifacts (schema included), risk levels, worktree bootstrap, execution rules, post-execution verification pipeline, engineering standards, generic commit convention, Constitution pairing note.</dd></div>
+          <div><dt>Files</dt><dd><code>public/files/AGENTS.md</code></dd></div>
+          <div><dt>Depends on</dt><dd>none</dd></div>
+          <div><dt>Verify</dt><dd><code>grep -i "alloro\|laggy\|friyay"</code> returns nothing; file downloads via <code>/files/AGENTS.md</code></dd></div>
+        </dl>
+      </article>
+      <article class="task-card">
+        <h3>T2: Rebuild section with pipeline, provenance, buttons, and modal</h3>
+        <dl>
+          <div><dt>Do</dt><dd>Replace FEATURES tiles with a 5-stage numbered pipeline (command chips per stage); provenance callout; "Learn the workflow" (opens modal) + "Download AGENTS.md" (anchor download) + Constitution-on-request note; accessible AnimatePresence modal with command reference, artifact contract, and Constitution summary.</dd></div>
+          <div><dt>Files</dt><dd><code>src/components/SpeedWithStructure.tsx</code></dd></div>
+          <div><dt>Depends on</dt><dd>T1</dd></div>
+          <div><dt>Verify</dt><dd><code>npx tsc --noEmit</code> + lint clean; modal opens/closes (Esc, backdrop, X); download link resolves 200</dd></div>
+        </dl>
+      </article>
+    </section>
+
+    <section class="spec-card" id="revision-log">
+      <h2>Revision Log</h2>
+      <article class="revision-entry">
+        <h3>Rev 1 - 2026-07-22</h3>
+        <p><strong>Change:</strong> Section eyebrow changed from "Speed with structure" to "How I harness AI" (main headline untouched); every em dash in the section and modal copy replaced with commas or colons (17 total, including two code comments).</p>
+        <p><strong>Reason:</strong> User QA: reframe the section as the "how I work / harness AI" thought without replacing the heading; user dislikes em dashes in this section's copy.</p>
+        <p><strong>Updated Done criteria:</strong> None added; verified eyebrow updated, headline intact, and zero em dashes in section + modal via DOM checks.</p>
+      </article>
+    </section>
+
+    <section class="spec-card" id="done">
+      <h2>Done</h2>
+      <ul class="checklist">
+        <li><input type="checkbox" disabled> <code>npx tsc --noEmit</code> and <code>npm run lint</code> — zero errors from this change</li>
+        <li><input type="checkbox" disabled> Manual: pipeline replaces the three tiles; provenance line present; both buttons render</li>
+        <li><input type="checkbox" disabled> Manual: modal opens with command reference + Constitution summary; closes via Esc, backdrop, and X; body scroll locked while open</li>
+        <li><input type="checkbox" disabled> AGENTS.md downloads and contains no company/client/personal-identity references</li>
+        <li><input type="checkbox" disabled> No regressions in section entrance animation or CTA</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

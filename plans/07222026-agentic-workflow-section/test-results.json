@@ -1,0 +1,65 @@
+{
+  "plan": "plans/07222026-agentic-workflow-section",
+  "generatedAt": "2026-07-22",
+  "status": "Passed",
+  "items": [
+    {
+      "id": "T1",
+      "title": "Workflow pipeline replaces the three virtue tiles",
+      "surface": "ui",
+      "precondition": "Dev server on http://localhost:5170, desktop viewport",
+      "steps": [
+        "1. Scroll to the 'Speed with structure' dark slab",
+        "2. Observe the card row"
+      ],
+      "expected": "Five numbered stages (Explore, Plan, Execute, Verify, Finalize) with command chips replace Speed/Structure/Accountability; provenance line and both action buttons render; 'Code Constitution available on request' note present; CTA intact",
+      "status": "pass",
+      "evidence": "evidence/workflow-section.png — run by Playwright agent",
+      "notes": "",
+      "waiver": ""
+    },
+    {
+      "id": "T2",
+      "title": "Workflow modal opens, explains commands + Constitution, closes accessibly",
+      "surface": "ui",
+      "precondition": "Section in view",
+      "steps": [
+        "1. Click 'Learn the workflow'",
+        "2. Inspect content: provenance intro, 12-command reference, contract section, Constitution summary, download button",
+        "3. Press Esc; reopen; click backdrop"
+      ],
+      "expected": "Modal opens with role=dialog and locked body scroll; contains command gate reference and §N.M Constitution summary; closes on Esc and backdrop click, restoring scroll",
+      "status": "pass",
+      "evidence": "evidence/workflow-modal.png; DOM checks: modalOpen/bodyLocked/hasConstitution true; escClosed/backdropClosed/bodyUnlocked true",
+      "notes": "",
+      "waiver": ""
+    },
+    {
+      "id": "T3",
+      "title": "AGENTS.md downloads and is company-neutral",
+      "surface": "api",
+      "precondition": "Dev server running",
+      "steps": [
+        "1. GET /files/AGENTS.md",
+        "2. Grep content for company/client/personal identifiers"
+      ],
+      "expected": "200 response; no matches for alloro/laggy/friyay/client names; document covers command gate, plan artifacts, acceptance, risk levels, verification pipeline, Constitution pairing note",
+      "status": "pass",
+      "evidence": "fetch returned status 200, 10969 bytes, scrubOk: true; repo-side grep clean",
+      "notes": "Constitution intentionally not downloadable — offered on request, tailored per stack",
+      "waiver": ""
+    },
+    {
+      "id": "T4",
+      "title": "Build gates clean",
+      "surface": "cli",
+      "precondition": "Repo root",
+      "steps": ["1. npx tsc --noEmit", "2. npm run lint"],
+      "expected": "Zero TypeScript errors, zero lint failures",
+      "status": "pass",
+      "evidence": "tsc exit 0; eslint exit 0; zero browser console errors",
+      "notes": "",
+      "waiver": ""
+    }
+  ]
+}
